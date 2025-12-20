@@ -1,0 +1,31 @@
+{
+  "dataset_stats": {
+    "total_sequences": 1000,
+    "avg_length": 1237.486,
+    "min_length": 231,
+    "max_length": 5683
+  },
+  "prefix_sharing": {
+    "pairs_with_shared_prefix": 124750,
+    "total_pairs": 124750,
+    "sharing_rate": 1.0,
+    "avg_shared_length": 6.142541082164328,
+    "max_shared_length": 31,
+    "median_shared_length": 6.0
+  },
+  "system_prompt_simulation": {
+    "system_prompt_length": 20,
+    "sequences_with_prompt": 500,
+    "total_tokens": 618321,
+    "reusable_tokens": 9980,
+    "reuse_rate": 0.01614048366463374
+  },
+  "rag_scenario": {
+    "n_documents": 5,
+    "n_queries": 10,
+    "total_requests": 50,
+    "baseline_tokens": 27500,
+    "cached_tokens": 5000,
+    "savings_rate": 0.8181818181818182
+  }
+}
