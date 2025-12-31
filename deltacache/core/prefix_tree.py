@@ -166,6 +166,7 @@ class PrefixTree:
         self,
         tokens: List[int],
         cache_block: Optional[CacheBlock] = None,
+        store_prefix_caches: bool = True,
     ) -> PrefixTreeNode:
         """
         Insert a token sequence into the tree.
@@ -173,12 +174,15 @@ class PrefixTree:
         Args:
             tokens: Token sequence to insert.
             cache_block: Optional cache block to attach at the end.
+            store_prefix_caches: If True, also store sliced caches at intermediate
+                nodes that don't already have cache. This enables prefix reuse.
 
         Returns:
             The node at the end of the inserted path.
         """
         with self._lock:
             node = self._root
+            nodes_needing_cache = []  # Track nodes that need prefix caches
 
             for i, token in enumerate(tokens):
                 if token not in node.children:
@@ -193,9 +197,27 @@ class PrefixTree:
                 node = node.children[token]
                 node.touch()
 
+                # Track intermediate nodes that don't have cache
+                if store_prefix_caches and not node.has_cache:
+                    nodes_needing_cache.append((node, i + 1))
+
+            # Store full cache at leaf
             if cache_block is not None:
                 node.cache_block = cache_block
                 self._cache_nodes[cache_block.block_id] = node
+
+                # Store sliced prefix caches at intermediate nodes
+                if store_prefix_caches and cache_block is not None:
+                    full_kv = cache_block.get_kv()
+                    if full_kv is not None:
+                        for prefix_node, prefix_len in nodes_needing_cache[:-1]:
+                            # Slice the full KV to get prefix cache
+                            # KV shape: [num_layers, seq_len, num_heads, head_dim]
+                            prefix_key = full_kv[0][:, :prefix_len, :, :]
+                            prefix_value = full_kv[1][:, :prefix_len, :, :]
+                            prefix_block = CacheBlock.from_kv(prefix_key, prefix_value)
+                            prefix_node.cache_block = prefix_block
+                            self._cache_nodes[prefix_block.block_id] = prefix_node
 
             return node
 

@@ -4,18 +4,29 @@ HuggingFace format:
     tuple[tuple[Tensor, Tensor], ...]
     Each layer: (key, value) with shape [batch, num_heads, seq_len, head_dim]
 
+    OR (for transformers >= 4.36):
+    DynamicCache object with key_cache and value_cache lists
+
 DeltaCache format:
     tuple[Tensor, Tensor]
     key/value shape: [num_layers, seq_len, num_heads, head_dim]
 """
 
-from typing import Tuple, Optional, List
+from typing import Tuple, Optional, List, Any, Union
 import torch
 from torch import Tensor
 
+# Try to import DynamicCache for newer transformers versions
+try:
+    from transformers.cache_utils import DynamicCache
+    HAS_DYNAMIC_CACHE = True
+except ImportError:
+    HAS_DYNAMIC_CACHE = False
+    DynamicCache = None
+
 
 def hf_to_deltacache(
-    past_key_values: Tuple[Tuple[Tensor, Tensor], ...],
+    past_key_values: Union[Tuple[Tuple[Tensor, Tensor], ...], Any],
     remove_batch_dim: bool = True,
 ) -> Tuple[Tensor, Tensor]:
     """Convert HuggingFace KV cache format to DeltaCache format.
@@ -23,18 +34,28 @@ def hf_to_deltacache(
     Args:
         past_key_values: HuggingFace format KV cache.
             tuple of (key, value) per layer, each with shape [batch, heads, seq, dim]
+            OR DynamicCache object (transformers >= 4.36)
         remove_batch_dim: If True, squeeze batch dimension (assumes batch_size=1)
 
     Returns:
         Tuple of (key_cache, value_cache) with shape [num_layers, seq_len, num_heads, head_dim]
     """
-    if not past_key_values:
-        raise ValueError("past_key_values cannot be empty")
+    # Handle DynamicCache object (transformers >= 4.36)
+    if HAS_DYNAMIC_CACHE and isinstance(past_key_values, DynamicCache):
+        # Access keys/values from each layer
+        key_list = [layer.keys for layer in past_key_values.layers]
+        value_list = [layer.values for layer in past_key_values.layers]
+    else:
+        # Legacy tuple format
+        if not past_key_values:
+            raise ValueError("past_key_values cannot be empty")
+        key_list = [layer_kv[0] for layer_kv in past_key_values]
+        value_list = [layer_kv[1] for layer_kv in past_key_values]
 
     # Stack keys and values from all layers
     # Each layer has shape [batch, heads, seq, dim]
-    keys = torch.stack([layer_kv[0] for layer_kv in past_key_values], dim=0)
-    values = torch.stack([layer_kv[1] for layer_kv in past_key_values], dim=0)
+    keys = torch.stack(key_list, dim=0)
+    values = torch.stack(value_list, dim=0)
     # Shape: [num_layers, batch, heads, seq, dim]
 
     if remove_batch_dim:
@@ -53,17 +74,20 @@ def deltacache_to_hf(
     key_cache: Tensor,
     value_cache: Tensor,
     add_batch_dim: bool = True,
-) -> Tuple[Tuple[Tensor, Tensor], ...]:
+    use_dynamic_cache: bool = True,
+) -> Union[Tuple[Tuple[Tensor, Tensor], ...], Any]:
     """Convert DeltaCache KV cache format to HuggingFace format.
 
     Args:
         key_cache: Key cache with shape [num_layers, seq_len, num_heads, head_dim]
         value_cache: Value cache with shape [num_layers, seq_len, num_heads, head_dim]
         add_batch_dim: If True, add batch dimension of size 1
+        use_dynamic_cache: If True and available, return DynamicCache object
 
     Returns:
         HuggingFace format: tuple of (key, value) per layer,
         each with shape [batch, heads, seq, dim]
+        OR DynamicCache object if use_dynamic_cache=True and transformers >= 4.36
     """
     # Transpose from [layers, seq, heads, dim] to [layers, heads, seq, dim]
     keys = key_cache.transpose(1, 2)
@@ -74,8 +98,16 @@ def deltacache_to_hf(
         keys = keys.unsqueeze(1)  # [layers, 1, heads, seq, dim]
         values = values.unsqueeze(1)
 
-    # Split by layer and create tuple of tuples
     num_layers = keys.shape[0]
+
+    # Return DynamicCache if available and requested
+    if use_dynamic_cache and HAS_DYNAMIC_CACHE:
+        cache = DynamicCache()
+        for i in range(num_layers):
+            cache.update(keys[i], values[i], i)
+        return cache
+
+    # Legacy tuple format
     past_key_values = tuple(
         (keys[i], values[i]) for i in range(num_layers)
     )

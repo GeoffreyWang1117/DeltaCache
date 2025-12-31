@@ -132,7 +132,10 @@ class IncrementalEngine:
         # Look up existing cache
         lookup_result = self.prefix_tree.lookup(tokens)
 
-        matched_length = lookup_result.matched_length if lookup_result.has_match else 0
+        # Only count as a match if we have actual cached KV values
+        # (intermediate tree nodes may match but have no cached KV)
+        has_usable_cache = lookup_result.has_match and lookup_result.kv_cache is not None
+        matched_length = lookup_result.matched_length if has_usable_cache else 0
         suffix_tokens = tokens[matched_length:]
 
         self._total_tokens += len(tokens)

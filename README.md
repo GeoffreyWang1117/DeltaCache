@@ -279,8 +279,8 @@ class LookupResult:
 class IncrementalResult:
     matched_length: int      # Tokens from cache
     computed_length: int     # Tokens computed
-    full_key_cache: Tensor   # Complete key cache
-    full_value_cache: Tensor # Complete value cache
+    key_cache: Tensor        # Complete key cache
+    value_cache: Tensor      # Complete value cache
 ```
 
 ## Running Tests

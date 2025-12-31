@@ -125,7 +125,9 @@ class TestPrefixTree:
 
         assert node.has_cache
         assert node.cache_block is cache
-        assert tree.num_cached == 1
+        # With prefix caching enabled, all intermediate nodes also get cache
+        # For [1, 2, 3] this means nodes 1, 2, and 3 all have cache
+        assert tree.num_cached == 3
 
     def test_insert_overlapping(self):
         """Test insertion of overlapping sequences."""
@@ -233,13 +235,17 @@ class TestPrefixTree:
         cache = CacheBlock(key, value)
         tree.insert([1, 2, 3], cache)
 
-        assert tree.num_cached == 1
+        # With prefix caching, [1, 2, 3] creates caches at nodes 1, 2, and 3
+        assert tree.num_cached == 3
 
         tree.remove_cache(cache.block_id)
 
-        assert tree.num_cached == 0
+        # Only removes the leaf cache, prefix caches remain
+        assert tree.num_cached == 2
         result = tree.lookup([1, 2, 3])
-        assert result.kv_cache is None
+        # The prefix cache at node 2 should still be available
+        assert result.kv_cache is not None
+        assert result.matched_length == 2
 
     def test_get_all_cached_nodes(self):
         """Test getting all cached nodes."""
@@ -254,7 +260,10 @@ class TestPrefixTree:
         tree.insert([3, 4, 5], CacheBlock(key2, value2))
 
         cached = tree.get_all_cached_nodes()
-        assert len(cached) == 2
+        # With prefix caching:
+        # [1, 2] creates caches at nodes 1 and 2 (2 caches)
+        # [3, 4, 5] creates caches at nodes 3, 4, and 5 (3 caches)
+        assert len(cached) == 5
 
     def test_iter_nodes(self):
         """Test iterating over all nodes."""
@@ -284,7 +293,8 @@ class TestPrefixTree:
         tree.insert([1, 2, 3], CacheBlock(key, value))
 
         candidates = tree.get_eviction_candidates()
-        assert len(candidates) == 1
+        # With prefix caching, [1, 2, 3] creates 3 cached nodes
+        assert len(candidates) == 3
 
     def test_clear(self):
         """Test clearing tree."""

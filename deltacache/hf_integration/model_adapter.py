@@ -107,12 +107,15 @@ class HFModelAdapter(ABC):
         """
         # Convert DeltaCache KV to HuggingFace format if provided
         hf_past = None
+        past_seq_len = 0
         if past_key_values is not None:
             hf_past = deltacache_to_hf(
                 past_key_values[0],
                 past_key_values[1],
                 add_batch_dim=True,
             )
+            # Track how many tokens are in the past cache
+            past_seq_len = past_key_values[0].shape[1]
 
         # Run model forward pass
         with torch.no_grad():
@@ -125,9 +128,15 @@ class HFModelAdapter(ABC):
         # Extract and convert new KV cache
         new_kv = self._extract_kv_from_outputs(outputs)
 
-        # If we had past KV, we only get the new tokens' KV
-        # HuggingFace returns the full concatenated cache
+        # Convert to DeltaCache format
+        # HuggingFace returns the full concatenated cache (past + new)
         key_cache, value_cache = hf_to_deltacache(new_kv, remove_batch_dim=True)
+
+        # If we had past KV, extract only the newly computed tokens
+        # This is because the IncrementalEngine will concatenate the cached and new KV
+        if past_seq_len > 0:
+            key_cache = key_cache[:, past_seq_len:, :, :]
+            value_cache = value_cache[:, past_seq_len:, :, :]
 
         return key_cache, value_cache
 
@@ -335,8 +344,8 @@ class HFModelAdapter(ABC):
         # Get initial KV from DeltaCache
         result = delta_manager.compute_incremental(tokens, self)
         past_kv = deltacache_to_hf(
-            result.full_key_cache,
-            result.full_value_cache,
+            result.key_cache,
+            result.value_cache,
             add_batch_dim=True,
         )
 

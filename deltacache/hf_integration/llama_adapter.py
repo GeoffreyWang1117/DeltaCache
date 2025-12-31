@@ -283,8 +283,8 @@ class LlamaStyleAdapter(HFModelAdapter):
             # Use DeltaCache
             result = delta_manager.compute_incremental(tokens, self)
             past_kv = deltacache_to_hf(
-                result.full_key_cache,
-                result.full_value_cache,
+                result.key_cache,
+                result.value_cache,
                 add_batch_dim=True,
             )
             stats["cached_tokens"] = result.matched_length
@@ -363,43 +363,51 @@ class LlamaStyleAdapter(HFModelAdapter):
                 return_dict=True,
             )
         logits_no_cache = outputs_no_cache.logits
-        kv_no_cache = outputs_no_cache.past_key_values
+
+        # Convert ground truth KV to DeltaCache format for comparison
+        kv_no_cache_dc = hf_to_deltacache(
+            outputs_no_cache.past_key_values,
+            remove_batch_dim=True,
+        )
 
         # Compute with DeltaCache
         result = delta_manager.compute_incremental(tokens, self)
-        kv_cached = deltacache_to_hf(
-            result.full_key_cache,
-            result.full_value_cache,
-            add_batch_dim=True,
-        )
 
-        # Use cached KV to compute logits
-        with torch.no_grad():
-            # Just get logits for last position using cached KV
-            outputs_cached = self.model(
-                input_ids=input_ids[:, -1:],
-                position_ids=position_ids[:, -1:],
-                past_key_values=kv_cached,
-                use_cache=True,
-                return_dict=True,
+        # Compare KV values directly in DeltaCache format
+        # Both should be [num_layers, seq_len, num_heads, head_dim]
+        key_diff = (kv_no_cache_dc[0] - result.key_cache).abs()
+        value_diff = (kv_no_cache_dc[1] - result.value_cache).abs()
+
+        kv_max_diff = max(key_diff.max().item(), value_diff.max().item())
+        kv_mean_diff = (key_diff.mean().item() + value_diff.mean().item()) / 2
+
+        # Now test that the cached KV produces correct logits
+        # We need to use KV for positions 0 to N-2, then compute position N-1
+        # This tests that the cached prefix produces correct next-token prediction
+        if len(tokens) > 1:
+            prefix_key = result.key_cache[:, :-1, :, :]
+            prefix_value = result.value_cache[:, :-1, :, :]
+            kv_prefix = deltacache_to_hf(
+                prefix_key,
+                prefix_value,
+                add_batch_dim=True,
             )
-        # Note: This tests that the cached KV can be used correctly
 
-        # Compare KV values
-        kv_max_diff = 0.0
-        kv_mean_diff = 0.0
-        num_layers = len(kv_no_cache)
+            # Compute logits for last token using prefix cache
+            with torch.no_grad():
+                outputs_cached = self.model(
+                    input_ids=input_ids[:, -1:],
+                    position_ids=position_ids[:, -1:],
+                    past_key_values=kv_prefix,
+                    use_cache=True,
+                    return_dict=True,
+                )
 
-        for i in range(num_layers):
-            k_diff = (kv_no_cache[i][0] - kv_cached[i][0]).abs()
-            v_diff = (kv_no_cache[i][1] - kv_cached[i][1]).abs()
-            kv_max_diff = max(kv_max_diff, k_diff.max().item(), v_diff.max().item())
-            kv_mean_diff += k_diff.mean().item() + v_diff.mean().item()
+            logits_cached_last = outputs_cached.logits[:, -1, :]
+        else:
+            # Single token - just use the logits from ground truth
+            logits_cached_last = logits_no_cache[:, -1, :]
 
-        kv_mean_diff /= (2 * num_layers)
-
-        # Compare logits for next token prediction
-        logits_cached_last = outputs_cached.logits[:, -1, :]
         logits_no_cache_last = logits_no_cache[:, -1, :]
         logits_diff = (logits_cached_last - logits_no_cache_last).abs()
 
