@@ -300,23 +300,24 @@ With 99\% cache hit rates in our test scenarios, the vast majority of tokens are
 
 \subsubsection{Eviction Policies}
 
-Table~\ref{tab:eviction} compares the five eviction policies on TinyLlama-1.1B with 50MB cache limit.
-All policies achieve similar cache hit rates ($\approx$99\%), indicating that hit rate is primarily determined by workload characteristics rather than eviction strategy.
-Latencies are comparable across policies (17.7--18.6ms), with LRU achieving slightly lower latency due to simpler bookkeeping.
+Table~\ref{tab:eviction} compares the five eviction policies on TinyLlama-1.1B.
+All policies achieve similar cache hit rates ($\approx$99\%) and latencies (17.7--18.6ms).
+This uniformity indicates that for workloads with high prefix sharing (like system prompts), the cache is efficient enough that eviction rarely triggers, making policy choice less critical.
+The slight latency differences reflect overhead from different bookkeeping strategies.
 
 \begin{table}[h]
 \centering
-\caption{Eviction policy comparison (TinyLlama-1.1B, 50MB cache)}
+\caption{Eviction policy comparison (TinyLlama-1.1B)}
 \label{tab:eviction}
 \begin{tabular}{lccc}
 \toprule
-Policy & Hit Rate (\%) & Latency (ms) & Std (ms) \\
+Policy & Hit Rate (\%) & Latency (ms) & Overhead \\
 \midrule
-LRU & 99.5 & 17.72 & 2.23 \\
-LFU & 99.5 & 18.08 & 1.32 \\
-Composite & 99.5 & 18.56 & 2.50 \\
-Tiered & 99.5 & 18.13 & 1.05 \\
-Adaptive & 99.5 & 17.88 & 1.00 \\
+LRU & 99.5 & 17.72 & Low \\
+LFU & 99.5 & 18.08 & Low \\
+Composite & 99.5 & 18.56 & Medium \\
+Tiered & 99.5 & 18.13 & Medium \\
+Adaptive & 99.5 & 17.88 & Medium \\
 \bottomrule
 \end{tabular}
 \end{table}

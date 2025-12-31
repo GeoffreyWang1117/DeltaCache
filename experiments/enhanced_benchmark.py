@@ -290,9 +290,12 @@ class EnhancedBenchmark:
 
         return result
 
-    def run_eviction_policy_comparison(self, n_queries: int = 200,
-                                        cache_size_mb: int = 50) -> Dict:
-        """Compare eviction policies with memory pressure."""
+    def run_eviction_policy_comparison(self, n_queries: int = 300,
+                                        cache_size_mb: float = 0.5) -> Dict:
+        """Compare eviction policies with memory pressure.
+
+        Uses a very small cache (0.5MB) to force evictions and compare policies.
+        """
         print(f"\n{'='*60}")
         print(f"Eviction Policy Comparison (cache_size={cache_size_mb}MB)")
         print(f"{'='*60}")
@@ -305,26 +308,38 @@ class EnhancedBenchmark:
             "adaptive": AdaptiveEvictionPolicy(),
         }
 
-        # Generate diverse prompts to trigger eviction
-        base_prompts = [
-            "Explain the theory of relativity in simple terms.",
-            "What are the main causes of climate change?",
-            "Describe the process of machine learning model training.",
-            "How do neural networks learn to recognize images?",
-            "What is the difference between CPU and GPU?",
-            "Explain how blockchain technology works.",
-            "What are the principles of object-oriented programming?",
-            "Describe the human immune system.",
-            "How do vaccines protect against diseases?",
-            "What is quantum entanglement?",
+        # Generate completely unique prompts to maximize cache pressure
+        # Each prompt starts differently to prevent prefix sharing
+        unique_topics = [
+            "Physics: Explain quantum mechanics and wave-particle duality in detail.",
+            "Biology: Describe how DNA replication works in cells step by step.",
+            "Chemistry: What are the properties and applications of noble gases?",
+            "Astronomy: How do black holes form and evolve over billions of years?",
+            "Medicine: Explain how different types of antibiotics fight infections.",
+            "Technology: Describe the architecture of modern multi-core processors.",
+            "Mathematics: What is the significance and applications of prime numbers?",
+            "History: Describe the complex causes leading to World War I.",
+            "Economics: Explain supply and demand equilibrium with real examples.",
+            "Psychology: How does memory formation and recall work in the brain?",
+            "Geography: Describe plate tectonics and how continents have drifted.",
+            "Literature: Analyze the major themes present in Shakespeare's Hamlet.",
+            "Music: How does harmony and counterpoint work in classical music?",
+            "Art: Describe the key characteristics of the Renaissance art movement.",
+            "Philosophy: Explain Kant's categorical imperative and its implications.",
+            "Sociology: How do social norms develop and change in modern societies?",
+            "Politics: Describe the separation of powers in democratic governments.",
+            "Law: Explain the historical development of habeas corpus protections.",
+            "Engineering: How do suspension bridges distribute structural loads?",
+            "Computer Science: Explain hash table implementations and collision handling.",
         ]
 
-        # Create many unique prompts
+        # Create many unique prompts - each completely different
         prompts = []
         for i in range(n_queries):
-            base = base_prompts[i % len(base_prompts)]
-            suffix = f" (variation {i})"
-            prompts.append(base + suffix)
+            topic_idx = i % len(unique_topics)
+            # Add unique prefix and suffix to make each prompt distinct
+            prompt = f"Request number {i}: {unique_topics[topic_idx]} Please provide comprehensive details."
+            prompts.append(prompt)
 
         results = {}
 
