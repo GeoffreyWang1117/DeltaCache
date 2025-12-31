@@ -54,6 +54,12 @@ def hf_to_deltacache(
 
     # Stack keys and values from all layers
     # Each layer has shape [batch, heads, seq, dim]
+    # Handle multi-GPU case: move all tensors to same device
+    if key_list:
+        target_device = key_list[0].device
+        key_list = [k.to(target_device) for k in key_list]
+        value_list = [v.to(target_device) for v in value_list]
+
     keys = torch.stack(key_list, dim=0)
     values = torch.stack(value_list, dim=0)
     # Shape: [num_layers, batch, heads, seq, dim]

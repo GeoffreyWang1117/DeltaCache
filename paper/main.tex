@@ -232,12 +232,13 @@ We ensure correctness through:
 \subsection{Experimental Setup}
 
 \paragraph{Models}
-We evaluate \deltacache{} on two models:
+We evaluate \deltacache{} on three models:
 \begin{itemize}
     \item \textbf{TinyLlama-1.1B} \citep{tinyllama}: A compact Llama-architecture model with 1.1B parameters
     \item \textbf{Qwen2-1.5B} \citep{qwen2}: A 1.5B parameter model from the Qwen2 family
+    \item \textbf{Mistral-7B} \citep{jiang2023mistral}: A 7B parameter model with 4-bit quantization
 \end{itemize}
-Both models use Grouped Query Attention (GQA) \citep{ainslie2023gqa} and RoPE positional embeddings.
+All models use Grouped Query Attention (GQA) \citep{ainslie2023gqa} and RoPE positional embeddings.
 
 \paragraph{Hardware}
 Experiments were conducted on a system with 2$\times$ NVIDIA RTX 3090 GPUs (24GB each) and 64GB CPU memory.
@@ -275,20 +276,19 @@ Qwen2-1.5B & 4 & 0.0000 & 0.0000 & 100\% \\
 \subsection{Performance Comparison}
 
 Table~\ref{tab:performance} compares \deltacache{} with baseline inference (no caching).
-\deltacache{} achieves \textbf{8.48$\times$} speedup on TinyLlama and \textbf{8.41$\times$} on Qwen2, with standard deviations of 0.31 and 0.54 respectively across 3 runs.
+\deltacache{} achieves \textbf{8.48$\times$} speedup on TinyLlama, \textbf{8.41$\times$} on Qwen2, and \textbf{14.62$\times$} on Mistral-7B (4-bit).
 
 \begin{table}[h]
 \centering
 \caption{Performance: \deltacache{} vs baseline (no cache). Mean $\pm$ std over 3 runs.}
 \label{tab:performance}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccc}
 \toprule
-\multirow{2}{*}{Model} & \multicolumn{2}{c}{Latency (ms)} & \multicolumn{2}{c}{Throughput (tok/s)} & \multirow{2}{*}{Speedup} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
- & Base & Ours & Base & Ours & \\
+Model & Base (ms) & Ours (ms) & Speedup & Mem (GB) \\
 \midrule
-TinyLlama-1.1B & 14.65$\pm$0.19 & 1.73$\pm$0.08 & 7,096 & 66,508 & 8.48$\times$$\pm$0.31 \\
-Qwen2-1.5B & 18.38$\pm$0.12 & 2.19$\pm$0.16 & 5,711 & 46,060 & 8.41$\times$$\pm$0.54 \\
+TinyLlama-1.1B & 14.65$\pm$0.19 & 1.73$\pm$0.08 & 8.48$\times$$\pm$0.31 & 2.05 \\
+Qwen2-1.5B & 18.38$\pm$0.12 & 2.19$\pm$0.16 & 8.41$\times$$\pm$0.54 & 2.88 \\
+Mistral-7B (4-bit) & 201.3$\pm$1.6 & 13.78$\pm$0.47 & 14.62$\times$$\pm$0.56 & 4.16 \\
 \bottomrule
 \end{tabular}
 \end{table}

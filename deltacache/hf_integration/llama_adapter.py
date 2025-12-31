@@ -150,7 +150,8 @@ class LlamaStyleAdapter(HFModelAdapter):
                     load_in_4bit=load_in_4bit,
                 )
                 model_kwargs["quantization_config"] = quantization_config
-                model_kwargs["device_map"] = "auto"
+                # Use specific device to avoid multi-GPU distribution
+                model_kwargs["device_map"] = {"": device} if device else "auto"
             except ImportError:
                 print("Warning: bitsandbytes not available, loading without quantization")
                 if dtype is None:
