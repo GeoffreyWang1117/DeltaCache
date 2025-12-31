@@ -124,7 +124,7 @@ class RealModelBenchmark:
     def reset_cache(self):
         """Reset DeltaCache manager."""
         if self._manager:
-            self._manager.reset()
+            self._manager.clear()
 
     def run_correctness_test(
         self,

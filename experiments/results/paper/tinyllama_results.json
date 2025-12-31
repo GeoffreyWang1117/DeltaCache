@@ -1,0 +1,43 @@
+{
+  "correctness": {
+    "num_tests": 5,
+    "all_correct": true,
+    "avg_kv_max_diff": 0.0,
+    "avg_kv_mean_diff": 0.0,
+    "tokens_match_rate": 1.0,
+    "tolerance": 0.02
+  },
+  "prompt_length_sweep": [
+    {
+      "prompt_name": "short",
+      "prompt_length": 5,
+      "cache_hit_rate": 0.8,
+      "avg_latency_ms": 19.95366425253451,
+      "throughput_tok_s": 601.3933004047497
+    },
+    {
+      "prompt_name": "medium",
+      "prompt_length": 17,
+      "cache_hit_rate": 0.8,
+      "avg_latency_ms": 15.392335737124085,
+      "throughput_tok_s": 1559.2175489075044
+    },
+    {
+      "prompt_name": "long",
+      "prompt_length": 44,
+      "cache_hit_rate": 0.8,
+      "avg_latency_ms": 22.372775385156274,
+      "throughput_tok_s": 2279.556251829047
+    }
+  ],
+  "baseline_comparison": {
+    "with_cache": {
+      "avg_latency_ms": 12.473720079287887,
+      "throughput_tok_s": 1042.1910959494737
+    },
+    "without_cache": {
+      "avg_latency_ms": 14.460714254528284,
+      "throughput_tok_s": 898.9874062361151
+    }
+  }
+}
