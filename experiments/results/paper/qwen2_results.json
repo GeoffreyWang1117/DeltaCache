@@ -1,0 +1,29 @@
+{
+  "correctness": {
+    "num_tests": 4,
+    "all_correct": true,
+    "avg_kv_max_diff": 0.0,
+    "avg_kv_mean_diff": 0.0,
+    "tokens_match_rate": 1.0,
+    "tolerance": 0.02
+  },
+  "system_prompt": {
+    "prompt_length": 26,
+    "num_queries": 10,
+    "cache_hit_rate": 0.9,
+    "token_reuse_rate": 0.7616099071207431,
+    "avg_latency_ms": 26.11058729235083,
+    "throughput": 1237.0460931555674
+  },
+  "baseline_comparison": {
+    "with_cache": {
+      "avg_latency_ms": 20.838590571656823,
+      "throughput_tok_s": 1554.807648271001,
+      "token_reuse_rate": 0.0
+    },
+    "without_cache": {
+      "avg_latency_ms": 23.163915006443858,
+      "throughput_tok_s": 1398.7272872908918
+    }
+  }
+}
