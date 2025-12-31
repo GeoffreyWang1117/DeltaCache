@@ -1,0 +1,6 @@
+{
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "num_queries": 10,
+  "system_prompt_length": 30,
+  "results": []
+}
