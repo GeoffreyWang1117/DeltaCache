@@ -1,0 +1,450 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda",
+    "quantization": "none",
+    "timestamp": "2025-12-31T23:37:27.178289"
+  },
+  "experiments": {
+    "prefix_length_scaling": {
+      "prefix_lengths": {
+        "50": {
+          "deltacache_ms": 6.201974249931179,
+          "deltacache_std": 16.67413468756456,
+          "baseline_ms": 14.074977183327064,
+          "baseline_std": 0.9233420736842027,
+          "speedup": 2.2694349599215524,
+          "token_reuse_rate": 0.9212962962962963
+        },
+        "100": {
+          "deltacache_ms": 4.000475983290623,
+          "deltacache_std": 6.934644704381784,
+          "baseline_ms": 13.678145416785506,
+          "baseline_std": 0.6255453038122128,
+          "speedup": 3.4191294920697013,
+          "token_reuse_rate": 0.9337979094076655
+        },
+        "200": {
+          "deltacache_ms": 4.129553266632986,
+          "deltacache_std": 7.10939992919341,
+          "baseline_ms": 15.184414600116725,
+          "baseline_std": 0.8972061965135614,
+          "speedup": 3.6770114391809923,
+          "token_reuse_rate": 0.9413407821229051
+        },
+        "500": {
+          "deltacache_ms": 4.8812481999599795,
+          "deltacache_std": 8.591206344717254,
+          "baseline_ms": 27.319786516682143,
+          "baseline_std": 0.6173075568920479,
+          "speedup": 5.596885345208657,
+          "token_reuse_rate": 0.9463869463869464
+        },
+        "1000": {
+          "deltacache_ms": 6.0222314333411004,
+          "deltacache_std": 12.083782884172589,
+          "baseline_ms": 51.0954318333764,
+          "baseline_std": 0.9013812313054859,
+          "speedup": 8.484468323567722,
+          "token_reuse_rate": 0.9481671265273945
+        },
+        "1500": {
+          "deltacache_ms": 7.144281166680837,
+          "deltacache_std": 15.616515965314964,
+          "baseline_ms": 68.37600291664785,
+          "baseline_std": 1.054808026838222,
+          "speedup": 9.570732355206937,
+          "token_reuse_rate": 0.9487721151307104
+        }
+      },
+      "summary": {
+        "min_speedup": 2.2694349599215524,
+        "max_speedup": 9.570732355206937,
+        "mean_speedup": 5.502943652525927
+      }
+    },
+    "correctness": {
+      "samples": [
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.015625,
+          "val_max_diff": 0.002288818359375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.0009765625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.002197265625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001953125,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.01171875,
+          "val_max_diff": 0.00238037109375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.015625,
+          "val_max_diff": 0.002288818359375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.0009765625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.002197265625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001953125,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.01171875,
+          "val_max_diff": 0.00238037109375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.015625,
+          "val_max_diff": 0.002288818359375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.0009765625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.002197265625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001953125,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.01171875,
+          "val_max_diff": 0.00238037109375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.015625,
+          "val_max_diff": 0.002288818359375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.0009765625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.002197265625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001953125,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.01171875,
+          "val_max_diff": 0.00238037109375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.015625,
+          "val_max_diff": 0.002288818359375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.0009765625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.002197265625,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001953125,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 5,
+          "key_max_diff": 0.0,
+          "val_max_diff": 0.0,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 4,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        },
+        {
+          "prompt_len": 7,
+          "key_max_diff": 0.01171875,
+          "val_max_diff": 0.00238037109375,
+          "is_correct": false
+        },
+        {
+          "prompt_len": 6,
+          "key_max_diff": 0.0078125,
+          "val_max_diff": 0.001708984375,
+          "is_correct": true
+        }
+      ],
+      "summary": {
+        "total_samples": 50,
+        "correct_samples": 40,
+        "accuracy": 0.8,
+        "max_key_diff": 0.015625,
+        "max_val_diff": 0.00238037109375
+      }
+    },
+    "multiturn": {
+      "conversations": [
+        {
+          "n_turns": 4,
+          "speedup_mean": 0.9151049990860113,
+          "speedup_std": 0.04778174126917484,
+          "token_reuse": 0.6091370558375635
+        },
+        {
+          "n_turns": 3,
+          "speedup_mean": 0.9035875271798095,
+          "speedup_std": 0.035609678305363365,
+          "token_reuse": 0.5289256198347108
+        },
+        {
+          "n_turns": 2,
+          "speedup_mean": 0.9313189864435758,
+          "speedup_std": 0.017834079693003463,
+          "token_reuse": 0.34375
+        }
+      ],
+      "summary": {
+        "mean_speedup": 0.9166705042364656,
+        "mean_token_reuse": 0.49393755855742477
+      }
+    },
+    "rag": {
+      "documents": [
+        {
+          "doc_tokens": 114,
+          "speedup_mean": 1.753156256256867,
+          "token_reuse": 0.874806800618238
+        },
+        {
+          "doc_tokens": 94,
+          "speedup_mean": 1.7113463527913306,
+          "token_reuse": 0.870201096892139
+        },
+        {
+          "doc_tokens": 89,
+          "speedup_mean": 1.782016738536811,
+          "token_reuse": 0.8687739463601533
+        }
+      ],
+      "summary": {
+        "mean_speedup": 1.7488397825283362,
+        "mean_token_reuse": 0.8712606146235101
+      }
+    },
+    "ttft": {
+      "prefix_lengths": {
+        "100": {
+          "deltacache_ttft_ms": 0.77793455009972,
+          "baseline_ttft_ms": 13.33084963331809,
+          "ttft_speedup": 17.136209764188088
+        },
+        "500": {
+          "deltacache_ttft_ms": 1.4599580666375307,
+          "baseline_ttft_ms": 27.236553400007324,
+          "ttft_speedup": 18.655709381254063
+        },
+        "1000": {
+          "deltacache_ttft_ms": 2.7859786500509167,
+          "baseline_ttft_ms": 51.22978518332578,
+          "ttft_speedup": 18.388434233833596
+        }
+      },
+      "summary": {
+        "mean_ttft_speedup": 18.060117793091916,
+        "max_ttft_speedup": 18.655709381254063
+      }
+    }
+  }
+}
