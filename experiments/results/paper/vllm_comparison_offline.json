@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "n_queries": 30,
+    "n_runs": 3,
+    "system_prompt_tokens": 28,
+    "timestamp": "2026-01-01T18:27:07.216225"
+  },
+  "systems": {
+    "deltacache": {
+      "latency_mean_ms": 6.481744066574417,
+      "latency_std_ms": 13.961314408040526,
+      "token_reuse_rate": 0.9171203871748337
+    },
+    "hf_baseline": {
+      "latency_mean_ms": 12.493390055594014,
+      "latency_std_ms": 0.9247845078524983
+    },
+    "vllm_prefix": {
+      "error": "Engine core initialization failed. See root cause above. Failed core proc(s): {}"
+    }
+  },
+  "speedups": {
+    "deltacache": 1.9274735205947024
+  }
+}

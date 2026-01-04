@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-v0.1",
+    "device": "cuda",
+    "n_queries_per_scenario": 15,
+    "n_runs": 2,
+    "timestamp": "2026-01-03T11:24:52.412866"
+  },
+  "scenarios": {
+    "rag_python_guide": {
+      "scenario": "rag_python_guide",
+      "prefix_tokens": 676,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 35.13382703337508,
+        "deltacache_std_ms": 64.99246595680114,
+        "baseline_mean_ms": 193.54935633358158,
+        "baseline_std_ms": 1.8334015774138523
+      },
+      "speedup": {
+        "overall": 5.508917549736926,
+        "cached_queries": 3.111123113890949
+      },
+      "token_reuse_rate": 0.9244242306947938,
+      "ttft": {
+        "deltacache_first_ms": 255.3460385024664,
+        "baseline_first_ms": 195.9057535023021
+      }
+    },
+    "rag_ml_tutorial": {
+      "scenario": "rag_ml_tutorial",
+      "prefix_tokens": 647,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 34.00470643343093,
+        "deltacache_std_ms": 43.61454681314152,
+        "baseline_mean_ms": 189.09116796664117,
+        "baseline_std_ms": 3.1874411346904297
+      },
+      "speedup": {
+        "overall": 5.560735198135415,
+        "cached_queries": 6.461986385492636
+      },
+      "token_reuse_rate": 0.9233340085071906,
+      "ttft": {
+        "deltacache_first_ms": 188.6189370015927,
+        "baseline_first_ms": 192.31945600404288
+      }
+    },
+    "rag_api_documentation": {
+      "scenario": "rag_api_documentation",
+      "prefix_tokens": 646,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 32.55173316695922,
+        "deltacache_std_ms": 45.056974463784655,
+        "baseline_mean_ms": 191.93480003305012,
+        "baseline_std_ms": 2.7504280613539867
+      },
+      "speedup": {
+        "overall": 5.896300484174173,
+        "cached_queries": 6.390585286571197
+      },
+      "token_reuse_rate": 0.9244900030447579,
+      "ttft": {
+        "deltacache_first_ms": 191.21333799921558,
+        "baseline_first_ms": 193.52047650318127
+      }
+    },
+    "fewshot_sentiment": {
+      "scenario": "fewshot_sentiment",
+      "prefix_tokens": 282,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 33.510228033507396,
+        "deltacache_std_ms": 22.124810013876914,
+        "baseline_mean_ms": 113.67010209990742,
+        "baseline_std_ms": 2.1943861630184225
+      },
+      "speedup": {
+        "overall": 3.3921017185035844,
+        "cached_queries": 3.934177106967666
+      },
+      "token_reuse_rate": 0.8944196428571428,
+      "ttft": {
+        "deltacache_first_ms": 114.88005850333138,
+        "baseline_first_ms": 115.07192849967396
+      }
+    },
+    "long_system_prompt": {
+      "scenario": "long_system_prompt",
+      "prefix_tokens": 484,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 35.327519399531106,
+        "deltacache_std_ms": 26.68750434719767,
+        "baseline_mean_ms": 135.25724826637693,
+        "baseline_std_ms": 2.494353667533472
+      },
+      "speedup": {
+        "overall": 3.8286653171626925,
+        "cached_queries": 4.738106270650112
+      },
+      "token_reuse_rate": 0.9224417975094749,
+      "ttft": {
+        "deltacache_first_ms": 133.4694969955308,
+        "baseline_first_ms": 136.24121050088434
+      }
+    },
+    "code_completion": {
+      "scenario": "code_completion",
+      "prefix_tokens": 1448,
+      "n_queries": 15,
+      "n_runs": 2,
+      "latency": {
+        "deltacache_mean_ms": 56.56428249882689,
+        "deltacache_std_ms": 85.9673431581762,
+        "baseline_mean_ms": 374.60445626614575,
+        "baseline_std_ms": 3.840939874231346
+      },
+      "speedup": {
+        "overall": 6.62263251149548,
+        "cached_queries": 10.896270567266473
+      },
+      "token_reuse_rate": 0.9229020820074553,
+      "ttft": {
+        "deltacache_first_ms": 372.8023494950321,
+        "baseline_first_ms": 381.14556450091186
+      }
+    }
+  },
+  "summary": {
+    "mean_speedup": 5.134892129868045,
+    "mean_cached_speedup": 5.922041455139839,
+    "max_speedup": 6.62263251149548,
+    "min_speedup": 3.3921017185035844
+  }
+}

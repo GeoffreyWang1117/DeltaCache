@@ -1,0 +1,53 @@
+{
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "num_prompts": 20,
+  "system_prompt_length": 200,
+  "baseline_latency_ms": 40.54512104994501,
+  "baseline_ttft_ms": 40.54512104994501,
+  "results": [
+    {
+      "policy_name": "lru",
+      "cache_hit_rate": 0.95,
+      "avg_latency_ms": 20.65916190022108,
+      "speedup": 1.9625733728100134,
+      "memory_used_mb": 0.0,
+      "ttft_ms": 20.583149249796406,
+      "num_requests": 20,
+      "num_cache_hits": 19,
+      "num_evictions": 0
+    },
+    {
+      "policy_name": "attention_aware",
+      "cache_hit_rate": 0.95,
+      "avg_latency_ms": 20.102297649282264,
+      "speedup": 2.016939643284639,
+      "memory_used_mb": 0.0,
+      "ttft_ms": 20.03242059963668,
+      "num_requests": 20,
+      "num_cache_hits": 19,
+      "num_evictions": 0
+    },
+    {
+      "policy_name": "layer_aware",
+      "cache_hit_rate": 0.95,
+      "avg_latency_ms": 19.953007150252233,
+      "speedup": 2.03203059792581,
+      "memory_used_mb": 0.0,
+      "ttft_ms": 19.880585150167462,
+      "num_requests": 20,
+      "num_cache_hits": 19,
+      "num_evictions": 0
+    },
+    {
+      "policy_name": "hierarchical",
+      "cache_hit_rate": 0.95,
+      "avg_latency_ms": 20.475180399989767,
+      "speedup": 1.9802082451964758,
+      "memory_used_mb": 0.0,
+      "ttft_ms": 20.40372489955189,
+      "num_requests": 20,
+      "num_cache_hits": 19,
+      "num_evictions": 0
+    }
+  ]
+}

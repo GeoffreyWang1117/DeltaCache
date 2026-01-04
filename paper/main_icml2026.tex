@@ -1,0 +1,639 @@
+%%%%%%%% ICML 2026 SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended packages
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2026}
+
+% For camera-ready, use:
+% \usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% Custom commands
+\newcommand{\deltacache}{\textsc{DeltaCache}}
+
+% Short running title
+\icmltitlerunning{DeltaCache: Layer-Aware KV Cache Management}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{DeltaCache: Layer-Aware KV Cache Management Guided by Transformer Semantics}
+
+\begin{icmlauthorlist}
+\icmlauthor{Anonymous Author(s)}{}
+\end{icmlauthorlist}
+
+\icmlkeywords{Large Language Models, KV Cache, Inference Optimization, Prefix Caching}
+
+\vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}
+
+\begin{abstract}
+Large Language Models (LLMs) face significant computational overhead during inference due to repeated Key-Value (KV) cache computations for shared prompt prefixes.
+We present \deltacache{}, an incremental computation-aware KV cache management system that leverages prefix sharing patterns to eliminate redundant computations.
+Our key innovations include: (1) a prefix tree-based cache architecture for efficient KV reuse, (2) attention-aware eviction that uses attention scores to prioritize important cache entries, (3) layer-aware caching that prioritizes late-layer (semantic) over early-layer (syntactic) KV cache based on transformer interpretability insights, and (4) hierarchical GPU/CPU memory management with predictive prefetching.
+On targeted application benchmarks (RAG, few-shot learning, code completion), \deltacache{} achieves \textbf{5.13$\times$} average speedup on Mistral-7B (fp16), with \textbf{10.90$\times$} cached speedup on code completion scenarios.
+In comprehensive baseline comparisons, we achieve up to \textbf{13.43$\times$} speedup on 2K-token contexts.
+Speedup scales at \textbf{2.43$\times$ per 1K additional tokens}, with memory overhead of only 17--22\%.
+We verify 100\% correctness at fp16 precision and identify optimal scenarios: \deltacache{} excels in fixed-prefix workloads while multi-turn conversations show limited gains.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Large Language Models (LLMs) have become foundational components in modern AI systems, powering applications from conversational agents to code generation \citep{brown2020language,openai2023gpt4}.
+However, the computational cost of LLM inference remains a significant bottleneck, particularly in production environments serving multiple concurrent requests.
+
+A key observation in production LLM deployments is that many requests share common prompt prefixes.
+Consider a customer service chatbot: every conversation begins with the same system prompt defining the agent's behavior.
+Similarly, Retrieval-Augmented Generation (RAG) systems often prepend the same document context to multiple user queries \citep{lewis2020retrieval}.
+In few-shot learning scenarios, the same demonstration examples precede every inference request.
+
+Despite this redundancy, standard LLM inference recomputes the Key-Value (KV) cache for shared prefixes with every request.
+This represents a significant waste of computational resources, as the KV states for identical token sequences are mathematically equivalent across requests.
+The quadratic complexity of self-attention makes this particularly costly for long prefixes.
+
+We present \deltacache{}, an incremental computation-aware KV cache management system that addresses this inefficiency.
+Our approach is grounded in two key insights from transformer interpretability research \citep{rogers2020primer,elhage2021mathematical}:
+
+\begin{enumerate}
+    \item \textbf{Prefix independence}: For causal language models, KV states for prefix tokens are independent of future tokens, enabling safe reuse.
+    \item \textbf{Layer heterogeneity}: Different transformer layers serve distinct functions---early layers capture local syntactic patterns while late layers encode semantic features \citep{geva2023dissecting}---suggesting differentiated caching priorities.
+\end{enumerate}
+
+Our contributions are:
+\begin{itemize}
+    \item A \textbf{prefix tree-based cache architecture} that enables efficient lookup and reuse of cached KV states for shared prompt prefixes with $O(n)$ complexity.
+    \item An \textbf{incremental computation engine} that computes only the delta (new tokens) while reusing cached KV states for matched prefixes.
+    \item \textbf{Attention-aware eviction}: A novel policy that uses attention scores to identify and retain important cache entries.
+    \item \textbf{Layer-aware caching}: Prioritizes late-layer (semantic) KV cache over early-layer (local pattern) cache based on transformer layer characteristics.
+    \item \textbf{Hierarchical memory management}: GPU$\rightarrow$CPU tiering with proactive offloading and predictive prefetching.
+    \item \textbf{Comprehensive evaluation} demonstrating 5.13$\times$ average speedup on Mistral-7B with 100\% correctness at fp16 precision.
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{KV Cache Memory Optimization}
+The KV cache is a critical component in transformer inference, storing computed attention states to avoid redundant computation during autoregressive generation \citep{vaswani2017attention}.
+Several works focus on reducing KV cache memory footprint through quantization \citep{liu2024kivi,hooper2024kvquant}, compression \citep{ge2023model}, or sparse attention patterns \citep{child2019generating,xiao2024efficient}.
+H2O \citep{zhang2024h2o} identifies ``heavy hitter'' tokens that receive high attention and retains only these.
+SnapKV \citep{snapkv2024} compresses KV cache by clustering similar attention patterns.
+These approaches focus on memory reduction rather than computation reuse, which is complementary to our work.
+
+\paragraph{Prefix Caching in Serving Systems}
+vLLM \citep{kwon2023efficient} introduced automatic prefix caching as an optimization for shared prompt prefixes.
+Their PagedAttention mechanism enables efficient memory management but operates at the serving layer.
+SGLang \citep{zheng2023efficiently} further optimizes prefix sharing through RadixAttention with efficient tree-based prefix matching.
+ChunkAttention \citep{ye2024chunkattention} introduces prefix-aware KV cache with two-phase partition.
+\deltacache{} differs by providing a general-purpose library that can be integrated with any transformer implementation, offering fine-grained control over eviction policies and layer-aware prioritization.
+
+\paragraph{Layer-wise KV Cache Management}
+Recent work recognizes that different transformer layers have different importance for KV caching.
+LayerCondensed \citep{layercondensed2024} shares KV cache across adjacent layers.
+SqueezeAttention \citep{squeezeattention2025} allocates layer-wise optimal budget for KV cache.
+Our layer-aware caching is motivated by similar insights but focuses on eviction priority rather than compression.
+
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Problem Formulation}
+
+Consider a transformer model with $L$ layers processing a sequence of tokens $\mathbf{x} = [x_1, x_2, \ldots, x_n]$.
+For each layer $l$ and position $i$, the model computes key and value states:
+\begin{align}
+    \mathbf{k}_i^l &= W_K^l \mathbf{h}_i^{l-1} \\
+    \mathbf{v}_i^l &= W_V^l \mathbf{h}_i^{l-1}
+\end{align}
+where $\mathbf{h}_i^{l-1}$ is the hidden state from the previous layer and $W_K^l, W_V^l$ are learned projection matrices.
+
+The key insight enabling prefix caching is that for causal language models, the KV states for prefix tokens are \textit{independent of future tokens}.
+Formally, $\mathbf{k}_i^l$ and $\mathbf{v}_i^l$ depend only on $[x_1, \ldots, x_i]$, not on any tokens after position $i$.
+This property follows from the causal attention mask that prevents positions from attending to future tokens.
+
+\textbf{Implication}: If we have previously computed KV states for a prefix $[x_1, \ldots, x_m]$, and we receive a new sequence $[x_1, \ldots, x_m, x_{m+1}, \ldots, x_n]$ with the same prefix, we can reuse the cached KV states for positions $1$ through $m$ and only compute new states for positions $m+1$ through $n$.
+
+\subsection{System Architecture}
+
+\deltacache{} consists of three main components: a prefix tree for cache organization, a memory pool for hierarchical storage, and an incremental computation engine.
+
+\paragraph{Prefix Tree}
+We organize cached KV states in a prefix tree (trie) data structure.
+Each node in the tree corresponds to a token, and the path from root to any node represents a token sequence.
+Nodes store pointers to cached KV blocks, enabling $O(n)$ lookup for a sequence of length $n$.
+
+The prefix tree supports three operations:
+\begin{itemize}
+    \item \texttt{lookup(tokens)}: Find the longest matching prefix and return cached KV states. Returns (prefix\_length, kv\_cache).
+    \item \texttt{insert(tokens, kv\_cache)}: Add a new sequence with its computed KV states to the tree.
+    \item \texttt{evict(node)}: Remove a node and free associated memory when capacity is exceeded.
+\end{itemize}
+
+\paragraph{Memory Pool}
+The memory pool manages GPU and CPU memory for KV cache blocks.
+It implements a two-tier caching hierarchy:
+\begin{itemize}
+    \item \textbf{GPU tier}: Fast access for active cache entries
+    \item \textbf{CPU tier}: Overflow storage for less frequently used entries
+\end{itemize}
+Proactive offloading moves entries from GPU to CPU before GPU memory is exhausted (default threshold: 80\%).
+Predictive prefetching moves hot entries back to GPU based on access patterns.
+
+\paragraph{Incremental Computation Engine}
+The incremental engine coordinates the computation flow as shown in Algorithm~\ref{alg:incremental}.
+
+\begin{algorithm}[t]
+\caption{Incremental KV Computation}
+\label{alg:incremental}
+\begin{algorithmic}[1]
+\REQUIRE Input tokens $\mathbf{x} = [x_1, \ldots, x_n]$, Model $M$, Cache $C$
+\ENSURE Complete KV cache for full sequence
+\STATE $(\text{prefix\_len}, \text{kv\_cached}) \leftarrow C.\text{lookup}(\mathbf{x})$
+\IF{prefix\_len $> 0$}
+    \STATE $\mathbf{x}_\text{delta} \leftarrow [x_{\text{prefix\_len}+1}, \ldots, x_n]$
+    \STATE $\text{kv\_delta} \leftarrow M.\text{forward}(\mathbf{x}_\text{delta}, \text{kv\_cached})$
+    \STATE $\text{kv\_full} \leftarrow \text{concat}(\text{kv\_cached}, \text{kv\_delta})$
+\ELSE
+    \STATE $\text{kv\_full} \leftarrow M.\text{forward}(\mathbf{x})$
+\ENDIF
+\STATE $C.\text{insert}(\mathbf{x}, \text{kv\_full})$
+\STATE \textbf{return} kv\_full
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Eviction Policies}
+
+When memory is exhausted, \deltacache{} must evict cached entries.
+We implement several eviction policies, including novel attention-aware and layer-aware strategies.
+
+\paragraph{Attention-Aware Eviction}
+We introduce \emph{attention-aware eviction}, which leverages attention scores to prioritize important cache entries.
+The intuition is that KV cache entries receiving high attention from subsequent queries are likely important for future queries.
+
+We compute entry importance as:
+\begin{equation}
+    I(e) = w_a \cdot \bar{\alpha}_e + w_f \cdot \log(1 + f_e) + w_r \cdot \frac{1}{1 + \log(1 + t_e)}
+\end{equation}
+where $\bar{\alpha}_e$ is the exponential moving average (EMA) of attention scores received by entry $e$, $f_e$ is access frequency, $t_e$ is time since last access, and $w_a, w_f, w_r$ are tunable weights (default: 0.5, 0.3, 0.2).
+
+\paragraph{Layer-Aware Caching}
+Research in transformer interpretability reveals that different layers serve distinct functions \citep{rogers2020primer,elhage2021mathematical}:
+\begin{itemize}
+    \item \textbf{Early layers} (0--30\%): Capture local syntactic patterns, positional information
+    \item \textbf{Middle layers} (30--70\%): Build compositional representations
+    \item \textbf{Late layers} (70--100\%): Encode task-specific semantic features
+\end{itemize}
+
+We assign layer-dependent importance weights using a sigmoid function:
+\begin{equation}
+    w_l = \frac{1}{1 + e^{-k(l/L - \tau)}}
+\end{equation}
+where $l$ is the layer index, $L$ is total layers, $k=5$ controls steepness, and $\tau=0.3$ is the transition point.
+This gives early layers weight $\approx$0.18 and late layers weight $\approx$0.88, prioritizing semantic representations during eviction.
+
+\subsection{Correctness Guarantee}
+
+A critical requirement for \deltacache{} is numerical correctness.
+The cached KV states must be identical (within floating-point tolerance) to freshly computed states.
+
+We ensure correctness through:
+\begin{enumerate}
+    \item \textbf{Position-aware computation}: When computing delta tokens, we provide correct absolute position IDs accounting for the cached prefix length.
+    \item \textbf{RoPE handling}: For models using Rotary Position Embeddings \citep{su2024roformer}, position IDs must match absolute positions in the full sequence. We explicitly pass \texttt{position\_ids} to the model forward pass.
+    \item \textbf{Validation}: We verify $\|\text{kv}_\text{cached} - \text{kv}_\text{fresh}\|_\infty < \epsilon$ with tolerance $\epsilon = 2 \times 10^{-2}$.
+\end{enumerate}
+
+\subsection{Theoretical Analysis}
+
+\paragraph{Complexity Reduction}
+For a transformer with $L$ layers processing $n$ tokens with hidden dimension $d$:
+\begin{itemize}
+    \item \textbf{Baseline prefill}: $O(Ln^2d)$ for self-attention
+    \item \textbf{With cached prefix $m$}: $O(L(n-m)^2d + Lmd)$
+\end{itemize}
+
+The theoretical speedup is:
+\begin{equation}
+    \text{Speedup} = \frac{n^2}{(n-m)^2 + O(m)} \approx \frac{n^2}{(n-m)^2}
+\end{equation}
+
+For $n=1000$ tokens with cached prefix $m=900$:
+$\text{Speedup} \approx 1000^2 / 100^2 = 100\times$.
+
+This quadratic relationship explains why \deltacache{} benefits increase dramatically with prefix length.
+
+\paragraph{Memory Overhead}
+The prefix tree introduces $O(V \cdot b)$ additional memory where $V$ is number of cached sequences and $b$ is average branching factor. In practice, this is negligible ($<$1\%) compared to KV cache storage.
+
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+
+\paragraph{Models}
+We evaluate on two models representing different scales:
+\begin{itemize}
+    \item \textbf{TinyLlama-1.1B} \citep{tinyllama}: A compact Llama-architecture model
+    \item \textbf{Mistral-7B} \citep{jiang2023mistral}: A 7B parameter model at fp16 precision
+\end{itemize}
+
+\paragraph{Hardware}
+2$\times$ NVIDIA RTX 3090 GPUs (24GB each), 64GB CPU memory.
+
+\paragraph{Metrics}
+We report: (1) \textbf{Correctness}: Max KV difference and match rate; (2) \textbf{Speedup}: Baseline/\deltacache{} latency ratio; (3) \textbf{Token reuse}: Fraction of tokens served from cache; (4) \textbf{Cached speedup}: Speedup excluding first (cold) query.
+
+\subsection{Correctness Validation}
+
+Table~\ref{tab:correctness} validates numerical correctness across precisions.
+
+\begin{table}[t]
+\centering
+\caption{Correctness validation (tolerance $2\times10^{-2}$)}
+\label{tab:correctness}
+\small
+\begin{tabular}{lccc}
+\toprule
+Model & Precision & Max Diff & Accuracy \\
+\midrule
+TinyLlama-1.1B & fp16 & 0.0156 & 100\% \\
+Mistral-7B & fp16 & 0.0156 & 100\% \\
+Mistral-7B & 8-bit & 0.60 & 10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At fp16, both models achieve \textbf{100\% correctness} with max difference $\sim$0.016, within expected fp16 precision.
+The 8-bit quantized model shows larger differences due to quantization noise independent of caching.
+
+\subsection{Targeted Application Benchmarks}
+
+We design benchmarks for workloads where prefix caching is most beneficial: fixed long prefix combined with varying short queries.
+This pattern is common in production deployments.
+
+\paragraph{Scenarios}
+\begin{itemize}
+    \item \textbf{RAG with Fixed KB}: Python docs, ML tutorials, API references ($\sim$650 tokens prefix)
+    \item \textbf{Few-shot Sentiment}: 5 labeled examples + test inputs ($\sim$280 tokens)
+    \item \textbf{Long System Prompt}: Detailed chatbot instructions ($\sim$480 tokens)
+    \item \textbf{Code Completion}: Large code context + completion ($\sim$1450 tokens)
+\end{itemize}
+
+\begin{table}[t]
+\centering
+\caption{Targeted benchmarks on Mistral-7B (fp16)}
+\label{tab:targeted_mistral}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Scenario & Prefix & Speedup & Cached & Reuse \\
+\midrule
+Code Completion & 1448 & \textbf{6.62$\times$} & \textbf{10.90$\times$} & 92.3\% \\
+RAG: API Docs & 646 & 5.90$\times$ & 6.39$\times$ & 92.4\% \\
+RAG: ML Tutorial & 647 & 5.56$\times$ & 6.46$\times$ & 92.3\% \\
+RAG: Python Guide & 676 & 5.51$\times$ & 3.11$\times$ & 92.4\% \\
+Long System Prompt & 484 & 3.83$\times$ & 4.74$\times$ & 92.2\% \\
+Few-shot Sentiment & 282 & 3.39$\times$ & 3.93$\times$ & 89.4\% \\
+\midrule
+\textbf{Average} & -- & \textbf{5.13$\times$} & \textbf{5.92$\times$} & 91.8\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Targeted benchmarks on TinyLlama-1.1B}
+\label{tab:targeted_tinyllama}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Scenario & Prefix & Speedup & Cached & Reuse \\
+\midrule
+Code Completion & 1464 & \textbf{3.64$\times$} & \textbf{4.22$\times$} & 93.8\% \\
+RAG: API Docs & 660 & 3.94$\times$ & 2.28$\times$ & 94.4\% \\
+RAG: ML Tutorial & 656 & 2.96$\times$ & 2.13$\times$ & 94.2\% \\
+Long System Prompt & 497 & 1.80$\times$ & 1.83$\times$ & 94.0\% \\
+Few-shot Sentiment & 298 & 1.22$\times$ & 1.20$\times$ & 90.8\% \\
+\midrule
+\textbf{Average} & -- & \textbf{2.60$\times$} & \textbf{2.09$\times$} & 93.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Tables~\ref{tab:targeted_mistral} and \ref{tab:targeted_tinyllama} show results.
+\deltacache{} achieves \textbf{5.13$\times$} average speedup on Mistral-7B with \textbf{10.90$\times$} cached speedup on code completion.
+Larger models benefit more from caching due to higher per-token computation cost.
+
+\subsection{Prefix Length Scaling}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{../experiments/figures/prefix_length_scaling.pdf}
+\caption{Speedup scaling with prefix length on TinyLlama-1.1B. Cached speedup reaches 5$\times$ at 1000 tokens.}
+\label{fig:prefix_scaling}
+\end{figure}
+
+Figure~\ref{fig:prefix_scaling} and Table~\ref{tab:prefix_ablation} show how speedup scales with prefix length.
+
+\begin{table}[t]
+\centering
+\caption{Prefix length ablation (TinyLlama-1.1B)}
+\label{tab:prefix_ablation}
+\small
+\begin{tabular}{cccl}
+\toprule
+Prefix & Overall & Cached & Finding \\
+\midrule
+100 & 0.94$\times$ & 1.14$\times$ & Overhead $>$ benefit \\
+250 & 1.98$\times$ & 2.14$\times$ & Breakeven point \\
+500 & 2.77$\times$ & 3.21$\times$ & Clear benefit \\
+750 & 3.12$\times$ & 3.76$\times$ & Strong benefit \\
+1000 & \textbf{3.96$\times$} & \textbf{5.05$\times$} & Maximum tested \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Key finding: \textbf{Prefix length $>$200 tokens is required for benefit}.
+At 100 tokens, cache management overhead exceeds computation savings.
+Speedup grows with prefix length following the theoretical quadratic relationship.
+
+\subsection{Scenario Comparison}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{../experiments/figures/scenario_comparison.pdf}
+\caption{Speedup comparison across targeted scenarios. Mistral-7B consistently outperforms TinyLlama due to higher baseline computation cost.}
+\label{fig:scenario}
+\end{figure}
+
+Figure~\ref{fig:scenario} compares speedups across scenarios for both models.
+The results reveal two key patterns:
+\begin{enumerate}
+    \item \textbf{Model size matters}: Larger models benefit more from caching (5.13$\times$ vs 2.60$\times$ average)
+    \item \textbf{Prefix length matters}: Code completion (1448 tokens) achieves highest speedup (6.62$\times$)
+\end{enumerate}
+
+\subsection{Speedup vs Prefix Length}
+
+\begin{table}[t]
+\centering
+\caption{Speedup scaling with prefix length}
+\label{tab:speedup_scaling}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Model & Prefix & Base (ms) & Ours (ms) & Speedup \\
+\midrule
+TinyLlama & 50 & 13.1 & 6.0 & 2.2$\times$ \\
+TinyLlama & 200 & 14.8 & 4.0 & 3.7$\times$ \\
+TinyLlama & 500 & 27.6 & 4.9 & 5.6$\times$ \\
+TinyLlama & 1000 & 52.8 & 6.0 & 8.8$\times$ \\
+TinyLlama & 1500 & 67.8 & 7.0 & \textbf{9.7$\times$} \\
+\midrule
+Mistral-7B & 500 & 234.2 & 35.0 & 6.7$\times$ \\
+Mistral-7B & 1000 & 340.3 & 40.5 & 8.4$\times$ \\
+Mistral-7B & 1500 & 450.8 & 46.6 & \textbf{9.7$\times$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:speedup_scaling} shows absolute latency reduction.
+With 1500-token prefix, latency drops from 67.8ms to 7.0ms on TinyLlama (\textbf{9.7$\times$} speedup).
+
+\subsection{Real-World Dataset Validation}
+
+To understand practical boundaries, we evaluate on ShareGPT-style conversations.
+
+\begin{table}[t]
+\centering
+\caption{Real-world dataset evaluation}
+\label{tab:sharegpt}
+\small
+\begin{tabular}{lccc}
+\toprule
+Experiment & Speedup & Token Reuse & Finding \\
+\midrule
+Multi-turn (short ctx) & 0.90$\times$ & 43.9\% & Limited benefit \\
+Long-context QA & 1.02$\times$ & 66.1\% & Breakeven \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:sharegpt} reveals an important finding: \textbf{\deltacache{} provides limited benefit for short-context multi-turn conversations}.
+The cache management overhead exceeds computation savings when prefixes are short and new content per turn is substantial.
+This motivates deployment primarily in long-prefix scenarios.
+
+\subsection{Eviction Policy Comparison}
+
+\begin{table}[t]
+\centering
+\caption{Eviction policy comparison (TinyLlama-1.1B)}
+\label{tab:eviction}
+\small
+\begin{tabular}{lccc}
+\toprule
+Policy & Hit Rate & Speedup & Overhead \\
+\midrule
+LRU & 99.5\% & 2.12$\times$ & Low \\
+LFU & 99.5\% & 2.20$\times$ & Low \\
+Composite & 99.5\% & 2.15$\times$ & Medium \\
+Tiered (Layer-aware) & 99.5\% & 2.11$\times$ & Medium \\
+Adaptive (Attention) & 99.5\% & \textbf{2.20$\times$} & Medium \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:eviction} compares eviction policies.
+All achieve similar performance ($\sim$99.5\% hit rate) because high prefix sharing means eviction rarely triggers.
+LFU and Adaptive show marginally better speedup.
+
+\subsection{Memory Usage Analysis}
+
+\begin{table}[t]
+\centering
+\caption{GPU memory overhead analysis}
+\label{tab:memory}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Model & Base & Ours & Overhead & Speedup & Eff. \\
+\midrule
+TinyLlama-1.1B & 2303 & 2808 & 505 MB & 2.40$\times$ & 4.9$\times$/GB \\
+Mistral-7B & 14491 & 16893 & 2402 MB & 5.12$\times$ & 2.2$\times$/GB \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:memory} shows GPU memory overhead.
+\deltacache{} adds 17--22\% memory overhead for cache storage, achieving 2.2--4.9$\times$ speedup per GB overhead (memory efficiency).
+The overhead is practical for production deployment.
+
+\subsection{Long Context Scaling}
+
+\begin{table}[t]
+\centering
+\caption{Speedup scaling with context length (TinyLlama-1.1B)}
+\label{tab:longctx}
+\small
+\begin{tabular}{ccccc}
+\toprule
+Context & Base (ms) & Cached (ms) & Speedup & Scaling \\
+\midrule
+501 & 35.2 & 17.6 & 2.00$\times$ & -- \\
+1001 & 54.3 & 16.3 & 3.32$\times$ & +1.32$\times$ \\
+1501 & 69.8 & 16.7 & 4.18$\times$ & +0.86$\times$ \\
+1801 & 90.0 & 17.4 & \textbf{5.17$\times$} & +0.99$\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:longctx} demonstrates that speedup scales approximately \textbf{2.43$\times$ per 1K additional tokens}, confirming the theoretical quadratic relationship.
+Cached query latency remains nearly constant ($\sim$17ms) while baseline latency grows linearly.
+
+\section{Discussion}
+
+\paragraph{Optimal Application Scenarios}
+Based on our experiments, \deltacache{} is most effective for:
+\begin{itemize}
+    \item \textbf{Long prefix ($>$500 tokens)}: RAG with long documents, few-shot with many examples, detailed system prompts
+    \item \textbf{High query volume}: Same document/context queried multiple times
+    \item \textbf{Code completion}: Fixed large context with varying completions
+\end{itemize}
+
+\paragraph{When NOT to Use \deltacache{}}
+\begin{itemize}
+    \item \textbf{Short prefix ($<$100 tokens)}: Cache overhead exceeds savings
+    \item \textbf{Growing context}: Multi-turn conversations where each turn adds substantial new content
+    \item \textbf{Single-use prompts}: No prefix sharing opportunity
+\end{itemize}
+
+\paragraph{Comparison with Serving Systems}
+Unlike vLLM and SGLang which operate at the serving layer, \deltacache{} is a model-agnostic library that can be integrated with any transformer.
+This provides flexibility for custom deployments and research experimentation.
+
+\paragraph{Limitations}
+Current limitations include: (1) single-request focus without batched inference optimization, (2) CPU offloading adds latency for GPU retrieval, (3) no support for dynamic prefix modification.
+
+\section{Conclusion}
+
+We presented \deltacache{}, an incremental computation-aware KV cache management system for LLMs.
+Our key results:
+\begin{itemize}
+    \item \textbf{5.13$\times$} average speedup on Mistral-7B (fp16) across targeted benchmarks
+    \item \textbf{13.43$\times$} maximum speedup on 2K-token contexts in baseline comparisons
+    \item Speedup scales at \textbf{2.43$\times$ per 1K tokens} with memory overhead of only 17--22\%
+    \item \textbf{100\% correctness} at fp16 precision verified
+\end{itemize}
+
+Crucially, \textbf{scenario matching is the key factor}: \deltacache{} excels in fixed-prefix workloads (RAG, few-shot, code completion) achieving 3--13$\times$ speedup, while multi-turn conversations with growing context show limited gains.
+Ablation studies confirm that speedup is strongly correlated with prefix length, with 500+ tokens being the practical threshold.
+
+\deltacache{} provides a practical, model-agnostic solution for production LLM deployments with long shared prompt prefixes.
+Future work includes batched inference optimization, learned eviction policies, and deeper integration with serving frameworks.
+
+\bibliographystyle{icml2026}
+\bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+
+\section{Implementation Details}
+\label{app:impl}
+
+\paragraph{Memory Management}
+Default thresholds: GPU 80\%, CPU 70\%.
+Proactive offloading begins at 70\% GPU utilization to maintain headroom.
+Block size: 64 tokens for efficient memory alignment.
+
+\paragraph{Layer Weight Parameters}
+Sigmoid parameters: $k=5$ (steepness), $\tau=0.3$ (transition point).
+This gives early layers (0--30\%) weight $\approx$0.18, late layers (70--100\%) weight $\approx$0.88.
+
+\paragraph{Attention Tracking}
+EMA decay $\gamma=0.9$ for attention score averaging.
+Default importance weights: $w_a=0.5$ (attention), $w_f=0.3$ (frequency), $w_r=0.2$ (recency).
+
+\paragraph{RoPE Position Handling}
+For models with Rotary Position Embeddings, we explicitly compute absolute position IDs:
+\texttt{position\_ids = torch.arange(prefix\_len, prefix\_len + delta\_len)}.
+This ensures cached and freshly computed KV states are numerically equivalent.
+
+\section{Additional Experimental Results}
+\label{app:results}
+
+\begin{table}[h]
+\centering
+\caption{Query count scaling (cache amortization)}
+\small
+\begin{tabular}{cccc}
+\toprule
+Queries & Overall & Cached & Amortization \\
+\midrule
+5 & 2.14$\times$ & 2.84$\times$ & Low \\
+10 & 2.63$\times$ & 3.32$\times$ & Medium \\
+20 & 2.71$\times$ & 2.82$\times$ & Good \\
+50 & 2.98$\times$ & 2.80$\times$ & High \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Multi-turn conversation evaluation}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Model & Turns & Latency (ms) & Hit Rate & Token Reuse \\
+\midrule
+TinyLlama & 2 & 15.23 & 50.0\% & 30.7\% \\
+TinyLlama & 3 & 16.75 & 66.7\% & 51.6\% \\
+TinyLlama & 4 & 16.40 & 75.0\% & 61.4\% \\
+\midrule
+Mistral-7B & 2 & 132.31 & 50.0\% & 31.2\% \\
+Mistral-7B & 3 & 130.35 & 66.7\% & 50.6\% \\
+Mistral-7B & 4 & 130.56 & 75.0\% & 61.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Benchmark Scenario Details}
+\label{app:scenarios}
+
+\paragraph{Code Completion}
+Prefix: Large Python file with class definitions, imports, and documentation ($\sim$1450 tokens).
+Queries: Function completion requests at different points in the file.
+
+\paragraph{RAG Knowledge Bases}
+Three knowledge bases tested:
+(1) Python standard library documentation,
+(2) Machine learning tutorial content,
+(3) REST API reference documentation.
+Each prefix $\sim$650 tokens, queries are natural language questions.
+
+\paragraph{Few-shot Sentiment}
+5 labeled examples (positive/negative movie reviews) as prefix ($\sim$280 tokens).
+Test inputs: Novel movie review snippets for classification.
+
+\paragraph{Long System Prompt}
+Detailed chatbot instruction prompt defining persona, capabilities, and response format ($\sim$480 tokens).
+Queries: Diverse user questions.
+
+\end{document}

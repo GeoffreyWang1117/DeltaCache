@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda:0",
+    "timestamp": "2026-01-03T18:17:52.269076"
+  },
+  "comparisons": [
+    {
+      "scenario": "rag",
+      "prefix_tokens": 298,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 22.438211321714334,
+      "hf_p50_ms": 18.355478008743376,
+      "hf_p95_ms": 20.228188004693948,
+      "dc_mean_latency_ms": 7.767173880129121,
+      "dc_p50_ms": 0.08628200157545507,
+      "dc_p95_ms": 18.962860995088704,
+      "dc_token_reuse": 0.9532905926992019,
+      "speedup": 2.8888514236971505,
+      "speedup_p95": 1.0667265878251682
+    },
+    {
+      "scenario": "code",
+      "prefix_tokens": 360,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 19.204902360215783,
+      "hf_p50_ms": 19.15048499358818,
+      "hf_p95_ms": 20.262179008568637,
+      "dc_mean_latency_ms": 3.4575895994203165,
+      "dc_p50_ms": 0.10067199764307588,
+      "dc_p95_ms": 16.34176599327475,
+      "dc_token_reuse": 0.9535203811540498,
+      "speedup": 5.55441928777076,
+      "speedup_p95": 1.2399014290687607
+    },
+    {
+      "scenario": "rag",
+      "prefix_tokens": 581,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 33.69089944055304,
+      "hf_p50_ms": 33.47205799946096,
+      "hf_p95_ms": 35.8593179989839,
+      "dc_mean_latency_ms": 7.40543864085339,
+      "dc_p50_ms": 0.1769740047166124,
+      "dc_p95_ms": 17.22837499983143,
+      "dc_token_reuse": 0.9565158309552928,
+      "speedup": 4.549480601282864,
+      "speedup_p95": 2.081410347716181
+    },
+    {
+      "scenario": "code",
+      "prefix_tokens": 726,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 36.3874808390392,
+      "hf_p50_ms": 36.330767994513735,
+      "hf_p95_ms": 37.924051997833885,
+      "dc_mean_latency_ms": 4.261910557979718,
+      "dc_p50_ms": 0.1951340091181919,
+      "dc_p95_ms": 17.103931997553445,
+      "dc_token_reuse": 0.956708792686206,
+      "speedup": 8.537833054921741,
+      "speedup_p95": 2.2172709762444427
+    },
+    {
+      "scenario": "rag",
+      "prefix_tokens": 1169,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 58.07574895909056,
+      "hf_p50_ms": 58.483696993789636,
+      "hf_p95_ms": 59.714563001762144,
+      "dc_mean_latency_ms": 8.905192401143722,
+      "dc_p50_ms": 0.3521470061969012,
+      "dc_p95_ms": 18.294456996954978,
+      "dc_token_reuse": 0.9582568495478958,
+      "speedup": 6.5215602698973365,
+      "speedup_p95": 3.2640795521671584
+    },
+    {
+      "scenario": "code",
+      "prefix_tokens": 1438,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 71.22126675851177,
+      "hf_p50_ms": 72.01094400079455,
+      "hf_p95_ms": 74.55944799585268,
+      "dc_mean_latency_ms": 5.7751446415204555,
+      "dc_p50_ms": 0.37164799869060516,
+      "dc_p95_ms": 17.723274999298155,
+      "dc_token_reuse": 0.9583184503365847,
+      "speedup": 12.332378005992409,
+      "speedup_p95": 4.206866281700489
+    },
+    {
+      "scenario": "rag",
+      "prefix_tokens": 1746,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 82.96621343994047,
+      "hf_p50_ms": 83.04828700784128,
+      "hf_p95_ms": 85.16491200134624,
+      "dc_mean_latency_ms": 10.037327440804802,
+      "dc_p50_ms": 0.7219550025183707,
+      "dc_p95_ms": 18.5508130089147,
+      "dc_token_reuse": 0.9588303720092147,
+      "speedup": 8.265767349848275,
+      "speedup_p95": 4.590899167622451
+    },
+    {
+      "scenario": "code",
+      "prefix_tokens": 2171,
+      "n_queries": 25,
+      "hf_mean_latency_ms": 98.88248160190415,
+      "hf_p50_ms": 98.68539799936116,
+      "hf_p95_ms": 101.80530400248244,
+      "dc_mean_latency_ms": 7.362293319310993,
+      "dc_p50_ms": 0.5729020049329847,
+      "dc_p95_ms": 17.749525999533944,
+      "dc_token_reuse": 0.9588815789473685,
+      "speedup": 13.430934807030773,
+      "speedup_p95": 5.735663251241503
+    }
+  ],
+  "summary": {
+    "mean_speedup": 7.760153100055164,
+    "max_speedup": 13.430934807030773,
+    "min_speedup": 2.8888514236971505,
+    "mean_token_reuse": 0.9567903560419768
+  }
+}

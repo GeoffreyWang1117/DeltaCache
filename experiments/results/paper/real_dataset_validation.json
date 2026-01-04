@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda",
+    "timestamp": "2026-01-01T18:51:21.309904"
+  },
+  "experiments": {
+    "sharegpt": {
+      "experiment": "sharegpt_multiturn",
+      "n_conversations": 50,
+      "n_runs": 2,
+      "speedup": {
+        "mean": 0.9016157249005181,
+        "std": 0.2601582791464702,
+        "min": 0.3447441048513151,
+        "max": 1.85590994935042
+      },
+      "token_reuse": {
+        "mean": 0.4389368032904723,
+        "std": 0.11329365845797901
+      },
+      "latency": {
+        "deltacache_mean_ms": 23.351948686166875,
+        "baseline_mean_ms": 19.905159431041753
+      }
+    },
+    "long_context": {
+      "experiment": "long_context_qa",
+      "n_documents": 30,
+      "n_runs": 2,
+      "speedup": {
+        "mean": 1.0183028278759514,
+        "std": 0.1768359191410248,
+        "min": 0.624747410613072,
+        "max": 1.4578121649703915
+      },
+      "token_reuse": {
+        "mean": 0.661494036506242,
+        "std": 0.11851311891695294
+      },
+      "latency": {
+        "deltacache_mean_ms": 26.38044025229859,
+        "baseline_mean_ms": 26.501853210341483
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda",
+    "n_runs": 2,
+    "timestamp": "2026-01-03T11:53:48.499011"
+  },
+  "ablations": {
+    "prefix_length": {
+      "prefix_lengths": {
+        "100": {
+          "speedup": 0.9401413631930866,
+          "cached_speedup": 1.1437169589485632,
+          "deltacache_ms": 24.99287729903396,
+          "baseline_ms": 23.496837734031335
+        },
+        "250": {
+          "speedup": 1.9754263009225523,
+          "cached_speedup": 2.138056340432022,
+          "deltacache_ms": 20.519485767241957,
+          "baseline_ms": 40.53473186601574
+        },
+        "500": {
+          "speedup": 2.767235186107678,
+          "cached_speedup": 3.209980101325884,
+          "deltacache_ms": 21.416404033031238,
+          "baseline_ms": 59.26422680010243
+        },
+        "750": {
+          "speedup": 3.1247463371596726,
+          "cached_speedup": 3.759615391902175,
+          "deltacache_ms": 24.792485332970198,
+          "baseline_ms": 77.47022773328354
+        },
+        "1000": {
+          "speedup": 3.9624517466297298,
+          "cached_speedup": 5.047879365166079,
+          "deltacache_ms": 26.963287899949744,
+          "baseline_ms": 106.84072723403612
+        }
+      }
+    },
+    "eviction_policies": {
+      "policies": {
+        "lru": {
+          "speedup": 2.1225538584153583,
+          "latency_ms": 21.18901667508908
+        },
+        "lfu": {
+          "speedup": 2.200162889573815,
+          "latency_ms": 20.441590626251127
+        },
+        "composite": {
+          "speedup": 2.1526050840810615,
+          "latency_ms": 20.893209549831226
+        },
+        "tiered": {
+          "speedup": 2.1140472941739343,
+          "latency_ms": 21.27427764917229
+        },
+        "adaptive": {
+          "speedup": 2.198871196430076,
+          "latency_ms": 20.4535987249983
+        }
+      },
+      "baseline_ms": 44.97482909973769
+    },
+    "query_count": {
+      "query_counts": {
+        "5": {
+          "overall_speedup": 2.1399588897065005,
+          "cached_speedup": 2.8422866400082043,
+          "deltacache_ms": 27.54541500034975,
+          "baseline_ms": 58.94605570065323
+        },
+        "10": {
+          "overall_speedup": 2.6345062351706834,
+          "cached_speedup": 3.3204859579889465,
+          "deltacache_ms": 22.806006699465797,
+          "baseline_ms": 60.082566849087016
+        },
+        "20": {
+          "overall_speedup": 2.7062052981013887,
+          "cached_speedup": 2.8190403049625194,
+          "deltacache_ms": 21.6481266741539,
+          "baseline_ms": 58.584275099565275
+        },
+        "50": {
+          "overall_speedup": 2.976772749634989,
+          "cached_speedup": 2.800831957013483,
+          "deltacache_ms": 19.851167230372084,
+          "baseline_ms": 59.0924136598187
+        }
+      }
+    }
+  }
+}

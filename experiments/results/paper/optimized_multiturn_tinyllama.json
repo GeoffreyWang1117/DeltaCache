@@ -1,0 +1,33 @@
+{
+  "conversations": [
+    {
+      "system_prompt_tokens": 202,
+      "n_turns": 6,
+      "speedup_mean": 0.9442586406163952,
+      "speedup_std": 0.37970670117074307,
+      "token_reuse": 0.7799895233106339,
+      "ttft_speedup": 0.6701512097855356
+    },
+    {
+      "system_prompt_tokens": 190,
+      "n_turns": 6,
+      "speedup_mean": 1.1271791420981003,
+      "speedup_std": 0.025255069371723025,
+      "token_reuse": 0.7807486631016043,
+      "ttft_speedup": 0.9072179992154153
+    },
+    {
+      "system_prompt_tokens": 224,
+      "n_turns": 5,
+      "speedup_mean": 1.167571754507113,
+      "speedup_std": 0.020430564332805372,
+      "token_reuse": 0.7390783961699581,
+      "ttft_speedup": 0.9316372543246002
+    }
+  ],
+  "summary": {
+    "mean_speedup": 1.079669845740536,
+    "mean_token_reuse": 0.7666055275273987,
+    "mean_ttft_speedup": 0.8363354877751837
+  }
+}

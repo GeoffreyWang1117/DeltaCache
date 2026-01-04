@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.1",
+    "n_queries": 30,
+    "timestamp": "2026-01-03T18:16:08.216744",
+    "note": "SGLang skipped"
+  },
+  "systems": {
+    "hf_baseline": {
+      "system": "hf_baseline",
+      "n_queries": 30,
+      "latency_mean_ms": 28.91379159943123,
+      "latency_std_ms": 1.2465127583385434,
+      "latency_p50_ms": 29.03436400811188,
+      "latency_p95_ms": 30.985565987066366
+    },
+    "deltacache": {
+      "system": "deltacache",
+      "n_queries": 30,
+      "latency_mean_ms": 8.914563500729855,
+      "latency_std_ms": 12.806651388981193,
+      "latency_p50_ms": 0.028830007067881525,
+      "latency_p95_ms": 27.459650998935103,
+      "token_reuse_rate": 0.9162045594577942
+    }
+  },
+  "speedups": {
+    "deltacache": 3.2434332423639134
+  }
+}

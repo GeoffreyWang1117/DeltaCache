@@ -1,0 +1,132 @@
+{
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "model_config": {
+    "num_layers": 22,
+    "num_heads": 32,
+    "hidden_size": 2048,
+    "head_dim": 64
+  },
+  "experiment_config": {
+    "num_system_prompts": 5,
+    "queries_per_system": 10,
+    "system_prompt_tokens": 300,
+    "total_requests": 50
+  },
+  "nocache_baseline": {
+    "avg_latency_ms": 25.387186100015242,
+    "p50_ms": 18.147268500115388,
+    "p95_ms": 20.990206799933727,
+    "p99_ms": 198.64013099969205,
+    "std_ms": 47.51279014072971
+  },
+  "results": [
+    {
+      "config_name": "all_layers",
+      "cached_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "num_cached_layers": 22,
+      "avg_latency_ms": 18.02554050001163,
+      "ttft_ms": 18.02554050001163,
+      "speedup_vs_nocache": 1.4084008243746624,
+      "latency_p50_ms": 17.972155000052226,
+      "latency_p95_ms": 18.527728600292903,
+      "latency_p99_ms": 19.046033150043513,
+      "latency_std_ms": 0.4005182148801465,
+      "memory_used_mb": 344.609375,
+      "ttft_per_mb": 0.021362290564508328,
+      "cache_hit_rate": 0.0
+    },
+    {
+      "config_name": "late_only",
+      "cached_layers": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "num_cached_layers": 7,
+      "avg_latency_ms": 17.898926400011987,
+      "ttft_ms": 17.898926400011987,
+      "speedup_vs_nocache": 1.4183636231946426,
+      "latency_p50_ms": 17.750500500142152,
+      "latency_p95_ms": 18.38285650017042,
+      "latency_p99_ms": 18.69265620004171,
+      "latency_std_ms": 0.3547117471064091,
+      "memory_used_mb": 109.6484375,
+      "ttft_per_mb": 0.06829335529750029,
+      "cache_hit_rate": 0.0
+    },
+    {
+      "config_name": "early_only",
+      "cached_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "num_cached_layers": 6,
+      "avg_latency_ms": 17.86549720001858,
+      "ttft_ms": 17.86549720001858,
+      "speedup_vs_nocache": 1.4210176081743104,
+      "latency_p50_ms": 17.772545500065462,
+      "latency_p95_ms": 18.364789499901235,
+      "latency_p99_ms": 18.46906863005188,
+      "latency_std_ms": 0.3468468634565051,
+      "memory_used_mb": 93.984375,
+      "ttft_per_mb": 0.08003127009140255,
+      "cache_hit_rate": 0.0
+    },
+    {
+      "config_name": "middle_only",
+      "cached_layers": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "num_cached_layers": 9,
+      "avg_latency_ms": 17.88891876000889,
+      "ttft_ms": 17.88891876000889,
+      "speedup_vs_nocache": 1.4191571017007973,
+      "latency_p50_ms": 17.773346000240053,
+      "latency_p95_ms": 18.417062449975674,
+      "latency_p99_ms": 18.796586159878643,
+      "latency_std_ms": 0.3625316496753755,
+      "memory_used_mb": 140.9765625,
+      "ttft_per_mb": 0.053188042090374775,
+      "cache_hit_rate": 0.0
+    }
+  ]
+}
