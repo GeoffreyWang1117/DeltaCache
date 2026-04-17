@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Llama-3.1-8B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "n_samples_target": 40,
+  "overall_accuracy": 0.425,
+  "per_task": {
+    "mkr_1": {
+      "correct": 23,
+      "total": 40,
+      "accuracy": 0.575,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 10,
+      "total": 40,
+      "accuracy": 0.25,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 8,
+      "total": 40,
+      "accuracy": 0.2,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 27,
+      "total": 40,
+      "accuracy": 0.675,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__ruler__h2o_uniform__cr4.0__seq2048",
+  "_timestamp": "2026-04-17T00:05:50.419062"
+}

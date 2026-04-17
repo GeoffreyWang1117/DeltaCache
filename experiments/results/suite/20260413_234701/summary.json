@@ -1,0 +1,10 @@
+{
+  "run_id": "20260413_234701",
+  "tier": "paper",
+  "hardware": "a100_80g",
+  "total_units": 762,
+  "completed": 922,
+  "errors": 0,
+  "total_time_seconds": 89060.9,
+  "error_details": []
+}

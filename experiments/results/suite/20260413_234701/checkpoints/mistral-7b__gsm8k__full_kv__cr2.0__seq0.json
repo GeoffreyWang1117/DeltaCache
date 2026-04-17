@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Mistral-7B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "correct": 38,
+  "total": 200,
+  "accuracy": 0.19,
+  "_checkpoint_key": "mistral-7b__gsm8k__full_kv__cr2.0__seq0",
+  "_timestamp": "2026-04-16T02:06:17.823612"
+}

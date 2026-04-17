@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Qwen3-8B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "correct": 124,
+  "total": 200,
+  "accuracy": 0.62,
+  "_checkpoint_key": "qwen3-8b__gsm8k__full_kv__cr2.0__seq0",
+  "_timestamp": "2026-04-15T22:20:28.121961"
+}

@@ -1,0 +1,61 @@
+{
+  "task": "longbench",
+  "model": "Llama-2-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "overall_mean": 0.097,
+  "n_tasks": 8,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0081,
+      "std": 0.0181,
+      "n": 11
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.1418,
+      "std": 0.0189,
+      "n": 3
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.1786,
+      "std": 0.2071,
+      "n": 4
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.2857,
+      "std": 0,
+      "n": 1
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0488,
+      "std": 0.0976,
+      "n": 4
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.113,
+      "std": 0.0304,
+      "n": 18
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0,
+      "n": 1
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 2
+    }
+  },
+  "_checkpoint_key": "llama2-7b__longbench__h2o_uniform__cr2.0__seq4096",
+  "_timestamp": "2026-04-16T01:22:52.481069"
+}

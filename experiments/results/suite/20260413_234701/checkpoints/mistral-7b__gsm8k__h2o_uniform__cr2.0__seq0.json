@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Mistral-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "correct": 24,
+  "total": 200,
+  "accuracy": 0.12,
+  "_checkpoint_key": "mistral-7b__gsm8k__h2o_uniform__cr2.0__seq0",
+  "_timestamp": "2026-04-16T03:45:47.412828"
+}

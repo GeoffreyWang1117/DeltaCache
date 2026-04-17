@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "minikv",
+  "compression_ratio": 6.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 75.2104,
+  "std_ppl": 25.2959,
+  "ppl_ratio": 11.9217,
+  "full_ppl": 6.3087,
+  "mean_compress_ms": 17.51,
+  "mean_memory_bytes": 13404608,
+  "_checkpoint_key": "mistral-7b__ppl__minikv__cr6.0__seq1024",
+  "_timestamp": "2026-04-15T05:27:35.926617"
+}

@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Mistral-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "correct": 6,
+  "total": 200,
+  "accuracy": 0.03,
+  "_checkpoint_key": "mistral-7b__gsm8k__streaming_llm__cr4.0__seq0",
+  "_timestamp": "2026-04-17T00:48:05.765140"
+}

@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Mistral-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "correct": 13,
+  "total": 196,
+  "accuracy": 0.0663,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Geometry": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Prealgebra": {
+      "correct": 5,
+      "total": 28,
+      "accuracy": 0.1786
+    },
+    "Intermediate Algebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Algebra": {
+      "correct": 3,
+      "total": 28,
+      "accuracy": 0.1071
+    }
+  },
+  "_checkpoint_key": "mistral-7b__math__streaming_llm__cr2.0__seq0",
+  "_timestamp": "2026-04-17T02:21:27.057797"
+}

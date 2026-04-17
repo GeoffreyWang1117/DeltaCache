@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "squeeze_attention",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 16.493,
+  "std_ppl": 5.5204,
+  "ppl_ratio": 1.8282,
+  "full_ppl": 9.0214,
+  "mean_compress_ms": 7.27,
+  "mean_memory_bytes": 45350912,
+  "_checkpoint_key": "llama2-7b__ppl__squeeze_attention__cr4.0__seq512",
+  "_timestamp": "2026-04-13T23:51:58.589019"
+}

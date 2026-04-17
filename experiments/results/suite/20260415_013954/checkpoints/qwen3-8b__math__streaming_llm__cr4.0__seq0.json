@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Qwen3-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "correct": 3,
+  "total": 196,
+  "accuracy": 0.0153,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Geometry": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Prealgebra": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Intermediate Algebra": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Algebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    }
+  },
+  "_checkpoint_key": "qwen3-8b__math__streaming_llm__cr4.0__seq0",
+  "_timestamp": "2026-04-16T22:54:53.029590"
+}

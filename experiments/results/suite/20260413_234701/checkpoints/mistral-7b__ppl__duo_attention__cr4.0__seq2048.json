@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "duo_attention",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 7.4929,
+  "std_ppl": 3.558,
+  "ppl_ratio": 1.2792,
+  "full_ppl": 5.8573,
+  "mean_compress_ms": 5.35,
+  "mean_memory_bytes": 41054208,
+  "_checkpoint_key": "mistral-7b__ppl__duo_attention__cr4.0__seq2048",
+  "_timestamp": "2026-04-15T05:26:33.470561"
+}

@@ -1,0 +1,12 @@
+{
+  "task": "niah",
+  "model": "Qwen3-8B",
+  "method": "kivi_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 8192,
+  "overall_accuracy": 0,
+  "per_depth": {},
+  "oom_skipped": 5,
+  "_checkpoint_key": "qwen3-8b__niah__kivi_uniform__cr2.0__seq8192",
+  "_timestamp": "2026-04-16T23:19:25.422245"
+}

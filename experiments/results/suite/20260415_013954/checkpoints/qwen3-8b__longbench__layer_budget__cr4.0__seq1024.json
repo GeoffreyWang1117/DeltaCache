@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-8B",
+  "method": "layer_budget",
+  "compression_ratio": 4.0,
+  "seq_len": 1024,
+  "overall_mean": 0.0316,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0321,
+      "std": 0.0499,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0387,
+      "std": 0.0461,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0601,
+      "std": 0.0613,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0111,
+      "std": 0.0322,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0193,
+      "std": 0.0426,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0043,
+      "std": 0.0133,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1306,
+      "std": 0.0265,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.044,
+      "std": 0.0327,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.0968,
+      "std": 0.0499,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.0066,
+      "std": 0.0161,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0355,
+      "std": 0.0298,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0141,
+      "std": 0.0254,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0122,
+      "std": 0.022,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "qwen3-8b__longbench__layer_budget__cr4.0__seq1024",
+  "_timestamp": "2026-04-16T13:23:22.112683"
+}

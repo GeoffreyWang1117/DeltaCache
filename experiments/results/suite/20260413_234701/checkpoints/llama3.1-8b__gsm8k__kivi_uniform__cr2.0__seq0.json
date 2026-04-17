@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Llama-3.1-8B",
+  "method": "kivi_uniform",
+  "compression_ratio": 2.0,
+  "correct": 44,
+  "total": 200,
+  "accuracy": 0.22,
+  "_checkpoint_key": "llama3.1-8b__gsm8k__kivi_uniform__cr2.0__seq0",
+  "_timestamp": "2026-04-16T09:02:13.993497"
+}

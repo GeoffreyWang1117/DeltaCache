@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-8B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "overall_mean": 0.0297,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0345,
+      "std": 0.0452,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0493,
+      "std": 0.0506,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.052,
+      "std": 0.0581,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0037,
+      "std": 0.0115,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0171,
+      "std": 0.0332,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0116,
+      "std": 0.0301,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1203,
+      "std": 0.0372,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.0433,
+      "std": 0.0303,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.0909,
+      "std": 0.0341,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.0112,
+      "std": 0.0246,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0327,
+      "std": 0.0205,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0087,
+      "std": 0.023,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "qwen3-8b__longbench__h2o_uniform__cr4.0__seq512",
+  "_timestamp": "2026-04-16T12:47:28.737741"
+}

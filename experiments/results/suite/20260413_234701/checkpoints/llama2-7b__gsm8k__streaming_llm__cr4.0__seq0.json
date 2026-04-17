@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Llama-2-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "correct": 3,
+  "total": 200,
+  "accuracy": 0.015,
+  "_checkpoint_key": "llama2-7b__gsm8k__streaming_llm__cr4.0__seq0",
+  "_timestamp": "2026-04-15T20:01:49.239606"
+}

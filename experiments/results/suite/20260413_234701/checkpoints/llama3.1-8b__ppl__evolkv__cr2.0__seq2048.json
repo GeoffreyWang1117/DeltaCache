@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "evolkv",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 7.4856,
+  "std_ppl": 1.3272,
+  "ppl_ratio": 1.0121,
+  "full_ppl": 7.396,
+  "mean_compress_ms": 39712.77,
+  "mean_memory_bytes": 80456362,
+  "_checkpoint_key": "llama3.1-8b__ppl__evolkv__cr2.0__seq2048",
+  "_timestamp": "2026-04-14T16:03:45.828117"
+}

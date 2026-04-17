@@ -1,0 +1,10 @@
+{
+  "run_id": "20260415_013954",
+  "tier": "paper",
+  "hardware": "local_3090x2_9gb",
+  "total_units": 90,
+  "completed": 185,
+  "errors": 0,
+  "total_time_seconds": 99478.0,
+  "error_details": []
+}

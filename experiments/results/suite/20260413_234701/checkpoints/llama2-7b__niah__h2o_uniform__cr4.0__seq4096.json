@@ -1,0 +1,42 @@
+{
+  "task": "niah",
+  "model": "Llama-2-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0.4,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 0,
+      "total": 3,
+      "accuracy": 0.0
+    },
+    "25.0%": {
+      "depth": 0.25,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    "50.0%": {
+      "depth": 0.5,
+      "correct": 1,
+      "total": 3,
+      "accuracy": 0.3333
+    },
+    "75.0%": {
+      "depth": 0.75,
+      "correct": 0,
+      "total": 3,
+      "accuracy": 0.0
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    }
+  },
+  "_checkpoint_key": "llama2-7b__niah__h2o_uniform__cr4.0__seq4096",
+  "_timestamp": "2026-04-14T19:40:29.906871"
+}

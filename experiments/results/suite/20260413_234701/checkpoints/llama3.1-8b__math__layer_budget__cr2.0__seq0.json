@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Llama-3.1-8B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "correct": 45,
+  "total": 196,
+  "accuracy": 0.2296,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 7,
+      "total": 28,
+      "accuracy": 0.25
+    },
+    "Geometry": {
+      "correct": 8,
+      "total": 28,
+      "accuracy": 0.2857
+    },
+    "Prealgebra": {
+      "correct": 11,
+      "total": 28,
+      "accuracy": 0.3929
+    },
+    "Intermediate Algebra": {
+      "correct": 5,
+      "total": 28,
+      "accuracy": 0.1786
+    },
+    "Precalculus": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Number Theory": {
+      "correct": 3,
+      "total": 28,
+      "accuracy": 0.1071
+    },
+    "Algebra": {
+      "correct": 9,
+      "total": 28,
+      "accuracy": 0.3214
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__math__layer_budget__cr2.0__seq0",
+  "_timestamp": "2026-04-16T20:54:05.336883"
+}

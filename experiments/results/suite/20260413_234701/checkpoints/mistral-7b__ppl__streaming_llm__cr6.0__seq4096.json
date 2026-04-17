@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 6.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 7.2846,
+  "std_ppl": 1.3379,
+  "ppl_ratio": 1.211,
+  "full_ppl": 6.0154,
+  "mean_compress_ms": 27.1,
+  "mean_memory_bytes": 53739520,
+  "_checkpoint_key": "mistral-7b__ppl__streaming_llm__cr6.0__seq4096",
+  "_timestamp": "2026-04-15T05:28:18.354676"
+}

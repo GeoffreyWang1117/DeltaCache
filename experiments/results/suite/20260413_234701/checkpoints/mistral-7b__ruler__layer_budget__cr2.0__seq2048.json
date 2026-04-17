@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Mistral-7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "n_samples_target": 40,
+  "overall_accuracy": 0.8313,
+  "per_task": {
+    "mkr_1": {
+      "correct": 35,
+      "total": 40,
+      "accuracy": 0.875,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 39,
+      "total": 40,
+      "accuracy": 0.975,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 31,
+      "total": 40,
+      "accuracy": 0.775,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 28,
+      "total": 40,
+      "accuracy": 0.7,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "mistral-7b__ruler__layer_budget__cr2.0__seq2048",
+  "_timestamp": "2026-04-17T04:44:07.120229"
+}

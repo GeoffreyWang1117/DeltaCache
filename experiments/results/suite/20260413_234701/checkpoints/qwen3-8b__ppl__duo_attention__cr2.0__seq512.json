@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-8B",
+  "method": "duo_attention",
+  "compression_ratio": 2.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 11.5495,
+  "std_ppl": 6.3711,
+  "ppl_ratio": 1.0354,
+  "full_ppl": 11.1546,
+  "mean_compress_ms": 140.1,
+  "mean_memory_bytes": 37376000,
+  "_checkpoint_key": "qwen3-8b__ppl__duo_attention__cr2.0__seq512",
+  "_timestamp": "2026-04-14T22:33:04.619618"
+}

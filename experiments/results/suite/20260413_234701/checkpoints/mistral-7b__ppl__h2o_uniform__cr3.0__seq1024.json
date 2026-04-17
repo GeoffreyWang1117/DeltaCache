@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 3.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 6.8771,
+  "std_ppl": 2.3223,
+  "ppl_ratio": 1.0901,
+  "full_ppl": 6.3087,
+  "mean_compress_ms": 7.43,
+  "mean_memory_bytes": 26738688,
+  "_checkpoint_key": "mistral-7b__ppl__h2o_uniform__cr3.0__seq1024",
+  "_timestamp": "2026-04-15T05:24:50.612333"
+}

@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "lava",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 13.1839,
+  "std_ppl": 3.3269,
+  "ppl_ratio": 1.4614,
+  "full_ppl": 9.0214,
+  "mean_compress_ms": 12.9,
+  "mean_memory_bytes": 39895040,
+  "_checkpoint_key": "llama2-7b__ppl__lava__cr4.0__seq512",
+  "_timestamp": "2026-04-13T23:52:03.717352"
+}

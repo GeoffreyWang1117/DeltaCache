@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "seq_len": 512,
+  "overall_mean": 0.0311,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0344,
+      "std": 0.0467,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0391,
+      "std": 0.0407,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0626,
+      "std": 0.0802,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0019,
+      "std": 0.0086,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0123,
+      "std": 0.0276,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0085,
+      "std": 0.0221,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1224,
+      "std": 0.0381,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.0549,
+      "std": 0.0309,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.1156,
+      "std": 0.0312,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.013,
+      "std": 0.0243,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0268,
+      "std": 0.0234,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0036,
+      "std": 0.011,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0021,
+      "std": 0.0093,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "qwen3-8b__longbench__streaming_llm__cr2.0__seq512",
+  "_timestamp": "2026-04-16T07:48:08.407536"
+}

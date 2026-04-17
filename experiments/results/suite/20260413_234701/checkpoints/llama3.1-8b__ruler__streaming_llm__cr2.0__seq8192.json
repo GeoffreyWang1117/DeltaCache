@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Llama-3.1-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "seq_len": 8192,
+  "n_samples_target": 13,
+  "overall_accuracy": 0.4038,
+  "per_task": {
+    "mkr_1": {
+      "correct": 4,
+      "total": 13,
+      "accuracy": 0.3077,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 5,
+      "total": 13,
+      "accuracy": 0.3846,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 6,
+      "total": 13,
+      "accuracy": 0.4615,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 6,
+      "total": 13,
+      "accuracy": 0.4615,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__ruler__streaming_llm__cr2.0__seq8192",
+  "_timestamp": "2026-04-16T23:52:22.698186"
+}

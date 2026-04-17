@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 7.5143,
+  "std_ppl": 1.7659,
+  "ppl_ratio": 1.0076,
+  "full_ppl": 7.4578,
+  "mean_compress_ms": 21.31,
+  "mean_memory_bytes": 160956416,
+  "_checkpoint_key": "llama3.1-8b__ppl__h2o_uniform__cr2.0__seq4096",
+  "_timestamp": "2026-04-14T23:18:54.786426"
+}

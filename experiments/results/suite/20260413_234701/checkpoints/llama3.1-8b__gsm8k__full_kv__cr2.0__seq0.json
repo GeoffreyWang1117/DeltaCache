@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Llama-3.1-8B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "correct": 36,
+  "total": 200,
+  "accuracy": 0.18,
+  "_checkpoint_key": "llama3.1-8b__gsm8k__full_kv__cr2.0__seq0",
+  "_timestamp": "2026-04-16T07:53:32.833087"
+}

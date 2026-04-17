@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 8.3356,
+  "std_ppl": 1.592,
+  "ppl_ratio": 1.1299,
+  "full_ppl": 7.3775,
+  "mean_compress_ms": 10.01,
+  "mean_memory_bytes": 26869760,
+  "_checkpoint_key": "llama3.1-8b__ppl__streaming_llm__cr6.0__seq2048",
+  "_timestamp": "2026-04-14T23:53:04.517906"
+}

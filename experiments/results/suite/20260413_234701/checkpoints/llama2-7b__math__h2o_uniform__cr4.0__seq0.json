@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Llama-2-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "correct": 3,
+  "total": 196,
+  "accuracy": 0.0153,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Geometry": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Prealgebra": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Intermediate Algebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Algebra": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    }
+  },
+  "_checkpoint_key": "llama2-7b__math__h2o_uniform__cr4.0__seq0",
+  "_timestamp": "2026-04-16T07:10:22.735526"
+}

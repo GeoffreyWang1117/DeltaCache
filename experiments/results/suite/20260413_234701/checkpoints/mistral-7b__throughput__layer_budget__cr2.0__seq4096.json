@@ -1,0 +1,39 @@
+{
+  "task": "throughput",
+  "model": "Mistral-7B",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "gen_tokens": 64,
+  "baseline": {
+    "label": "baseline",
+    "TTFT_ms": 662.42,
+    "TPOT_ms": 20.49,
+    "prefill_ms": 662.42,
+    "decode_ms": 1311.46,
+    "e2e_ms": 1973.87,
+    "tokens_per_sec": 48.8,
+    "peak_mem_mb": 9624.9,
+    "kv_mem_mb": 762.5,
+    "prefill_std": 0.38,
+    "decode_std": 23.9
+  },
+  "layerbudget": {
+    "label": "layerbudget_2.0x",
+    "TTFT_ms": 704.66,
+    "TPOT_ms": 22.33,
+    "prefill_ms": 704.66,
+    "compress_ms": 1441.66,
+    "decode_ms": 1428.85,
+    "e2e_ms": 3575.16,
+    "tokens_per_sec": 44.8,
+    "peak_mem_mb": 8372.2,
+    "kv_mem_mb": 435.2,
+    "compressed_bytes": 0,
+    "prefill_std": 2.28,
+    "decode_std": 27.7
+  },
+  "memory_savings_pct": 42.9,
+  "speedup": 0.918,
+  "_checkpoint_key": "mistral-7b__throughput__layer_budget__cr2.0__seq4096",
+  "_timestamp": "2026-04-17T05:26:17.038204"
+}

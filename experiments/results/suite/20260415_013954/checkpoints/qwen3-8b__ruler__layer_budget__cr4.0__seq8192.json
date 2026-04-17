@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-8B",
+  "method": "layer_budget",
+  "compression_ratio": 4.0,
+  "seq_len": 8192,
+  "n_samples_target": 13,
+  "overall_accuracy": 0.7308,
+  "per_task": {
+    "mkr_1": {
+      "correct": 11,
+      "total": 13,
+      "accuracy": 0.8462,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 12,
+      "total": 13,
+      "accuracy": 0.9231,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 8,
+      "total": 13,
+      "accuracy": 0.6154,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 7,
+      "total": 13,
+      "accuracy": 0.5385,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "qwen3-8b__ruler__layer_budget__cr4.0__seq8192",
+  "_timestamp": "2026-04-17T01:15:55.632089"
+}

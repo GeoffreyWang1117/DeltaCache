@@ -1,0 +1,42 @@
+{
+  "task": "niah",
+  "model": "Llama-2-7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0.9333,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    "25.0%": {
+      "depth": 0.25,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "50.0%": {
+      "depth": 0.5,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "75.0%": {
+      "depth": 0.75,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    }
+  },
+  "_checkpoint_key": "llama2-7b__niah__kivi_uniform__cr4.0__seq4096",
+  "_timestamp": "2026-04-14T19:39:52.213150"
+}

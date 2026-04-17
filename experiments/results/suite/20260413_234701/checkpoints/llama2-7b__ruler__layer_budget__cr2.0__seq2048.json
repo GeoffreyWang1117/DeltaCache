@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Llama-2-7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.1562,
+  "per_task": {
+    "mkr_1": {
+      "correct": 6,
+      "total": 40,
+      "accuracy": 0.15
+    },
+    "mkr_5": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "mkr_10": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "vt": {
+      "correct": 19,
+      "total": 40,
+      "accuracy": 0.475
+    }
+  },
+  "_checkpoint_key": "llama2-7b__ruler__layer_budget__cr2.0__seq2048",
+  "_timestamp": "2026-04-14T19:44:38.709419"
+}

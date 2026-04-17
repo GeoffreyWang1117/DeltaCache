@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "dynamickv",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 13.2382,
+  "std_ppl": 3.3769,
+  "ppl_ratio": 1.4674,
+  "full_ppl": 9.0214,
+  "mean_compress_ms": 12.58,
+  "mean_memory_bytes": 40075264,
+  "_checkpoint_key": "llama2-7b__ppl__dynamickv__cr4.0__seq512",
+  "_timestamp": "2026-04-13T23:52:01.156124"
+}

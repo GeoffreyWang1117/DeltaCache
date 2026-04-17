@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "kivi_uniform",
+  "compression_ratio": 6.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 7.6332,
+  "std_ppl": 1.7778,
+  "ppl_ratio": 1.0235,
+  "full_ppl": 7.4578,
+  "mean_compress_ms": 6.87,
+  "mean_memory_bytes": 80956544,
+  "_checkpoint_key": "llama3.1-8b__ppl__kivi_uniform__cr6.0__seq4096",
+  "_timestamp": "2026-04-14T23:53:26.609992"
+}

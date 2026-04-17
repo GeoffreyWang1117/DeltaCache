@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "duo_attention",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 7.8081,
+  "std_ppl": 1.4227,
+  "ppl_ratio": 1.0557,
+  "full_ppl": 7.396,
+  "mean_compress_ms": 203.45,
+  "mean_memory_bytes": 49881088,
+  "_checkpoint_key": "llama3.1-8b__ppl__duo_attention__cr2.0__seq2048",
+  "_timestamp": "2026-04-14T14:19:25.194563"
+}

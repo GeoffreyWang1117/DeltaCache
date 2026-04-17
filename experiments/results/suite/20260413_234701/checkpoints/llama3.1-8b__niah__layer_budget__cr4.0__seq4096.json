@@ -1,0 +1,43 @@
+{
+  "task": "niah",
+  "model": "Llama-3.1-8B",
+  "method": "layer_budget",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_accuracy": 1.0,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "25.0%": {
+      "depth": 0.25,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "50.0%": {
+      "depth": 0.5,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "75.0%": {
+      "depth": 0.75,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    }
+  },
+  "oom_skipped": 0,
+  "_checkpoint_key": "llama3.1-8b__niah__layer_budget__cr4.0__seq4096",
+  "_timestamp": "2026-04-16T23:17:56.385395"
+}

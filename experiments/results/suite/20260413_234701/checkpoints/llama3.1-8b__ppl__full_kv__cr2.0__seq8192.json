@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-3.1-8B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 8192,
+  "prefix_len": 4915,
+  "n_chunks": 6,
+  "mean_ppl": 7.0129,
+  "std_ppl": 1.8528,
+  "ppl_ratio": null,
+  "full_ppl": null,
+  "mean_compress_ms": 0.0,
+  "mean_memory_bytes": 644218880,
+  "_checkpoint_key": "llama3.1-8b__ppl__full_kv__cr2.0__seq8192",
+  "_timestamp": "2026-04-14T18:58:22.269562"
+}

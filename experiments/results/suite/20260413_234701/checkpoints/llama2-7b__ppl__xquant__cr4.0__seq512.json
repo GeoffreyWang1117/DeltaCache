@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "xquant",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 30.233,
+  "std_ppl": 21.0275,
+  "ppl_ratio": 3.3512,
+  "full_ppl": 9.0214,
+  "mean_compress_ms": 18.05,
+  "mean_memory_bytes": 40173952,
+  "_checkpoint_key": "llama2-7b__ppl__xquant__cr4.0__seq512",
+  "_timestamp": "2026-04-13T23:52:12.710125"
+}

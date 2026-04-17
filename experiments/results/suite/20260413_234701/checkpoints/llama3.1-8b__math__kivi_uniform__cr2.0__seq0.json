@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Llama-3.1-8B",
+  "method": "kivi_uniform",
+  "compression_ratio": 2.0,
+  "correct": 33,
+  "total": 196,
+  "accuracy": 0.1684,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 3,
+      "total": 28,
+      "accuracy": 0.1071
+    },
+    "Geometry": {
+      "correct": 7,
+      "total": 28,
+      "accuracy": 0.25
+    },
+    "Prealgebra": {
+      "correct": 7,
+      "total": 28,
+      "accuracy": 0.25
+    },
+    "Intermediate Algebra": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Precalculus": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Number Theory": {
+      "correct": 4,
+      "total": 28,
+      "accuracy": 0.1429
+    },
+    "Algebra": {
+      "correct": 9,
+      "total": 28,
+      "accuracy": 0.3214
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__math__kivi_uniform__cr2.0__seq0",
+  "_timestamp": "2026-04-16T21:14:07.715930"
+}

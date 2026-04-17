@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "layer_budget",
+  "compression_ratio": 3.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 5.8617,
+  "std_ppl": 1.6083,
+  "ppl_ratio": 1.0007,
+  "full_ppl": 5.8573,
+  "mean_compress_ms": 434.49,
+  "mean_memory_bytes": 53102080,
+  "_checkpoint_key": "mistral-7b__ppl__layer_budget__cr3.0__seq2048",
+  "_timestamp": "2026-04-15T05:25:04.101110"
+}

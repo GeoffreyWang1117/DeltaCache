@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Llama-2-7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "overall_mean": 0.0475,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0238,
+      "std": 0.041,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0966,
+      "std": 0.1253,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.1273,
+      "std": 0.1913,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0158,
+      "std": 0.0296,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.034,
+      "std": 0.0989,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0101,
+      "std": 0.0265,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1335,
+      "std": 0.0303,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.0574,
+      "std": 0.0293,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.1033,
+      "std": 0.062,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.0198,
+      "std": 0.0386,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0501,
+      "std": 0.0578,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0746,
+      "std": 0.1142,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0144,
+      "std": 0.0308,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "llama2-7b__longbench__kivi_uniform__cr2.0__seq4096",
+  "_timestamp": "2026-04-16T00:51:07.946122"
+}

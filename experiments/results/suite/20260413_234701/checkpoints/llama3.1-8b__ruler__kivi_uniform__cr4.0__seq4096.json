@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Llama-3.1-8B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "n_samples_target": 20,
+  "overall_accuracy": 0.65,
+  "per_task": {
+    "mkr_1": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 15,
+      "total": 20,
+      "accuracy": 0.75,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 15,
+      "total": 20,
+      "accuracy": 0.75,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 2,
+      "total": 20,
+      "accuracy": 0.1,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__ruler__kivi_uniform__cr4.0__seq4096",
+  "_timestamp": "2026-04-17T00:09:41.655075"
+}

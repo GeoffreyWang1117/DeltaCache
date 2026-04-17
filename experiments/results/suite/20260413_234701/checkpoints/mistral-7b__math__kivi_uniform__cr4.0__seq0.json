@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Mistral-7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "correct": 14,
+  "total": 196,
+  "accuracy": 0.0714,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Geometry": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Prealgebra": {
+      "correct": 4,
+      "total": 28,
+      "accuracy": 0.1429
+    },
+    "Intermediate Algebra": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Algebra": {
+      "correct": 3,
+      "total": 28,
+      "accuracy": 0.1071
+    }
+  },
+  "_checkpoint_key": "mistral-7b__math__kivi_uniform__cr4.0__seq0",
+  "_timestamp": "2026-04-17T03:26:58.475331"
+}

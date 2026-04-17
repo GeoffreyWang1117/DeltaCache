@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "cake",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 9.5473,
+  "std_ppl": 3.4909,
+  "ppl_ratio": 1.2299,
+  "full_ppl": 7.763,
+  "mean_compress_ms": 39.01,
+  "mean_memory_bytes": 160956416,
+  "_checkpoint_key": "llama2-7b__ppl__cake__cr2.0__seq1024",
+  "_timestamp": "2026-04-13T23:48:21.839333"
+}

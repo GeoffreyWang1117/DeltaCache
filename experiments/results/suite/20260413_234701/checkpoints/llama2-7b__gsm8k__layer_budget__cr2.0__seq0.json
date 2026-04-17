@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Llama-2-7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "correct": 11,
+  "total": 200,
+  "accuracy": 0.055,
+  "_checkpoint_key": "llama2-7b__gsm8k__layer_budget__cr2.0__seq0",
+  "_timestamp": "2026-04-15T17:59:00.463690"
+}

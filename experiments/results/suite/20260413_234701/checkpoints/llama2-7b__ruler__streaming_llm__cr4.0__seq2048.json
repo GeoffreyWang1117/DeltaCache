@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Llama-2-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.1938,
+  "per_task": {
+    "mkr_1": {
+      "correct": 9,
+      "total": 40,
+      "accuracy": 0.225
+    },
+    "mkr_5": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "mkr_10": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "vt": {
+      "correct": 22,
+      "total": 40,
+      "accuracy": 0.55
+    }
+  },
+  "_checkpoint_key": "llama2-7b__ruler__streaming_llm__cr4.0__seq2048",
+  "_timestamp": "2026-04-14T20:07:19.077451"
+}

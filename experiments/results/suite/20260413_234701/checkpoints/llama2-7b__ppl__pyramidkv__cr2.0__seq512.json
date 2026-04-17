@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-7B",
+  "method": "pyramidkv",
+  "compression_ratio": 2.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 10.5482,
+  "std_ppl": 3.7923,
+  "ppl_ratio": 1.1692,
+  "full_ppl": 9.0214,
+  "mean_compress_ms": 11.89,
+  "mean_memory_bytes": 79970304,
+  "_checkpoint_key": "llama2-7b__ppl__pyramidkv__cr2.0__seq512",
+  "_timestamp": "2026-04-13T23:47:45.720762"
+}

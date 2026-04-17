@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-8B",
+  "method": "minikv",
+  "compression_ratio": 2.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 11.3028,
+  "std_ppl": 6.4854,
+  "ppl_ratio": 1.0095,
+  "full_ppl": 11.1967,
+  "mean_compress_ms": 45.01,
+  "mean_memory_bytes": 9922708,
+  "_checkpoint_key": "qwen3-8b__ppl__minikv__cr2.0__seq512",
+  "_timestamp": "2026-04-15T01:42:10.549275"
+}

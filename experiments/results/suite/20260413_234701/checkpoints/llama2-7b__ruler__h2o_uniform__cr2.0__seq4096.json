@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Llama-2-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0.1625,
+  "per_task": {
+    "mkr_1": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "mkr_5": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "mkr_10": {
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    "vt": {
+      "correct": 26,
+      "total": 40,
+      "accuracy": 0.65
+    }
+  },
+  "_checkpoint_key": "llama2-7b__ruler__h2o_uniform__cr2.0__seq4096",
+  "_timestamp": "2026-04-14T20:01:22.025810"
+}

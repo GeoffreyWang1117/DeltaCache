@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Llama-3.1-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "correct": 12,
+  "total": 196,
+  "accuracy": 0.0612,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Geometry": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Prealgebra": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Intermediate Algebra": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Algebra": {
+      "correct": 4,
+      "total": 28,
+      "accuracy": 0.1429
+    }
+  },
+  "_checkpoint_key": "llama3.1-8b__math__streaming_llm__cr4.0__seq0",
+  "_timestamp": "2026-04-16T22:52:45.593976"
+}

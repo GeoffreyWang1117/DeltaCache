@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Llama-2-7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "correct": 0,
+  "total": 100,
+  "accuracy": 0.0,
+  "_checkpoint_key": "llama2-7b__gsm8k__h2o_uniform__cr4.0__seq0",
+  "_timestamp": "2026-04-15T20:11:13.458235"
+}

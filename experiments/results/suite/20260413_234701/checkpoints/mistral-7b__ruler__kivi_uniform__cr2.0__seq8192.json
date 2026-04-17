@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Mistral-7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 8192,
+  "n_samples_target": 13,
+  "overall_accuracy": 0.9231,
+  "per_task": {
+    "mkr_1": {
+      "correct": 13,
+      "total": 13,
+      "accuracy": 1.0,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 13,
+      "total": 13,
+      "accuracy": 1.0,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 12,
+      "total": 13,
+      "accuracy": 0.9231,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 10,
+      "total": 13,
+      "accuracy": 0.7692,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "mistral-7b__ruler__kivi_uniform__cr2.0__seq8192",
+  "_timestamp": "2026-04-17T05:01:23.846249"
+}

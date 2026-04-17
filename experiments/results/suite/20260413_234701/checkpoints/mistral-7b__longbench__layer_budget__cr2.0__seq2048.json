@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Mistral-7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_mean": 0.0394,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0356,
+      "std": 0.0568,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0622,
+      "std": 0.0813,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0522,
+      "std": 0.0608,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0111,
+      "std": 0.0307,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0195,
+      "std": 0.0405,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0047,
+      "std": 0.0144,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.126,
+      "std": 0.0504,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.0644,
+      "std": 0.032,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.1392,
+      "std": 0.0567,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.0102,
+      "std": 0.0209,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0482,
+      "std": 0.0295,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0506,
+      "std": 0.0767,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0072,
+      "std": 0.0176,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "mistral-7b__longbench__layer_budget__cr2.0__seq2048",
+  "_timestamp": "2026-04-15T09:59:55.797640"
+}

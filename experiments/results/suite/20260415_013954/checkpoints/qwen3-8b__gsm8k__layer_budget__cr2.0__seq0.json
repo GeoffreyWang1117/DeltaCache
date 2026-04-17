@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Qwen3-8B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "correct": 120,
+  "total": 200,
+  "accuracy": 0.6,
+  "_checkpoint_key": "qwen3-8b__gsm8k__layer_budget__cr2.0__seq0",
+  "_timestamp": "2026-04-15T22:53:30.670608"
+}

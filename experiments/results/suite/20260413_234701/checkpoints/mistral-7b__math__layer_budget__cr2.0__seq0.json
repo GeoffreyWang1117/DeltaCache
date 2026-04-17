@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Mistral-7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "correct": 14,
+  "total": 196,
+  "accuracy": 0.0714,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Geometry": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Prealgebra": {
+      "correct": 6,
+      "total": 28,
+      "accuracy": 0.2143
+    },
+    "Intermediate Algebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Algebra": {
+      "correct": 4,
+      "total": 28,
+      "accuracy": 0.1429
+    }
+  },
+  "_checkpoint_key": "mistral-7b__math__layer_budget__cr2.0__seq0",
+  "_timestamp": "2026-04-17T01:36:57.492713"
+}

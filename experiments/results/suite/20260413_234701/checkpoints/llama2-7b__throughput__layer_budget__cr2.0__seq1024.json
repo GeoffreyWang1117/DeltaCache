@@ -1,0 +1,39 @@
+{
+  "task": "throughput",
+  "model": "Llama-2-7B",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "gen_tokens": 64,
+  "baseline": {
+    "label": "baseline",
+    "TTFT_ms": 112.92,
+    "TPOT_ms": 20.55,
+    "prefill_ms": 112.92,
+    "decode_ms": 1315.0,
+    "e2e_ms": 1427.92,
+    "tokens_per_sec": 48.7,
+    "peak_mem_mb": 5348.9,
+    "kv_mem_mb": 574.5,
+    "prefill_std": 0.11,
+    "decode_std": 40.35
+  },
+  "layerbudget": {
+    "label": "layerbudget_2.0x",
+    "TTFT_ms": 173.0,
+    "TPOT_ms": 21.08,
+    "prefill_ms": 173.0,
+    "compress_ms": 443.81,
+    "decode_ms": 1349.07,
+    "e2e_ms": 1965.88,
+    "tokens_per_sec": 47.4,
+    "peak_mem_mb": 5654.3,
+    "kv_mem_mb": 435.0,
+    "compressed_bytes": 0,
+    "prefill_std": 20.79,
+    "decode_std": 28.61
+  },
+  "memory_savings_pct": 24.3,
+  "speedup": 0.975,
+  "_checkpoint_key": "llama2-7b__throughput__layer_budget__cr2.0__seq1024",
+  "_timestamp": "2026-04-16T07:11:15.375995"
+}

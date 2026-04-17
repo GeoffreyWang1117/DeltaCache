@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "snapkv",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 6.2744,
+  "std_ppl": 1.0787,
+  "ppl_ratio": 1.0431,
+  "full_ppl": 6.0154,
+  "mean_compress_ms": 6.24,
+  "mean_memory_bytes": 80478208,
+  "_checkpoint_key": "mistral-7b__ppl__snapkv__cr4.0__seq4096",
+  "_timestamp": "2026-04-15T05:26:59.620566"
+}

@@ -1,0 +1,109 @@
+{
+  "task": "longbench",
+  "model": "Mistral-7B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_mean": 0.0375,
+  "n_tasks": 16,
+  "per_task": {
+    "narrativeqa": {
+      "metric": "f1",
+      "mean": 0.0408,
+      "std": 0.0518,
+      "n": 20
+    },
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0525,
+      "std": 0.0674,
+      "n": 20
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.043,
+      "std": 0.0522,
+      "n": 20
+    },
+    "hotpotqa": {
+      "metric": "f1",
+      "mean": 0.0165,
+      "std": 0.0342,
+      "n": 20
+    },
+    "2wikimqa": {
+      "metric": "f1",
+      "mean": 0.0217,
+      "std": 0.0484,
+      "n": 20
+    },
+    "musique": {
+      "metric": "f1",
+      "mean": 0.0066,
+      "std": 0.0162,
+      "n": 20
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1238,
+      "std": 0.0304,
+      "n": 20
+    },
+    "qmsum": {
+      "metric": "rouge_l",
+      "mean": 0.0626,
+      "std": 0.0295,
+      "n": 20
+    },
+    "multi_news": {
+      "metric": "rouge_l",
+      "mean": 0.1262,
+      "std": 0.0587,
+      "n": 20
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "triviaqa": {
+      "metric": "f1",
+      "mean": 0.0124,
+      "std": 0.0221,
+      "n": 20
+    },
+    "samsum": {
+      "metric": "rouge_l",
+      "mean": 0.0508,
+      "std": 0.0311,
+      "n": 20
+    },
+    "passage_count": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "passage_retrieval_en": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 20
+    },
+    "lcc": {
+      "metric": "rouge_l",
+      "mean": 0.0376,
+      "std": 0.0524,
+      "n": 20
+    },
+    "repobench-p": {
+      "metric": "rouge_l",
+      "mean": 0.0055,
+      "std": 0.0169,
+      "n": 20
+    }
+  },
+  "_checkpoint_key": "mistral-7b__longbench__streaming_llm__cr2.0__seq2048",
+  "_timestamp": "2026-04-15T10:26:05.932932"
+}
