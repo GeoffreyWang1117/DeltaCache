@@ -1,0 +1,12 @@
+{
+  "task": "longbench",
+  "model": "Llama-2-13B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "overall_mean": 0,
+  "n_tasks": 0,
+  "per_task": {},
+  "_checkpoint_key": "llama2-13b__longbench__kivi_uniform__cr4.0__seq2048",
+  "_timestamp": "2026-04-22T03:52:35.335018"
+}

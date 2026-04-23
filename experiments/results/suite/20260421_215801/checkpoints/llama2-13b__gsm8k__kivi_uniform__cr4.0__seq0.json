@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "gsm8k",
+  "model": "Llama-2-13B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 0,
+  "_checkpoint_key": "llama2-13b__gsm8k__kivi_uniform__cr4.0__seq0",
+  "_timestamp": "2026-04-23T13:38:25.014395"
+}

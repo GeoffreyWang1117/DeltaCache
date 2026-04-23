@@ -1,0 +1,12 @@
+{
+  "task": "longbench",
+  "model": "Qwen2.5-14B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "overall_mean": 0,
+  "n_tasks": 0,
+  "per_task": {},
+  "_checkpoint_key": "qwen2.5-14b__longbench__full_kv__cr2.0__seq1024",
+  "_timestamp": "2026-04-17T14:32:09.141297"
+}

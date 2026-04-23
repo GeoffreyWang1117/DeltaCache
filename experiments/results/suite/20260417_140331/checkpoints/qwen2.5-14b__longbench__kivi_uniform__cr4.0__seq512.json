@@ -1,0 +1,12 @@
+{
+  "task": "longbench",
+  "model": "Qwen2.5-14B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "overall_mean": 0,
+  "n_tasks": 0,
+  "per_task": {},
+  "_checkpoint_key": "qwen2.5-14b__longbench__kivi_uniform__cr4.0__seq512",
+  "_timestamp": "2026-04-17T15:12:27.728949"
+}

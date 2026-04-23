@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 9.498,
+  "std_ppl": 4.1138,
+  "ppl_ratio": 1.1418,
+  "full_ppl": 8.3183,
+  "mean_compress_ms": 37.84,
+  "mean_memory_bytes": 126156800,
+  "_checkpoint_key": "llama2-13b__ppl__streaming_llm__cr2.0__seq512",
+  "_timestamp": "2026-04-23T13:37:15.522558"
+}

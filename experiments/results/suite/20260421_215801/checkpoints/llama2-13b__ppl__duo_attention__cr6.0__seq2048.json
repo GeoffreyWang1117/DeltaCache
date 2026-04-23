@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "duo_attention",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "_checkpoint_key": "llama2-13b__ppl__duo_attention__cr6.0__seq2048",
+  "_timestamp": "2026-04-23T13:38:21.120687"
+}

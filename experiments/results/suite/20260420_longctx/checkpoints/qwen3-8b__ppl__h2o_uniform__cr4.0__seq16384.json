@@ -1,0 +1,15 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-8B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 16384,
+  "prefix_len": 9830,
+  "n_chunks": 3,
+  "mean_ppl": 7.8297,
+  "std_ppl": 2.4938,
+  "ppl_ratio": 1.0295,
+  "full_ppl": 7.6057,
+  "_checkpoint_key": "qwen3-8b__ppl__h2o_uniform__cr4.0__seq16384",
+  "_timestamp": "2026-04-20T01:21:34.277614"
+}

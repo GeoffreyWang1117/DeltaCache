@@ -1,0 +1,12 @@
+{
+  "task": "ruler",
+  "model": "Llama-2-13B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "n_samples_target": 20,
+  "overall_accuracy": 0,
+  "per_task": {},
+  "_checkpoint_key": "llama2-13b__ruler__full_kv__cr2.0__seq4096",
+  "_timestamp": "2026-04-22T06:08:33.081701"
+}

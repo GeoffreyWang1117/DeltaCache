@@ -1,0 +1,12 @@
+{
+  "task": "niah",
+  "model": "Llama-2-13B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0,
+  "per_depth": {},
+  "oom_skipped": 0,
+  "_checkpoint_key": "llama2-13b__niah__full_kv__cr2.0__seq2048",
+  "_timestamp": "2026-04-22T05:31:21.079996"
+}

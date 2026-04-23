@@ -1,0 +1,43 @@
+{
+  "run_id": "20260417_140331",
+  "tier": "paper",
+  "hardware": "local_3090x2",
+  "total_units": 63,
+  "completed": 178,
+  "errors": 8,
+  "total_time_seconds": 138715.4,
+  "error_details": [
+    [
+      "qwen2.5-14b__mmlu__duo_attention__cr2.0__seq0",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen2.5-14B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen2.5-14B"
+    ],
+    [
+      "qwen2.5-14b__mmlu__duo_attention__cr3.0__seq0",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen2.5-14B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen2.5-14B"
+    ],
+    [
+      "qwen2.5-14b__mmlu__duo_attention__cr4.0__seq0",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen2.5-14B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen2.5-14B"
+    ],
+    [
+      "qwen2.5-14b__mmlu__duo_attention__cr6.0__seq0",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen2.5-14B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen2.5-14B"
+    ],
+    [
+      "qwen2.5-14b__throughput__layer_budget__cr2.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen2.5-14b__throughput__layer_budget__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen2.5-14b__throughput__layer_budget__cr4.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen2.5-14b__throughput__layer_budget__cr6.0__seq4096",
+      "CUDA OOM"
+    ]
+  ]
+}

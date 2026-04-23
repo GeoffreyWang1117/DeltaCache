@@ -1,0 +1,15 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 32768,
+  "prefix_len": 19660,
+  "n_chunks": 3,
+  "mean_ppl": 5.9614,
+  "std_ppl": 0.3425,
+  "ppl_ratio": 1.0082,
+  "full_ppl": 5.9132,
+  "_checkpoint_key": "mistral-7b__ppl__kivi_uniform__cr4.0__seq32768",
+  "_timestamp": "2026-04-20T00:58:22.470620"
+}

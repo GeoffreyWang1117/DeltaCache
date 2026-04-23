@@ -1,0 +1,12 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-8B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_mean": 0,
+  "n_tasks": 0,
+  "per_task": {},
+  "_checkpoint_key": "qwen3-8b__longbench__streaming_llm__cr4.0__seq4096",
+  "_timestamp": "2026-04-17T10:48:00.828426"
+}

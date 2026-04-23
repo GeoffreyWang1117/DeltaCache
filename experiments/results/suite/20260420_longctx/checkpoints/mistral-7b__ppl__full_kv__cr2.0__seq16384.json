@@ -1,0 +1,15 @@
+{
+  "task": "ppl",
+  "model": "Mistral-7B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 16384,
+  "prefix_len": 9830,
+  "n_chunks": 3,
+  "mean_ppl": 5.0953,
+  "std_ppl": 1.0224,
+  "ppl_ratio": 1.0,
+  "full_ppl": 5.0953,
+  "_checkpoint_key": "mistral-7b__ppl__full_kv__cr2.0__seq16384",
+  "_timestamp": "2026-04-20T00:48:56.735312"
+}

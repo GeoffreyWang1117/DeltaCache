@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Qwen2.5-14B",
+  "method": "streaming_llm",
+  "compression_ratio": 2.0,
+  "correct": 21,
+  "total": 200,
+  "accuracy": 0.105,
+  "_checkpoint_key": "qwen2.5-14b__gsm8k__streaming_llm__cr2.0__seq0",
+  "_timestamp": "2026-04-17T23:03:32.664661"
+}

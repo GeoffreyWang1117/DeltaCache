@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Qwen2.5-14B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "correct": 9,
+  "total": 196,
+  "accuracy": 0.0459,
+  "per_subject": {
+    "Counting & Probability": {
+      "correct": 4,
+      "total": 28,
+      "accuracy": 0.1429
+    },
+    "Geometry": {
+      "correct": 2,
+      "total": 28,
+      "accuracy": 0.0714
+    },
+    "Prealgebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Intermediate Algebra": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 28,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    },
+    "Algebra": {
+      "correct": 1,
+      "total": 28,
+      "accuracy": 0.0357
+    }
+  },
+  "_checkpoint_key": "qwen2.5-14b__math__h2o_uniform__cr4.0__seq0",
+  "_timestamp": "2026-04-19T00:34:57.087671"
+}

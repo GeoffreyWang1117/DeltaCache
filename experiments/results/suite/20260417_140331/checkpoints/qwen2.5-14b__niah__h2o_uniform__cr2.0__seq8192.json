@@ -1,0 +1,12 @@
+{
+  "task": "niah",
+  "model": "Qwen2.5-14B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 8192,
+  "overall_accuracy": 0,
+  "per_depth": {},
+  "oom_skipped": 5,
+  "_checkpoint_key": "qwen2.5-14b__niah__h2o_uniform__cr2.0__seq8192",
+  "_timestamp": "2026-04-17T15:48:35.796291"
+}

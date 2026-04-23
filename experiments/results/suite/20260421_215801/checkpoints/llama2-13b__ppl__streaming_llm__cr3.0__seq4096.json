@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "streaming_llm",
+  "compression_ratio": 3.0,
+  "seq_len": 4096,
+  "_checkpoint_key": "llama2-13b__ppl__streaming_llm__cr3.0__seq4096",
+  "_timestamp": "2026-04-23T13:38:08.325244"
+}

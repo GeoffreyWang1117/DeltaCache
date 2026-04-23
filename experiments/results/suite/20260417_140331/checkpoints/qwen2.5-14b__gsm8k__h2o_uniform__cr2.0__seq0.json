@@ -1,0 +1,11 @@
+{
+  "task": "gsm8k",
+  "model": "Qwen2.5-14B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "correct": 34,
+  "total": 200,
+  "accuracy": 0.17,
+  "_checkpoint_key": "qwen2.5-14b__gsm8k__h2o_uniform__cr2.0__seq0",
+  "_timestamp": "2026-04-18T01:13:57.946485"
+}

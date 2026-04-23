@@ -1,0 +1,12 @@
+{
+  "task": "niah",
+  "model": "Llama-2-13B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0,
+  "per_depth": {},
+  "oom_skipped": 5,
+  "_checkpoint_key": "llama2-13b__niah__layer_budget__cr2.0__seq4096",
+  "_timestamp": "2026-04-22T05:35:14.050050"
+}

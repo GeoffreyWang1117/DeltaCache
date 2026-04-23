@@ -1,0 +1,15 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-8B",
+  "method": "full_kv",
+  "compression_ratio": 2.0,
+  "seq_len": 32768,
+  "prefix_len": 19660,
+  "n_chunks": 3,
+  "mean_ppl": 8.6961,
+  "std_ppl": 0.9663,
+  "ppl_ratio": 1.0,
+  "full_ppl": 8.6961,
+  "_checkpoint_key": "qwen3-8b__ppl__full_kv__cr2.0__seq32768",
+  "_timestamp": "2026-04-20T01:23:39.685394"
+}

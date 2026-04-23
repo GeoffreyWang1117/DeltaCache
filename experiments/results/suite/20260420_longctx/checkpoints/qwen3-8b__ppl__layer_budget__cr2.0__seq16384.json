@@ -1,0 +1,15 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-8B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 16384,
+  "prefix_len": 9830,
+  "n_chunks": 3,
+  "mean_ppl": 7.6057,
+  "std_ppl": 2.3432,
+  "ppl_ratio": 1.0,
+  "full_ppl": 7.6057,
+  "_checkpoint_key": "qwen3-8b__ppl__layer_budget__cr2.0__seq16384",
+  "_timestamp": "2026-04-20T01:19:09.456166"
+}

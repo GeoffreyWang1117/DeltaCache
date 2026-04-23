@@ -1,10 +1,91 @@
 {
   "run_id": "20260415_013954",
   "tier": "paper",
-  "hardware": "local_3090x2_9gb",
-  "total_units": 90,
-  "completed": 185,
-  "errors": 0,
-  "total_time_seconds": 99478.0,
-  "error_details": []
+  "hardware": "local_3090x2",
+  "total_units": 159,
+  "completed": 269,
+  "errors": 55,
+  "total_time_seconds": 2681.5,
+  "error_details": [
+    [
+      "qwen3-8b__ppl__duo_attention__cr2.0__seq2048",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen3-8B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen3-8B"
+    ],
+    [
+      "qwen3-8b__ppl__snapkv__cr2.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__streaming_llm__cr2.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__duo_attention__cr2.0__seq4096",
+      "FileNotFoundError: DuoAttention profile not found at /home/coder-gw/.cache/duoattention_profiles/Qwen3-8B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen3-8B"
+    ],
+    [
+      "qwen3-8b__ppl__minikv__cr2.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__layer_budget__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__h2o_uniform__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__kivi_uniform__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__snapkv__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__streaming_llm__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__duo_attention__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__minikv__cr3.0__seq2048",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__layer_budget__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__h2o_uniform__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__kivi_uniform__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__snapkv__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__streaming_llm__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__duo_attention__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__minikv__cr3.0__seq4096",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-8b__ppl__layer_budget__cr4.0__seq2048",
+      "CUDA OOM"
+    ]
+  ]
 }

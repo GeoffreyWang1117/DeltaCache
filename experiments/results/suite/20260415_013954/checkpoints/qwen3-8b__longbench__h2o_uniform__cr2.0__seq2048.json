@@ -1,0 +1,12 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-8B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_mean": 0,
+  "n_tasks": 0,
+  "per_task": {},
+  "_checkpoint_key": "qwen3-8b__longbench__h2o_uniform__cr2.0__seq2048",
+  "_timestamp": "2026-04-17T10:19:47.977218"
+}

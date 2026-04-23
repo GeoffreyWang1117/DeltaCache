@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "minikv",
+  "compression_ratio": 6.0,
+  "seq_len": 512,
+  "_checkpoint_key": "llama2-13b__ppl__minikv__cr6.0__seq512",
+  "_timestamp": "2026-04-23T13:38:17.856233"
+}

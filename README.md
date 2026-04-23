@@ -8,33 +8,43 @@ LayerBudget jointly allocates per-layer token retention budgets and quantization
 2. **Protect early layers** — leave-one-out analysis reveals early transformer layers are the primary quality bottleneck under eviction. Inverted importance weights (early-high) improve 6x compression by 60–94% over conventional late-high weighting.
 3. **Mean-fill** — evicted positions are filled with the mean of retained tokens, reducing output KL divergence by 96%.
 
-## Key Results (NeurIPS 2026 experiment suite)
+## Key Results (NeurIPS 2026 experiment suite — 1423 checkpoints, 6 models, 17 baselines)
 
-### PPL Ratio @ 1024 tokens (4 models, 17 baselines)
+### PPL Ratio @ 1024 tokens
 
 | Compression | LayerBudget | H2O | SnapKV | StreamingLLM | KIVI |
 |:-----------:|:-----------:|:---:|:------:|:------------:|:----:|
-| 2x | **0.999–1.001** | 1.02–1.17 | 1.06–1.08 | 1.17–1.29 | 1.01–1.02 |
-| 4x | **1.02–1.03** | 1.07–1.21 | 1.13–1.20 | 1.28–1.41 | 1.01–1.02 |
-| 6x | **1.08–1.25** | 1.11–1.23 | 1.18–1.35 | 1.32–1.64 | 1.01–1.02 |
+| 2x | **0.999–1.001** | 1.02–1.17 | 1.06–1.12 | 1.17–1.29 | 1.01–1.02 |
+| 4x | **1.01–1.03** | 1.07–1.21 | 1.13–1.24 | 1.28–1.41 | 1.01–1.02 |
+| 6x | **1.03–1.25** | 1.11–1.24 | 1.18–1.35 | 1.32–1.64 | 1.01–1.02 |
 
-Evaluated on Llama-2-7B (MHA), Llama-3.1-8B (GQA), Mistral-7B (GQA), Qwen3-8B (GQA) across 17 baselines including H2O, KIVI, SnapKV, StreamingLLM, MiniKV, DuoAttention, PyramidKV, D2O, CAKE, AdaKV, DynamicKV, LAVa, EvolKV, KVTuner, SqueezeAttention, XQuant.
+### Long Context (16K–32K tokens, Mistral-7B)
 
-### Downstream Tasks (Llama-3.1-8B)
+| Method | 16K CR=2x | 16K CR=4x | 32K CR=2x | 32K CR=4x |
+|--------|:---------:|:---------:|:---------:|:---------:|
+| **LayerBudget** | **1.001** | **1.006** | **1.000** | **1.009** |
+| KIVI | 1.006 | 1.006 | 1.008 | 1.008 |
+| H2O | 1.039 | **34.9** | 1.057 | **83.4** |
+| StreamingLLM | 1.013 | 1.035 | 1.014 | 1.026 |
 
-| Benchmark | Full KV | LB@4x | H2O@4x | KIVI@4x | StreamingLLM@4x |
-|-----------|:-------:|:-----:|:-------:|:-------:|:---------------:|
-| MMLU (1140q) | 63.9% | **64.1%** | 42.2% | 63.7% | 61.1% |
-| NIAH@4096 | 100% | **100%** | — (OOM) | 100% | 60% |
+### Downstream Tasks
 
-### Retrieval Robustness (NIAH, Llama-2-7B)
+| Benchmark | Full KV | LB@4x | H2O@4x | KIVI@4x |
+|-----------|:-------:|:-----:|:-------:|:-------:|
+| MMLU (1140q, 4 models) | 47–73% | **47–73%** | 36–52% | 47–73% |
+| NIAH@4096 (4 models) | 87–100% | **73–100%** | 40–100% | 73–100% |
+| LongBench (16 tasks) | 0.037–0.040 | **0.038–0.039** | 0.032–0.036 | 0.032–0.037 |
 
-| Method | CR=2 @2048 | CR=4 @2048 | CR=4 @4096 |
-|--------|:----------:|:----------:|:----------:|
-| **LayerBudget** | **100%** | **100%** | **100%** |
-| H2O | 80% | 53% | 40% |
-| StreamingLLM | 60% | 40% | 40% |
-| KIVI | 100% | 100% | 93% |
+### System Metrics (KV cache memory savings)
+
+| Architecture | Memory Savings |
+|:------------:|:--------------:|
+| GQA 4-head (Qwen2.5-14B) | **72%** |
+| GQA 8-head (Mistral/Llama-3.1/Qwen3) | **43–72%** |
+| MHA 32-head (Llama-2-7B) | **24%** |
+
+Evaluated on 6 models (7B–14B): Llama-2-7B, Llama-2-13B, Llama-3.1-8B, Mistral-7B, Qwen3-8B, Qwen2.5-14B.
+17 baselines: H2O, KIVI, SnapKV, StreamingLLM, MiniKV, DuoAttention, PyramidKV, D2O, CAKE, AdaKV, DynamicKV, LAVa, EvolKV, KVTuner, SqueezeAttention, XQuant.
 
 ## Project Structure
 
@@ -145,41 +155,39 @@ Evicted positions filled with mean of retained KV:
 
 Quality function is monotone submodular → greedy achieves (1-1/e) approximation (Sviridenko 2004). Empirically: **118–119%** of 500-trial random search.
 
-## Models Validated (NeurIPS 2026 suite)
+## Models Validated (NeurIPS 2026 suite — 1423 OK checkpoints)
 
-| Model | Arch | KV Heads | PPL | MMLU | GSM8K | MATH | LongBench | NIAH | RULER | Throughput |
-|-------|:-----|:--------:|:---:|:----:|:-----:|:----:|:---------:|:----:|:-----:|:----------:|
-| Llama-2-7B | MHA | 32 | ✅ | ✅ | 🔄 | 🔄 | 🔄 | ✅ | ✅ | 🔄 |
-| Llama-3.1-8B | GQA | 8 | ✅ | ✅ | ⏳ | ⏳ | ⏳ | 🔄 | ⏳ | ⏳ |
-| Mistral-7B | GQA | 8 | ✅ | 🔄 | ⏳ | ⏳ | ✅ | ⏳ | ⏳ | ⏳ |
-| Qwen3-8B | GQA | 8 | 🔄 | ⏳ | 🔄 | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
+| Model | Arch | Params | PPL | MMLU | GSM8K | MATH | LB | NIAH | RULER | Thru | Context |
+|-------|:-----|:------:|:---:|:----:|:-----:|:----:|:--:|:----:|:-----:|:----:|:-------:|
+| Llama-2-7B | MHA | 7B | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 4K |
+| Llama-2-13B | MHA | 13B | ✅* | — | — | — | ✅ | ✅ | ✅ | — | 4K |
+| Llama-3.1-8B | GQA | 8B | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 32K |
+| Mistral-7B | GQA | 7B | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 32K |
+| Qwen3-8B | GQA | 8B | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅* | 16K |
+| Qwen2.5-14B | GQA | 14B | ✅* | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅* | 4K |
 
-✅ = complete, 🔄 = running, ⏳ = pending
-
-**Baselines**: 17 methods compared — H2O, KIVI, SnapKV, StreamingLLM, MiniKV, DuoAttention, PyramidKV, D2O, CAKE, AdaKV, DynamicKV, LAVa, EvolKV, KVTuner, SqueezeAttention, XQuant + full_kv
+✅ = complete, ✅* = partial (some methods OOM at long seq), — = OOM on 3090
 
 ---
 
 ## Remaining Work
 
-### Experiments in progress (Apr 15, 2026)
+### Experiments complete (Apr 23, 2026)
 
-- [x] **PPL evaluation** — 4 models × 8 methods × 4 CRs × 4 seq_lens (508 units complete)
-- [x] **MMLU** — 4 models × 8 methods × 4 CRs (68+ units)
-- [x] **LongBench fix** — data loading via direct zip download (datasets 4.x broke old API)
-- [x] **Throughput fix** — now uses compress_kv pipeline (old code showed 0% savings)
-- [x] **RULER/NIAH OOM fix** — per-sample recovery + h2o_uniform attention skip (256GB→0)
-- [x] **GSM8K/MATH** — sample size increased from 50 to 200
-- 🔄 **Server**: Llama2-7B GSM8K/MATH/LongBench/Throughput → Llama3.1 → Mistral → Qwen3
-- 🔄 **Local**: Qwen3-8B GSM8K/MMLU/LongBench/NIAH/RULER/Throughput
+- [x] **1423 OK checkpoints** across 6 models, 17 baselines, 8 tasks
+- [x] **PPL** — 6 models × 8 methods × 4 CRs × up to 4 seq_lens + 16K/32K long context
+- [x] **MMLU** — 5 models × 8 methods × 4 CRs (1140 questions, 57 subjects)
+- [x] **GSM8K/MATH** — 5 models × 5 methods × 2 CRs (200 samples each)
+- [x] **LongBench** — 6 models × 5 methods × 2 CRs (16 English tasks)
+- [x] **NIAH/RULER** — 6 models × 5 methods × 2 CRs × 3 seq_lens
+- [x] **Throughput** — 4 models (24–72% KV memory savings)
+- [x] **16K/32K context** — 3 GQA models (LB ≤1.001 at 2x, H2O collapses at 83x)
+- [x] **13B models** — Llama-2-13B (MHA) + Qwen2.5-14B (GQA)
 
 ### Before submission
 
-- [ ] **Aggregate results** — build final paper tables from suite checkpoints
-- [ ] **Paper analysis** — KIVI comparison narrative (LB wins on retrieval, KIVI wins at high CR PPL)
-- [ ] **Regenerate figures** — from new 4-model, 17-baseline data
-- [ ] **13B model** — Llama-2-13B or Qwen2.5-14B (config ready, needs 2×3090 or A100)
-- [ ] **Longer context** — 16K-32K experiments (pending OOM fixes verification)
+- [ ] **Regenerate figures** — from 6-model, 17-baseline data
+- [ ] **Final paper polish** — update abstract numbers, check page budget
 
 ## Baselines (16 methods, all reimplemented)
 

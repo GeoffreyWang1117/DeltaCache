@@ -1,0 +1,12 @@
+{
+  "task": "niah",
+  "model": "Qwen2.5-14B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0,
+  "per_depth": {},
+  "oom_skipped": 5,
+  "_checkpoint_key": "qwen2.5-14b__niah__streaming_llm__cr4.0__seq4096",
+  "_timestamp": "2026-04-17T15:48:51.966912"
+}
