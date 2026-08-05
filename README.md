@@ -1,43 +1,71 @@
 # DeltaCache
 
-**Research question (current): can a claim of "near-lossless" optimized LLM inference actually be verified?**
+**Research question (current): is KV-cache *eviction* detectable from a provider's outputs, and how
+does the audit cost scale with context length?**
 
-> ⚠️ **This project changed direction in August 2026.** It began as a KV-cache compression
-> method (LayerBudget) and that method is now retired — an independent adversarial review
-> returned 8/8 Reject, and the method loses to a 2024 baseline at matched memory. What remains
-> useful is the *measurement infrastructure*, which is being redirected at a different question:
-> whether the faithfulness claims made across this entire field are verifiable at all.
+> ⚠️ **This project changed direction in August 2026.** It began as a KV-cache compression method
+> (LayerBudget). That method is retired — an independent adversarial review returned 8/8 Reject, and
+> it loses to a 2024 baseline at matched memory. The direction is now inference *verification*.
 >
-> **New readers start at [`docs/README.md`](docs/README.md).** Do not trust numbers in the
-> git history, in `paper/`, or in older docs without checking
+> **New readers start at [`docs/PROBLEM_FORMULATION.md`](docs/PROBLEM_FORMULATION.md)**, then
+> [`docs/README.md`](docs/README.md). Do not trust numbers in the git history, in `paper/`, or in
+> docs dated before August 2026 without checking
 > [`docs/CLAIM_VERIFY_2026Q3.md`](docs/CLAIM_VERIFY_2026Q3.md) first.
 
 ---
 
-## Where this is going
+## ▶ Resume here
 
-Every KV-cache compression paper reports "our distortion is small." **None reports the distortion
-you get from changing nothing that should matter** — the attention backend, the batch size, the
-GPU, the matmul precision. Without that denominator, "small" has no meaning.
+**Next action: run [DiFR](https://github.com/adamkarvonen/difr)'s open-source implementation against
+one eviction method (H2O at CR=4).** This is a go/no-go gate and it comes before any code of our own.
 
-An external audit ([arXiv 2607.11942](https://arxiv.org/abs/2607.11942)) measures that swapping
-`sdpa` for `eager` attention moves RULER accuracy by **0.221 — larger than the gap between most
-published methods**, with identical weights and no compression at all. If a method's distortion
-sits inside that envelope, its faithfulness claim is not falsifiable as stated.
+```
+1. Rebuild the conda env      — 10-20 min, docs/ENV_REBUILD_DIAGNOSIS.md
+                                (env is empty, not broken; pin transformers==4.57.6)
+2. PPL smoke cell             — confirms the forward path works
+3. Clone + run DiFR on H2O    — github.com/adamkarvonen/difr, has a vLLM integration
+```
 
-That question connects directly to verifiable inference. **ChainProve**
-([VerifAI@ICLR 2026](https://arxiv.org/abs/2603.18046), ICICS 2026) states its threat model as:
+**Read the gate before running it:** if Token-DiFR detects H2O at CR=4 within ~300 output tokens —
+the budget at which it already detects 4-bit weight quantization at AUC > 0.999 — then target **Q3**
+in `PROBLEM_FORMULATION.md` is falsified, there is no blind spot, and the honest move is to stop.
+That outcome is a legitimate result of one day's work, not a failure.
+
+Note the GPUs are shared: a `fisherkd` job was using ~6.5 GB on GPU 0 and ~5.1 GB on GPU 1. Use fp16
+weights (not 4-bit) for anything faithfulness-related, which caps a single 24 GB card at ~7–8B.
+
+---
+
+## The question, stated precisely
+
+A provider serving KV-cache compression is running the **genuine advertised weights** — so a weight
+commitment passes bit-identically. Only the cache differs. **ChainProve**
+([VerifAI@ICLR 2026](https://arxiv.org/abs/2603.18046), ICICS 2026) names this in its threat model:
 
 > *model substitution*, where a provider silently swaps in a cheaper model, **applies aggressive
 > quantization, or returns cached outputs**
 
-KV-cache compression is precisely that adversary behaviour — and it is invisible to a weight
-commitment, because the provider really is running the advertised weights. Only the cache differs.
-That gap is where this project is headed.
+The general verification problem is already well modelled. [DiFR](https://arxiv.org/abs/2511.20621)
+(Anthropic / FAR AI, Nov 2025) formalizes the composite null over a pool of acceptable honest
+configurations, ships a vLLM integration, and already benchmarks **FP8 KV-cache quantization**.
 
-**Plan:** [`docs/EXPERIMENT_PLAN_FAITHFULNESS.md`](docs/EXPERIMENT_PLAN_FAITHFULNESS.md)
-(includes a pre-registered stop rule).
-**Rationale:** [`docs/REFRAME_VERIFAI_PROPOSAL.md`](docs/REFRAME_VERIFAI_PROPOSAL.md).
+What is untested is **token eviction** (H2O, SnapKV, PyramidKV, LayerBudget), which differs
+structurally from every threat those verifiers were built against:
+
+1. **It has an exact zero region.** Every published policy protects a sink + recent window, so below
+   a context threshold `S₀` nothing is evicted and the deviation is *identically zero*. No test on
+   any number of tokens can detect it. The standard short-prompt audit probe is exactly wrong here.
+2. **Its signal is sparse across positions**, concentrated where attention mass would have fallen on
+   evicted entries — whereas quantization perturbs everywhere.
+
+DiFR aggregates uniformly over a token batch. Against a signal present at only a fraction `π` of
+positions, uniform averaging costs a factor **1/π²** in required audit budget. That is the gap, the
+predicted mechanism, and the quantitative target — all with falsification conditions, in
+[`docs/PROBLEM_FORMULATION.md`](docs/PROBLEM_FORMULATION.md).
+
+**Honest sizing:** this is an *extension to DiFR*, not a new framework. Natural venue is
+VerifAI@ICLR, or a direct contribution to the DiFR line — their code is open, and implementing
+`κ_evict` inside their harness beats rebuilding one.
 
 ---
 
@@ -81,8 +109,9 @@ Qwen2.5-14B), which falsifies the fixed-pyramid assumption several published met
 ## Repository layout
 
 ```
-docs/                       ← START HERE (docs/README.md is the index)
-  EXPERIMENT_PLAN_FAITHFULNESS.md   current experiment design + stop rule
+docs/                       ← START HERE (PROBLEM_FORMULATION.md, then README.md)
+  PROBLEM_FORMULATION.md            the model, the targets, the falsification conditions
+  EXPERIMENT_PLAN_FAITHFULNESS.md   measurement design + stop rule (§2 partly superseded)
   REFRAME_VERIFAI_PROPOSAL.md       why the direction changed
   SCOUT_2026Q3_LANDSCAPE.md         competitive landscape as of Aug 2026
   CLAIM_VERIFY_2026Q3.md            which published numbers are wrong
@@ -147,8 +176,9 @@ card this caps single-GPU runs at ~7–8B.
 |---|---|
 | Method paper | **Retired.** Not submitted anywhere; not submittable. |
 | NeurIPS 2026 | Deadline missed May 2026; never submitted |
-| Current direction | Attestation of optimized inference — design stage, no results yet |
-| Next step | Rebuild env → PPL smoke cell → Experiment 0 (noise floor) |
+| Current direction | Detectability of KV-cache eviction — modelled, no experiments run |
+| Next step | Rebuild env → PPL smoke cell → **run DiFR against H2O** (go/no-go gate) |
+| Last session | 2026-08-04. Tree clean, all analysis committed. |
 
 ## License
 
