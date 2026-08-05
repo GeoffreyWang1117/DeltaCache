@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-0.6B",
+  "method": "cake",
+  "compression_ratio": 3.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 36.1725,
+  "std_ppl": 17.8641,
+  "ppl_ratio": 1.0945,
+  "full_ppl": 33.0491,
+  "mean_compress_ms": 28.47,
+  "mean_memory_bytes": 46953813,
+  "_checkpoint_key": "qwen3-0.6b__ppl__cake__cr3.0__seq2048",
+  "_timestamp": "2026-04-10T01:21:49.059545"
+}

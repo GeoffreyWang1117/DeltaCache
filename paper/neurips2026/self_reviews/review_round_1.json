@@ -1,0 +1,184 @@
+{
+  "paper": "LayerBudget: Per-Layer Token-Precision Joint Optimization for KV Cache Compression",
+  "venue": "NeurIPS 2026",
+  "round": 1,
+  "difficulty": "nightmare",
+  "review_date": "2026-05-02",
+  "paper_path": "/home/coder-gw/Projects/DeltaCache/paper/neurips2026/main.tex",
+  "reviews": [
+    {
+      "reviewer": "R1 — Methodologist",
+      "persona": "Methodologist",
+      "focus": "Technical soundness, mathematical rigor, proof correctness",
+      "summary": "The paper formalizes joint per-layer (n_l, b_l) allocation for KV cache compression as a multiple-choice knapsack problem with a separable quality objective Q(l,n,b) = C(l,n)·F(b)·w_l, and solves it greedily. The coverage component C(l,n) = (n/S)^(1-g_l) is a Gini-parametrized power law; fidelity F(b) is a small lookup; importance w_l is a hand-tuned sigmoid in layer index. A (1-1/e) submodular guarantee is invoked. The mathematical content is clean, but each of its three pillars has soundness gaps that a NeurIPS reviewer cannot wave through: (i) the coverage law is calibrated on one model and has a degenerate edge case at g_l=1, (ii) the submodularity argument does not hold over the joint (n,b) action space as stated, and (iii) the ablation A1 (Table 12) directly contradicts the central 'quantize first, evict last' claim at the compression ratios where it is supposed to matter.",
+      "strengths": [
+        "Section 3.1's (n_l, b_l) joint formulation is a clean abstraction. Formulating the search space as multiple-choice knapsack is the right framing and supports the greedy analysis.",
+        "Equation 3 (coverage) is dimensionally well-defined: C(l, n_l) ∈ [0,1] for n_l ∈ [0, S], and the exponent (1−g_l) is a principled parametrization of how sparsity affects coverage. The MAE 3.1% calibration on Mistral-7B (§3.2) is reported honestly.",
+        "The greedy allocator's algorithm complexity (O(L · S/Δn), <1ms claimed) is well-matched to the problem size and avoids the obvious dynamic-programming trap of size-quadratic tables. The 118–119% comparison against 500-trial random search at least frames the question of approximation tightness.",
+        "The leave-one-out analysis motivating inverted importance is the right experimental design for the question 'which layers are bottlenecks under eviction' — it reveals an effect (early layers are 1.8–2.0 PPL points more sensitive than late layers on Mistral-7B at 6×) that the authors then operationalize."
+      ],
+      "weaknesses": [
+        "**Submodularity argument (§3.5) is incorrect over the joint action space.** The text invokes Sviridenko's (1−1/e) bound on the basis that 'Q is a sum of monotone submodular functions.' But Q = C·F·w is a *product*, and over the joint (n_l, b_l) action set the marginal gains are not submodular in the usual sense — adding a token (Δn) and upgrading bits (Δb) interact through the product C·F. Specifically, ΔQ(add_token | b=4) ≠ ΔQ(add_token | b=16): the coverage gain is the same but the per-byte cost differs by 4×, so the marginal-gain-per-byte ranking changes after the bit upgrade. The (1−1/e) bound for matroid-constrained submodular maximization (Calinescu et al. 2011, Sviridenko 2004) does not apply directly to the multiple-choice knapsack with a product objective. State the actual approximation guarantee — perhaps PTAS for MCKP (Bazgan-Hugot-Vanderpooten 2009) — or downgrade '(1−1/e) approximation' to 'empirically achieves 118–119% of random search baseline,' which is what §3.5 actually demonstrates.",
+        "**Coverage law has a degenerate edge case.** At g_l = 1 (perfectly sparse — one token has all the mass), C(l, n_l) = (n/S)^0 = 1 for any n > 0 including n=1. This says retaining a single token captures full attention mass at any layer with Gini=1 — true in the asymptotic limit but the model assigns it C=1 even at n=0 (technically 0^0, indeterminate). At g_l = 0 (uniform), C(l, n_l) = n/S, linear. These limits are correct but the in-between regime is heuristic; the paper validates only the average MAE (3.1%) without showing the worst-case error envelope or whether the bias is correlated with g_l. Since the allocator's marginal-gain ordering depends on derivatives of C, not just its values, the relevant validation is dC/dn vs empirical attention-mass-per-token-added — not C vs total mass.",
+        "**Component analysis (Table 12) directly falsifies the 'quantize first, evict last' headline at high CR.** The numbers in A1: Mistral-7B 6×: Eviction-only 3.18, Quant-only **1.00**, Joint **3.23**. Llama-2-7B 6×: Eviction-only 44.71, Quant-only **1.01**, Joint **45.09**. Joint is *worse* than eviction-only and *vastly worse* than quant-only at 6× on both 7B models. The paper's reading is 'at 6× the joint approach uses 51% of eviction-only's memory by compressing retained tokens to INT4' — but the PPL ratio is what readers will judge, and quant-only achieves PPL 1.00 while the joint approach achieves PPL 3.23–45.09. The narrative 'quantize first' is contradicted by the very allocation regime where it should pay off: at 6×, quant-only's 1.00 means INT4 across all layers gives near-lossless compression at the same memory budget, and the joint method is *choosing to evict tokens it should not be evicting*. This is a structural problem with the cost model, not an artifact. Either show that quant-only's 6× is computed under a different memory denominator (and rederive the table with consistent denominators), or acknowledge that the joint approach's value vanishes at the highest CR.",
+        "**Fidelity values (F(16)=1.000, F(8)=0.9999, F(4)=0.9964) are calibrated on Mistral-7B-Instruct-v0.2 only** (§3.2). The paper then uses these constants for Llama-2-7B/13B (different attention head counts, MHA not GQA), Llama-3.1-8B, Qwen2.5-14B/72B, Qwen3-8B — all without re-calibration. For an objective whose constants are calibrated by one decimal place, transferring them across models without per-model validation begs the question of whether the allocator's decisions on, say, Llama-2-7B are reflecting Llama-2-7B's actual quantization sensitivity or a sensitivity profile borrowed from Mistral. A per-model F(b) measurement (cosine similarity is a 5-minute experiment per model) would close this.",
+        "**The greedy allocator's runtime is reported inconsistently.** §3.4 says '<1ms.' Table 14 (Profiling overhead) reports 'Alloc' at 100–513ms across configurations — three orders of magnitude larger. Either there are two allocators (a fast one used at runtime and a slow one used during profiling) and the paper does not distinguish them, or the <1ms claim refers to amortized allocator-only cost while the 100–513ms refers to allocator + sparsity profiling. Reconcile these in the camera-ready: state the cost of (i) Gini extraction, (ii) marginal-gain inner loop, (iii) action selection, separately."
+      ],
+      "questions": [
+        "What is the formal approximation guarantee for the greedy solver under the multiple-choice knapsack with product-form objective Q = C·F·w? The (1−1/e) bound cited via Sviridenko 2004 does not apply directly. Is there an MCKP-specific result that matches the claim?",
+        "For the coverage law C(l, n) = (n/S)^(1−g), does the validation (MAE 3.1% on Mistral-7B) hold per-layer or only on average across layers? Per-layer worst-case error matters because the allocator selects per-layer.",
+        "How were k=5 and τ=0.3 in the inverted importance sigmoid (Eq. 4) chosen? Are these values transferred across models or re-tuned per architecture? If re-tuned, what is the search cost?",
+        "In Table 12 row Joint-Mistral-6×=3.23 vs Quant-only-Mistral-6×=1.00: why does the greedy allocator not converge to 'INT4 across all layers, no eviction' at 6×, given that Quant-only achieves PPL 1.00 at the same nominal memory budget? Is the cost model assigning lower marginal gain to bit upgrades than the data warrant?",
+        "What is the expected value of the fidelity constants F(8), F(4) on the MHA models (Llama-2-7B/13B), where attention heads differ structurally from Mistral?"
+      ],
+      "limitations": [
+        "Section 7 lists four limitations honestly. The (1) 'quality model approximation' point understates a structural issue: the model is calibrated on one architecture and the calibration is single-anchor for both coverage and fidelity. (3) 'cross-layer coherence' is flagged but is a real correctness concern — under the current per-layer token selection, layer 0 may retain token 5 while layer 1 evicts it, breaking cross-layer attention paths in a way that is not captured by per-layer PPL."
+      ],
+      "scores": {
+        "Soundness": 2,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 3,
+        "Clarity": 3,
+        "Significance": 3
+      },
+      "overall": 5,
+      "confidence": 4,
+      "decision": "Borderline (lean reject without (a) corrected approximation guarantee, (b) per-model fidelity calibration, (c) reconciliation of Table 12's joint > quant-only inversion at 6×)"
+    },
+
+    {
+      "reviewer": "R2 — Empiricist",
+      "persona": "Empiricist",
+      "focus": "Experimental design, baselines, ablations, reproducibility",
+      "summary": "The empirical scope is large on paper: 7 models from 7B to 72B, 17 baselines, 8 evaluation tasks, contexts to 32K. The execution has visible methodology gaps that defeat the breadth: (i) the headline PPL claim does not match the table values (abstract says ≤1.01 at 4×, Table 1 shows up to 1.03), (ii) the memory-vs-quality denominator is inconsistent across methods (Table 9 shows LayerBudget using ~2× the memory of H2O at the same nominal '6×' CR), (iii) several baselines are reported at numbers so degraded (H2O on MMLU = 36.5% on Llama-2; SnapKV = 27.1%) that the baseline tuning is itself in question, (iv) statistical significance is acknowledged ('PPL std ≈2.3 on S=1024') but no error bars accompany any table. The strongest results — long-context Mistral (1.009 at 32K 4× vs H2O 83.4) and 72B PPL (1.004 at 4×) — are real but rest on small numbers of evaluation chunks.",
+      "strengths": [
+        "Long-context evaluation at 16K and 32K (Table 18) is the most compelling part of the paper: the 83.4× collapse of H2O on Mistral-7B at 32K 4× while LayerBudget stays at 1.009 is a striking and well-presented result.",
+        "72B-scale validation (Table 19) is rare in the KV-compression literature and the PPL ratio of 1.004 at 4× with 100% NIAH/RULER retrieval is a defensible flagship number, even if the baselines around it (H2O at 73% NIAH, 50% RULER) are surprising and need a tuning sanity check.",
+        "Importance-direction ablation (Table 11): inverted vs sigmoid vs flat vs U-shaped is the right ablation, with a striking 60% / 94% improvement at 6× from inverting the importance. Even if the conclusion is one model, this is the kind of falsifiable claim NeurIPS rewards.",
+        "Multi-task evaluation (PPL + NIAH + MMLU + GSM8K + LongBench + RULER) is broader than typical KV-compression papers, which lean only on PPL.",
+        "Coverage of 17 baselines is unusually thorough. Reimplementing each in a unified interface is non-trivial work."
+      ],
+      "weaknesses": [
+        "**Abstract claim 'PPL ratio ≤1.01 at 4× on seven models from 7B to 72B' is not what the tables show.** Table 1 at 4× reports: Llama-2-7B 1.02, Mistral-7B 1.03, Llama-3.1-8B 1.02, Qwen3-8B 1.01. Only Qwen3-8B hits 1.01. Table 19 has 72B at 1.00 at 4× — that one is fine. So the actually-supported claim is '≤1.03 at 4× on five 7B–72B models' — which is *still* a strong result and deserves an honest framing. Recommend rewriting as: 'PPL ratio ≤1.03 at 4× on seven models from 7B to 72B; ≤1.01 on three of seven and the 72B model.'",
+        "**Memory-denominator inconsistency between methods invalidates the headline 'ranks 1st' claim.** Table 9 (Memory at 6× on Mistral-7B): Full KV 39,296 KB, H2O 6,528 KB, CAKE 6,626 KB, **LayerBudget 12,939 KB**. At nominal '6× CR', LayerBudget uses 1.98× the memory of H2O. The PPL columns (LB 1.07, H2O 1.17) only beat H2O because LB is operating at effective ~3× memory while H2O is at effective ~6×. Either (a) state in every results table what the actual byte denominator is per method (so a reader compares like-for-like), or (b) re-derive Table 1 / Table 18 / Table 19 with byte-matched comparisons. The current 6× column is comparing Bose-Einstein to apples.",
+        "**Baseline H2O degrades to MMLU 36.5% on Llama-2-7B (Table 15) and SnapKV to 27.1%.** Random-chance MMLU is 25%. SnapKV at 27.1% is essentially indistinguishable from chance. For comparison, the H2O paper itself (Zhang et al. 2024) reports MMLU degradation of <2% at comparable CR. Either the implementation has a tuning bug, the MMLU prompt format differs, or the comparison is at an effective compression level much higher than CR=4×. A sanity-check reimplementation against the official H2O artifacts (which exist) is mandatory before claiming a 21.7pp MMLU advantage.",
+        "**No error bars / confidence intervals on any results table.** §4 states 'standard deviations are dominated by cross-chunk content variation (PPL std ≈2.3 on S=1024) rather than method variance, so all methods share the same noise profile' — but this is an assumption, not a measurement. The differences between LayerBudget (1.00–1.03) and KIVI (1.01–1.02) at 2–4× are 0.001–0.02 — well within the 2.3 PPL std the paper itself cites. The 'matches KIVI' claim therefore *cannot* be statistically distinguished from 'is identical to KIVI within noise.' Add 95% bootstrap CIs over the 6 chunks per setting.",
+        "**Single-model leave-one-out for inverted importance.** The 'early layers are bottleneck' finding (§5, Table 11) is run on Mistral-7B (32 layers) only. The same scheme is then applied to Llama-2-7B (32 layers, MHA), Llama-2-13B (40 layers), Llama-3.1-8B (32 layers), Qwen3-8B (36 layers), Qwen2.5-14B (48 layers), Qwen2.5-72B (80 layers). The k=5, τ=0.3 sigmoid is the same across all of them. Why should the 'protect first 30%' rule transfer to a 80-layer model? Run leave-one-out on a 40+ layer model.",
+        "**Mistral NIAH at 4× is 73.3% — below Full KV's 86.7%** (Table 7). The table bolds it as if matching, and the abstract says LayerBudget 'maintains 100% NIAH retrieval'. Llama-2-7B at 4× is 100% (Full KV 100%), Llama-3.1-8B 100/100, Qwen3-8B 100/100. So 3 of 4 models maintain 100% but Mistral-7B drops 13.4 points. The abstract's '100% NIAH retrieval' framing is correct only on cherry-picked models.",
+        "**Greedy '118–119% of random search' is a weak baseline.** 500-trial random over an L=32-layer × {4,8,16}-bit × n_l-grid space is small enough that a properly constrained random search (e.g., MCMC or LP-relaxation rounding) should match or beat greedy. The right comparison is dynamic programming on the multiple-choice knapsack — which is exact in O(L · B / Δm). Greedy beating random by 18% may just say random is bad on this problem, not that greedy is good. Add a DP comparison or clarify why DP is infeasible at this problem size.",
+        "**Profiling overhead 61–109% is presented and then the paper says 'fixed profiles eliminate this entirely.'** But fixed profiles abandon the adaptive value of per-input Gini measurement — and §6 'Gini stability' (max deviation 0.061 across context lengths 256–2048) is the justification, again on Mistral-7B only. The same stability claim is not validated for the other 6 models. If fixed profiles are the actual deployment story, the paper should be evaluated end-to-end with fixed profiles on every model, not adaptively profiled on every model.",
+        "**Qwen2-0.5B in Table 10 (zero-fill)** appears nowhere in the main suite. The headline says 7 models from 7B–72B; Qwen2-0.5B sneaks into the appendix as an extra zero-fill validation row. It is unclear whether this model was in the design loop (i.e., the design was iterated on it). Disclose."
+      ],
+      "questions": [
+        "What is the actual byte-equivalent memory at each nominal CR for each method? Add a memory-vs-quality scatter plot at fixed effective compression (bytes used / Full KV bytes), per model, across all baselines.",
+        "Was the H2O implementation validated against the official H2O artifacts? At what setting does the implementation reproduce H2O's published MMLU numbers (i.e., <2% degradation) for Llama-2-7B?",
+        "What is the bootstrap 95% CI on PPL ratio for LayerBudget vs KIVI at 2× and 4× on each of the 7 models? Are the differences statistically distinguishable from zero?",
+        "Was leave-one-out importance run on a non-Mistral model? If yes, what was the conclusion? If no, please run it on at least one MHA model (Llama-2-7B) and one large model (Qwen2.5-14B).",
+        "What is the official baseline H2O MMLU on Llama-2-7B at the same effective memory budget? Cite the H2O-paper number alongside the reimplementation number.",
+        "Why is the Mistral-7B NIAH drop at 4× (86.7→73.3) not flagged in the abstract? Recommend either replacing the '100% NIAH' claim with '100% on 3 of 4 models; 73.3 on Mistral-7B,' or excluding Mistral-7B's NIAH from the headline."
+      ],
+      "limitations": [
+        "Section 7's 'profiling overhead' limitation is honestly stated but the camera-ready needs an end-to-end-with-fixed-profiles results table for the paper to be deployable. Without it, the 24–72% memory savings come at +61–109% prefill cost, which only amortizes at very long generation."
+      ],
+      "scores": {
+        "Soundness": 2,
+        "Presentation": 2,
+        "Contribution": 3,
+        "Originality": 2,
+        "Clarity": 2,
+        "Significance": 3
+      },
+      "overall": 4,
+      "confidence": 5,
+      "decision": "Reject (memory-denominator inconsistency, abstract overclaim, baseline tuning sanity check, and missing error bars are each independently sufficient to block; collectively they require a re-evaluation pass before re-review)"
+    },
+
+    {
+      "reviewer": "R3 — Visionary",
+      "persona": "Visionary",
+      "focus": "Novelty, significance, long-term impact, big picture",
+      "summary": "The paper's central conceptual contribution is the joint per-layer (n_l, b_l) framing: prior work either evicted or quantized but applied the strategy uniformly. The framing is clean and citable, and the 'quantize first, evict last' rule of thumb is the kind of small, transferable insight the field needs. The leave-one-out finding that early layers are the eviction bottleneck — reversing the conventional 'late layers matter more' assumption from interpretability literature — is the most interesting empirical observation in the paper and deserves a more prominent role than it currently gets in §5. The paper undersells its conceptual contribution: it presents itself as a system (greedy allocator, vLLM integration) when the more durable contribution is the diagnostic — that uniform compression is leaving 60–94% on the table when it forces the wrong layers to evict.",
+      "strengths": [
+        "The (n_l, b_l) joint framing is a small, durable contribution. Multiple-choice knapsack is the right combinatorial home for 'how do I trade tokens against precision per-layer' and stating it that way clarifies the design space. Subsequent papers will cite this framing even if they replace the greedy solver.",
+        "The 'inverted importance' finding (early layers matter more under eviction) is a genuinely surprising empirical claim and inverts the standard interpretability narrative (Geva 2023, Meng 2022, etc.). Whether it generalizes beyond Mistral-7B is an open question (R2's complaint), but if it does, it is a publishable observation in its own right and deserves a §6.x called 'why are early layers the eviction bottleneck' with a serious mechanistic discussion — currently it is a paragraph.",
+        "Mean-fill is a clever, low-cost engineering trick (96% KL reduction on Mistral-7B at 6×) that gives the paper a transferable artifact independent of the allocator. The choice to fill with the *mean* (preserving first moment) rather than zero (which biases attention away from evicted positions) is the kind of detail that matters and the paper handles it correctly.",
+        "Long-context results — 1.009 at 32K 4× on Mistral while H2O collapses to 83× — are the kind of regime-shifting result that a NeurIPS audience cares about. Even with the methodology caveats, this is a genuinely useful operating point."
+      ],
+      "weaknesses": [
+        "**The conceptual contribution is buried under operational detail.** The (n_l, b_l) joint framing and the 'quantize first, evict last' rule of thumb deserve a §2 or §3 of their own, structured as a *principles* section similar to how the Tail-at-Scale paper (Dean & Barroso 2013) reads. The current §3 dives directly into the quality model and the greedy solver. A reader who only reads the abstract gets 'we have a method that does X', not 'we have a principled framing of compression as joint allocation, plus a method.' The framing is the more durable contribution.",
+        "**The 'early layers are the eviction bottleneck' finding is the paper's most original observation and the empirical evidence behind it is one model.** Mistral-7B leave-one-out at 6× (Table 11). For a finding that *contradicts* the 'late layers matter more' conventional wisdom, one model is not enough. Run leave-one-out on Llama-2-7B and one large model (Qwen2.5-14B). If the result holds, the paper has a larger conceptual contribution than it currently claims; if it doesn't, the inverted-importance scheme should be presented as an empirical heuristic that worked for Mistral and scaled with k=5, τ=0.3, not as a principle.",
+        "**The orthogonality of Gini and importance (ρ=0.194) is presented as a feature** ('weak correlation enables complementary allocation', §3.3) but not as a hypothesis the design tested. A more ambitious paper would have asked: does the orthogonality hold across architectures? Does it hold under different attention-pattern regimes (sliding window, GQA group structure, quantized-weights vs FP16)? The current paper measures it on TinyLlama-1.1B once.",
+        "**The cost model and the system contribution are tangled and weaken each other.** The greedy allocator with calibrated constants is presented as the contribution, but the calibration constants F(b) and the coverage law are calibrated on one model — so the system doesn't generalize. Conversely, the conceptual claim 'quantize first, evict last' is presented as a consequence of the cost model rather than as a standalone design principle. Either separate them — a §3 'Principles' that is architecture-independent, and a §4 'A Calibrated Cost Model' that is architecture-specific — or commit to one. The middle ground hides both.",
+        "**The vLLM integration paragraph (§4.3) is one paragraph of text and represents a real claim** (block-level integration, 33.7% blocks freed at 6×) that is not supported by a real serving table (no throughput-vs-batch-size, no end-to-end latency comparison vs vanilla vLLM with paged attention). A serious system contribution would either (a) measure end-to-end serving, or (b) present vLLM integration as a proof-of-concept and downgrade the abstract's framing to 'we extend the method to block-level allocation; full serving evaluation is future work.'"
+      ],
+      "questions": [
+        "Of the three 'design choices' in the conclusion (quantize-first, inverted importance, mean-fill), which is the paper's main contribution? The abstract claims all three; a reader needs ranking guidance.",
+        "Does the inverted-importance finding extend beyond Mistral-7B? What would falsify it (e.g., what would a leave-one-out experiment on Llama-2-13B need to show for the conclusion to be 'this finding does not generalize')?",
+        "The paper is presented as 'online' (Table 2's last column). What is the per-batch cost of the online mode in production, and at what generation length does the +61–109% prefill overhead amortize? A simple amortization plot (overhead vs generated tokens) would settle this.",
+        "Is there an analytical reason early layers matter more under eviction? The paper says 'early layers' diffuse attention patterns make them far more sensitive to token removal' (§3.2 last paragraph) — but diffuse attention is what high Gini is *not*, so 'high attention diffusion' would correspond to *low* Gini, which the paper cites as the regime where eviction is *most damaging*. Are the importance and Gini signals saying the same thing or opposite things in early layers?"
+      ],
+      "limitations": [
+        "Section 7's limitations are honest but stop short of the conceptual limitations. 'Cross-layer coherence' (limitation 3) is a real concern: per-layer token selection breaks the implicit invariant that all layers see the same prefix, and the paper does not measure how this affects, e.g., RoPE-based positional reasoning or instruction-following coherence."
+      ],
+      "scores": {
+        "Soundness": 2,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 3,
+        "Clarity": 3,
+        "Significance": 3
+      },
+      "overall": 5,
+      "confidence": 3,
+      "decision": "Borderline. The (n_l, b_l) joint framing and the inverted-importance finding are publishable contributions, but the paper currently presents them in a system-paper voice that obscures the conceptual content. A camera-ready that promotes the principle and demotes the calibration would be a stronger NeurIPS paper."
+    },
+
+    {
+      "reviewer": "R4 — Skeptic",
+      "persona": "Skeptic",
+      "focus": "Overclaiming, missing baselines, unfair comparisons, cherry-picking",
+      "summary": "Stripped of framing, the paper is: (1) a per-layer (n_l, b_l) joint formulation that is a clean abstraction; (2) a greedy allocator over a calibrated cost model; (3) a single-model finding (early layers as eviction bottleneck) generalized across 7 models without per-model validation; (4) a memory comparison whose denominator is inconsistent across methods; (5) an abstract that overstates Table 1's PPL numbers; (6) an MMLU table where H2O drops to 36.5% — a number that, if accurate, would invalidate every prior H2O paper, and is therefore most likely a tuning artifact; (7) a flagship long-context result (1.009 vs H2O 83.4 at 32K 4× on Mistral) that is real and impressive. The paper has one very strong empirical hook (32K Mistral) and one strong conceptual hook (joint (n_l, b_l)) wrapped in claims that are not consistently supported by the tables. The honesty of the appendix tables (especially Table 12's joint-vs-quant inversion at 6×) is to the authors' credit but introduces internal contradictions the abstract does not acknowledge.",
+      "strengths": [
+        "The 32K Mistral-7B result (LayerBudget 1.009 at 4× vs H2O 83.4) is genuinely striking and survives all of my methodological objections — H2O at 83× PPL is so bad that no amount of memory-denominator argumentation rescues it. This is the paper's strongest empirical claim and should be the lede.",
+        "Honest reporting of A1 component analysis (Table 12) is above average for the subfield — most papers would not have shown that joint-Mistral-6× (3.23) loses to quant-only (1.00). The authors' willingness to publish this contradiction is an integrity signal.",
+        "Table 12 also reports that joint at 3× equals quant-only at 3× on Mistral-7B (1.00 vs 1.00) — i.e., the joint method correctly notices, at moderate CR, that it should not evict at all. This is a falsifiable prediction of the cost model and is confirmed.",
+        "Coverage of 17 baselines is thorough. Even if some are mistuned (see weaknesses), the breadth is rare."
+      ],
+      "weaknesses": [
+        "**Abstract overstates Table 1.** Abstract: 'LayerBudget achieves PPL ratio ≤1.01 at 4× on seven models from 7B to 72B.' Table 1 at 4×: Llama-2-7B 1.02, Mistral-7B 1.03, Llama-3.1-8B 1.02, Qwen3-8B 1.01. Only one of four 7B models hits 1.01. Table 19 has 72B at 1.00. So the supportable claim is '≤1.03 at 4× on the 7B models, ≤1.02 at the 13B/14B/72B'. The abstract's '≤1.01' statement is a 1–2pp inflation on each row that, repeated seven times, becomes a substantive misrepresentation of the headline result.",
+        "**Abstract claim '100% NIAH retrieval' is one of the few numerical claims literally contradicted by its own table.** Abstract: 'matches or exceeds quantization-only quality on retrieval benchmarks.' Table 7 NIAH at 4× 4096: Mistral-7B Full KV 86.7, LayerBudget 73.3 — a 13.4-point drop, *below* both Full KV and KIVI (73.3 — actually identical to LayerBudget here, but note Mistral Full KV is also 86.7, so KIVI loses 13.4 too). Recommend reframing: '100% NIAH retrieval on 3 of 4 models at 4× 4096; 73.3% on Mistral-7B (matching KIVI; both 13.4pp below Full KV).'",
+        "**Table 12's joint-vs-quant inversion at 6× is the smoking gun for the cost model's failure at the regime the abstract emphasizes.** Mistral-7B 6×: joint=3.23, quant-only=1.00. Llama-2-7B 6×: joint=45.09, quant-only=1.01. At 6× compression, the cost model is forcing the allocator to evict tokens in regimes where 'just quantize everything to INT4' would have been near-lossless. The abstract's '4×' is the safe regime; the conclusion's '6×' framing (e.g., 'inverted importance improves 6× compression by 60–94%') refers to the regime where the joint method is *wildly worse* than quant-only. The conclusion sentence '60–94% improvement' is over the eviction-only or sigmoid-importance baselines — not over quant-only — but a reader without time to cross-reference will read it as 'LayerBudget improves over the natural alternatives by 60–94% at 6×.' Reframe.",
+        "**MMLU H2O = 36.5% on Llama-2-7B (Table 15) is anomalous.** Random-chance MMLU is 25%; the official H2O paper reports <2% MMLU degradation at comparable CR; LM-Eval-Harness on Llama-2-7B gives Full KV around 47% (which the table reports correctly). H2O dropping to 36.5% at CR=4× on a 32-layer model is a 23% relative degradation — not consistent with the H2O paper's own numbers. Either the implementation has a tuning bug (e.g., heavy_ratio + recent_ratio mismatch), or the prompt format differs from official H2O (which uses LM-Eval-Harness). A sanity-check experiment: run the official H2O artifacts under the same evaluation harness; if the discrepancy holds, document it; if it doesn't, fix the reimplementation. Without this, the 'LayerBudget 47.7 vs H2O 36.5' result is not an apples-to-apples comparison.",
+        "**Memory-denominator inconsistency in Table 9 (Mistral-7B 6×).** Full KV 39,296 KB. Methods at '6× CR': H2O 6,528 KB (≈6.0× actual), CAKE 6,626 KB (≈5.9×), LayerBudget 12,939 KB (≈3.0× actual). The 'CR' column in every other table refers to a different thing for LayerBudget than for H2O. At equal byte budgets, the comparison would be: H2O at 6× (6,528 KB, PPL 1.17) vs LayerBudget at ~12× CR (which would be a different LayerBudget configuration). The current table compares LayerBudget at 3× to H2O at 6×, calls both '6×', and reports LB winning. This is the central methodological problem in the paper. Define CR = bytes_used / Full_KV_bytes for every method (no exceptions) and rerun.",
+        "**Greedy allocator runtime contradiction**: §3.4 '<1ms', Table 14 'Alloc 100–513ms'. Two orders of magnitude. Reconcile.",
+        "**'Quantize first, evict last' rule is empirically validated only by the cost model's own behavior, not by an external benchmark.** §5 says 'at 1.5–3.5× all signal variants are equivalent — INT4 quantization alone provides sufficient compression, no tokens are evicted.' That confirms that the allocator does what its cost model says it should; it does not confirm that the rule generalizes outside the calibration regime. A prior-free version: 'Are there model/CR points where evicting before fully quantizing is better than quantizing-first?' would be the right ablation.",
+        "**The 17-baselines breadth is undermined by selective reporting.** Table 1 shows 7 of 17 baselines. The other 10 are 'evaluated' but not in the main results table. Are they less competitive (so omitted), or did some fail to run? The paper should either include all 17 in the main table (with collapse rates and tuning notes), or list which 10 were dropped and why.",
+        "**GSM8K Table 13: LayerBudget 'slightly exceeds Full KV' on three of four models** (Llama-2 7.5 vs 5.5; Llama-3.1 22.5 vs 18.0; Mistral 21.5 vs 19.0). The footnote attributes this to 'chain-of-thought variance at small n=200.' If the variance is large enough that the *compressed* method beats *Full KV* by 35% relative on Llama-2, the same variance applies to all the GSM8K comparisons in the table — which means the H2O <3% numbers are also within the variance envelope and the comparison is uninformative. Either bump n to 500+, or remove GSM8K from the headline claims.",
+        "**Mean-fill claim '96% KL reduction' is on Mistral-7B.** Table not shown for other models. Generalize or scope down."
+      ],
+      "questions": [
+        "What is the byte-equivalent CR for LayerBudget at the entries shown as '6×' in Table 1 / Table 9 / Table 18 / Table 19? Is the CR computed against Full KV bytes or against an internal accounting that excludes overhead?",
+        "What is the official H2O MMLU on Llama-2-7B at CR=4× under the LM-Eval-Harness evaluation harness? If it matches your number (36.5%), what changed since the original H2O paper?",
+        "Why is greedy reported as <1ms in §3.4 but 100–513ms in Table 14? Are these measuring different things?",
+        "How were the 10 baselines not shown in Table 1 selected for omission? Recommend an appendix table listing all 17 with their best-case PPL ratio at each CR.",
+        "Does mean-fill generalize beyond Mistral-7B at 6×? Provide the KL-reduction number for at least Llama-2-7B and Llama-3.1-8B.",
+        "On the H2O collapse at 32K Mistral 4× (PPL 83.4): is this number confirmed against the official H2O implementation, or only the in-paper reimplementation? Given the headline depends on it, an external validation is warranted."
+      ],
+      "limitations": [
+        "Section 7's limitations are honestly stated but the most consequential limitation — that the cost-model constants (F(b), coverage law parameters, k, τ) are calibrated on one model and transferred — is not flagged. Calibration transfer is the load-bearing assumption of the empirical results; please flag it explicitly in §7."
+      ],
+      "scores": {
+        "Soundness": 2,
+        "Presentation": 2,
+        "Contribution": 2,
+        "Originality": 2,
+        "Clarity": 2,
+        "Significance": 2
+      },
+      "overall": 3,
+      "confidence": 5,
+      "decision": "Reject. Three independent issues (memory-denominator inconsistency in Table 9; abstract overstating Table 1; H2O MMLU number not matching the H2O paper's own claims) require resubmission, not minor revision. The 32K-Mistral and 72B headline numbers are real and worth saving; the path forward is to (a) define CR consistently across methods, (b) reconcile baselines against their official artifacts, (c) rewrite the abstract to match the actual table values."
+    }
+  ]
+}

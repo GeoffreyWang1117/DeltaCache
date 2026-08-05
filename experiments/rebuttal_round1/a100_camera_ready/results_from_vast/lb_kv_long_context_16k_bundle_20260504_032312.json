@@ -1,0 +1,103 @@
+{
+  "date": "2026-05-04T03:23:12.689053",
+  "cells": [
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 2.0,
+      "method": "full_kv",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0,
+      "ppl_ratio_per_chunk": [
+        1.0,
+        1.0
+      ],
+      "_checkpoint_key": "cr2.0__full_kv",
+      "_saved_at": "2026-05-04T03:23:00.586798"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 2.0,
+      "method": "kivi_uniform",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0039,
+      "ppl_ratio_per_chunk": [
+        1.0078,
+        1.0
+      ],
+      "_checkpoint_key": "cr2.0__kivi_uniform",
+      "_saved_at": "2026-05-04T03:23:01.272586"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 2.0,
+      "method": "layer_budget",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0,
+      "ppl_ratio_per_chunk": [
+        1.0,
+        1.0
+      ],
+      "_checkpoint_key": "cr2.0__layer_budget",
+      "_saved_at": "2026-05-04T03:23:04.357010"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 2.0,
+      "method": "layer_budget_kv",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0312,
+      "ppl_ratio_per_chunk": [
+        1.0317,
+        1.0307
+      ],
+      "_checkpoint_key": "cr2.0__layer_budget_kv",
+      "_saved_at": "2026-05-04T03:23:06.788324"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 4.0,
+      "method": "kivi_uniform",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0039,
+      "ppl_ratio_per_chunk": [
+        1.0078,
+        1.0
+      ],
+      "_checkpoint_key": "cr4.0__kivi_uniform",
+      "_saved_at": "2026-05-04T03:23:07.449604"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 4.0,
+      "method": "layer_budget",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0356,
+      "ppl_ratio_per_chunk": [
+        1.0078,
+        1.0635
+      ],
+      "_checkpoint_key": "cr4.0__layer_budget",
+      "_saved_at": "2026-05-04T03:23:10.222413"
+    },
+    {
+      "model": "mistral_7b",
+      "seq_len": 4096,
+      "cr": 4.0,
+      "method": "layer_budget_kv",
+      "n_chunks": 2,
+      "ppl_ratio_mean": 1.0312,
+      "ppl_ratio_per_chunk": [
+        1.0317,
+        1.0307
+      ],
+      "_checkpoint_key": "cr4.0__layer_budget_kv",
+      "_saved_at": "2026-05-04T03:23:12.688530"
+    }
+  ]
+}

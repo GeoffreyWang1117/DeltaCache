@@ -1,0 +1,220 @@
+{
+  "date": "2026-05-03T05:20:52.608305",
+  "results": [
+    {
+      "model": "mistral_7b",
+      "seq_len": 1024,
+      "n_chunks": 6,
+      "prefix_len": 614,
+      "cells": [
+        {
+          "cr": 2.0,
+          "methods": {
+            "full_kv": {
+              "ppl_ratio_mean": 1.0,
+              "ppl_ratio_per_chunk": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0064,
+              "ppl_ratio_per_chunk": [
+                1.0108,
+                1.0039,
+                1.0098,
+                1.0098,
+                0.9961,
+                1.0078
+              ]
+            },
+            "xkv_single": {
+              "ppl_ratio_mean": 1.0779,
+              "ppl_ratio_per_chunk": [
+                1.0358,
+                1.0624,
+                1.0645,
+                1.1112,
+                1.0834,
+                1.1101
+              ]
+            },
+            "xkv_g2": {
+              "ppl_ratio_mean": 1.0771,
+              "ppl_ratio_per_chunk": [
+                1.0635,
+                1.0728,
+                1.0687,
+                1.0791,
+                1.077,
+                1.1015
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 0.9995,
+              "ppl_ratio_per_chunk": [
+                0.998,
+                0.998,
+                1.0,
+                1.002,
+                0.998,
+                1.001
+              ]
+            }
+          }
+        },
+        {
+          "cr": 3.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0064,
+              "ppl_ratio_per_chunk": [
+                1.0108,
+                1.0039,
+                1.0098,
+                1.0098,
+                0.9961,
+                1.0078
+              ]
+            },
+            "xkv_single": {
+              "ppl_ratio_mean": 1.1118,
+              "ppl_ratio_per_chunk": [
+                1.0866,
+                1.1047,
+                1.0919,
+                1.1178,
+                1.1112,
+                1.1589
+              ]
+            },
+            "xkv_g2": {
+              "ppl_ratio_mean": 1.1291,
+              "ppl_ratio_per_chunk": [
+                1.1454,
+                1.1134,
+                1.1004,
+                1.1112,
+                1.1178,
+                1.1864
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.0056,
+              "ppl_ratio_per_chunk": [
+                1.0088,
+                1.002,
+                1.0098,
+                1.0078,
+                1.002,
+                1.0029
+              ]
+            }
+          }
+        },
+        {
+          "cr": 4.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0064,
+              "ppl_ratio_per_chunk": [
+                1.0108,
+                1.0039,
+                1.0098,
+                1.0098,
+                0.9961,
+                1.0078
+              ]
+            },
+            "xkv_single": {
+              "ppl_ratio_mean": 1.1554,
+              "ppl_ratio_per_chunk": [
+                1.1623,
+                1.1265,
+                1.1221,
+                1.1668,
+                1.1398,
+                1.2145
+              ]
+            },
+            "xkv_g2": {
+              "ppl_ratio_mean": 1.2094,
+              "ppl_ratio_per_chunk": [
+                1.3549,
+                1.1465,
+                1.1354,
+                1.1806,
+                1.1465,
+                1.2928
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.0204,
+              "ppl_ratio_per_chunk": [
+                1.0098,
+                1.0039,
+                1.0217,
+                1.0157,
+                1.0118,
+                1.0593
+              ]
+            }
+          }
+        },
+        {
+          "cr": 6.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0064,
+              "ppl_ratio_per_chunk": [
+                1.0108,
+                1.0039,
+                1.0098,
+                1.0098,
+                0.9961,
+                1.0078
+              ]
+            },
+            "xkv_single": {
+              "ppl_ratio_mean": 1.3549,
+              "ppl_ratio_per_chunk": [
+                1.9694,
+                1.1899,
+                1.176,
+                1.2372,
+                1.1968,
+                1.3602
+              ]
+            },
+            "xkv_g2": {
+              "ppl_ratio_mean": 1.365,
+              "ppl_ratio_per_chunk": [
+                2.1672,
+                1.1354,
+                1.1465,
+                1.1691,
+                1.2324,
+                1.3391
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.2499,
+              "ppl_ratio_per_chunk": [
+                1.1123,
+                1.0237,
+                1.3562,
+                1.3274,
+                1.3668,
+                1.3132
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

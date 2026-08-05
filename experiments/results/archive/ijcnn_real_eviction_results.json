@@ -1,0 +1,222 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "num_layers": 22,
+    "device": "cuda",
+    "num_unique_prefixes": 40,
+    "num_queries_per_prefix": 8,
+    "prefix_length": 400,
+    "total_queries": 320,
+    "access_pattern": "mixed",
+    "timestamp": "2026-01-28T16:18:54.601022",
+    "note": "Importance weights: system=2.0, code_common=1.8, doc=1.2, chat=0.8, temp=0.5"
+  },
+  "capacity_experiments": {
+    "4_entries": {
+      "lru": {
+        "hit_rate": 0.1562,
+        "speedup": 1.18,
+        "total_hits": 50,
+        "total_misses": 270,
+        "total_evictions": 266,
+        "avg_latency_ms": 19.08
+      },
+      "lfu": {
+        "hit_rate": 0.2094,
+        "speedup": 1.25,
+        "total_hits": 67,
+        "total_misses": 253,
+        "total_evictions": 249,
+        "avg_latency_ms": 16.96
+      },
+      "layer_aware": {
+        "hit_rate": 0.2594,
+        "speedup": 1.33,
+        "total_hits": 83,
+        "total_misses": 237,
+        "total_evictions": 233,
+        "avg_latency_ms": 15.97
+      },
+      "layer_attention": {
+        "hit_rate": 0.2562,
+        "speedup": 1.32,
+        "total_hits": 82,
+        "total_misses": 238,
+        "total_evictions": 234,
+        "avg_latency_ms": 16.0
+      }
+    },
+    "8_entries": {
+      "lru": {
+        "hit_rate": 0.3156,
+        "speedup": 1.43,
+        "total_hits": 101,
+        "total_misses": 219,
+        "total_evictions": 211,
+        "avg_latency_ms": 14.77
+      },
+      "lfu": {
+        "hit_rate": 0.4219,
+        "speedup": 1.67,
+        "total_hits": 135,
+        "total_misses": 185,
+        "total_evictions": 177,
+        "avg_latency_ms": 12.63
+      },
+      "layer_aware": {
+        "hit_rate": 0.4313,
+        "speedup": 1.7,
+        "total_hits": 138,
+        "total_misses": 182,
+        "total_evictions": 174,
+        "avg_latency_ms": 12.38
+      },
+      "layer_attention": {
+        "hit_rate": 0.3625,
+        "speedup": 1.53,
+        "total_hits": 116,
+        "total_misses": 204,
+        "total_evictions": 196,
+        "avg_latency_ms": 13.72
+      }
+    },
+    "12_entries": {
+      "lru": {
+        "hit_rate": 0.4281,
+        "speedup": 1.69,
+        "total_hits": 137,
+        "total_misses": 183,
+        "total_evictions": 171,
+        "avg_latency_ms": 12.61
+      },
+      "lfu": {
+        "hit_rate": 0.5156,
+        "speedup": 1.97,
+        "total_hits": 165,
+        "total_misses": 155,
+        "total_evictions": 143,
+        "avg_latency_ms": 10.77
+      },
+      "layer_aware": {
+        "hit_rate": 0.5531,
+        "speedup": 2.11,
+        "total_hits": 177,
+        "total_misses": 143,
+        "total_evictions": 131,
+        "avg_latency_ms": 10.0
+      },
+      "layer_attention": {
+        "hit_rate": 0.5219,
+        "speedup": 1.99,
+        "total_hits": 167,
+        "total_misses": 153,
+        "total_evictions": 141,
+        "avg_latency_ms": 10.58
+      }
+    },
+    "20_entries": {
+      "lru": {
+        "hit_rate": 0.625,
+        "speedup": 2.47,
+        "total_hits": 200,
+        "total_misses": 120,
+        "total_evictions": 100,
+        "avg_latency_ms": 8.55
+      },
+      "lfu": {
+        "hit_rate": 0.6562,
+        "speedup": 2.67,
+        "total_hits": 210,
+        "total_misses": 110,
+        "total_evictions": 90,
+        "avg_latency_ms": 7.91
+      },
+      "layer_aware": {
+        "hit_rate": 0.6969,
+        "speedup": 2.97,
+        "total_hits": 223,
+        "total_misses": 97,
+        "total_evictions": 77,
+        "avg_latency_ms": 7.09
+      },
+      "layer_attention": {
+        "hit_rate": 0.7188,
+        "speedup": 3.17,
+        "total_hits": 230,
+        "total_misses": 90,
+        "total_evictions": 70,
+        "avg_latency_ms": 6.63
+      }
+    }
+  },
+  "improvements": {
+    "4_entries": {
+      "lfu": {
+        "hit_rate_improvement_pct": 34.1,
+        "absolute_improvement_pp": 5.3,
+        "speedup_ratio": 1.06
+      },
+      "layer_aware": {
+        "hit_rate_improvement_pct": 66.1,
+        "absolute_improvement_pp": 10.3,
+        "speedup_ratio": 1.13
+      },
+      "layer_attention": {
+        "hit_rate_improvement_pct": 64.0,
+        "absolute_improvement_pp": 10.0,
+        "speedup_ratio": 1.12
+      }
+    },
+    "8_entries": {
+      "lfu": {
+        "hit_rate_improvement_pct": 33.7,
+        "absolute_improvement_pp": 10.6,
+        "speedup_ratio": 1.17
+      },
+      "layer_aware": {
+        "hit_rate_improvement_pct": 36.7,
+        "absolute_improvement_pp": 11.6,
+        "speedup_ratio": 1.19
+      },
+      "layer_attention": {
+        "hit_rate_improvement_pct": 14.9,
+        "absolute_improvement_pp": 4.7,
+        "speedup_ratio": 1.07
+      }
+    },
+    "12_entries": {
+      "lfu": {
+        "hit_rate_improvement_pct": 20.4,
+        "absolute_improvement_pp": 8.7,
+        "speedup_ratio": 1.17
+      },
+      "layer_aware": {
+        "hit_rate_improvement_pct": 29.2,
+        "absolute_improvement_pp": 12.5,
+        "speedup_ratio": 1.25
+      },
+      "layer_attention": {
+        "hit_rate_improvement_pct": 21.9,
+        "absolute_improvement_pp": 9.4,
+        "speedup_ratio": 1.18
+      }
+    },
+    "20_entries": {
+      "lfu": {
+        "hit_rate_improvement_pct": 5.0,
+        "absolute_improvement_pp": 3.1,
+        "speedup_ratio": 1.08
+      },
+      "layer_aware": {
+        "hit_rate_improvement_pct": 11.5,
+        "absolute_improvement_pp": 7.2,
+        "speedup_ratio": 1.2
+      },
+      "layer_attention": {
+        "hit_rate_improvement_pct": 15.0,
+        "absolute_improvement_pp": 9.4,
+        "speedup_ratio": 1.28
+      }
+    }
+  }
+}

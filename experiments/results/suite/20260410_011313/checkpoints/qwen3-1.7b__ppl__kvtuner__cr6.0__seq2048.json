@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-1.7B",
+  "method": "kvtuner",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 28.2561,
+  "std_ppl": 14.3105,
+  "ppl_ratio": 1.0135,
+  "full_ppl": 27.8793,
+  "mean_compress_ms": 35.06,
+  "mean_memory_bytes": 35461440,
+  "_checkpoint_key": "qwen3-1.7b__ppl__kvtuner__cr6.0__seq2048",
+  "_timestamp": "2026-04-10T17:23:02.079429"
+}

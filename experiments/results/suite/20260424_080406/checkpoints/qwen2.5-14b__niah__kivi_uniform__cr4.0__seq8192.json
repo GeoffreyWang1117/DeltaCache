@@ -1,0 +1,73 @@
+{
+  "task": "niah",
+  "model": "Qwen2.5-14B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 8192,
+  "overall_accuracy": 1.0,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "11.1%": {
+      "depth": 0.1111111111111111,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "22.2%": {
+      "depth": 0.2222222222222222,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "33.3%": {
+      "depth": 0.3333333333333333,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "44.4%": {
+      "depth": 0.4444444444444444,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "55.6%": {
+      "depth": 0.5555555555555556,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "66.7%": {
+      "depth": 0.6666666666666666,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "77.8%": {
+      "depth": 0.7777777777777778,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "88.9%": {
+      "depth": 0.8888888888888888,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    }
+  },
+  "oom_skipped": 0,
+  "_checkpoint_key": "qwen2.5-14b__niah__kivi_uniform__cr4.0__seq8192",
+  "_timestamp": "2026-04-24T11:36:37.961458"
+}

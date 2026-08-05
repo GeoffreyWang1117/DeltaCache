@@ -1,0 +1,564 @@
+{
+  "date": "2026-05-02T17:30:02.657356",
+  "cr": 6.0,
+  "seq_len": 512,
+  "n_texts": 2,
+  "results": [
+    {
+      "model": "llama2_7b",
+      "hf_name": "meta-llama/Llama-2-7b-chat-hf",
+      "elapsed_s": 8.5,
+      "zero_logits_kl": 0.6696,
+      "mean_logits_kl": 0.0636,
+      "reduction_pct": 90.50179211469533,
+      "raw": {
+        "logits": {
+          "zero": {
+            "kl_div": 0.6696,
+            "top1_match": 1.0
+          },
+          "mean": {
+            "kl_div": 0.0636,
+            "top1_match": 0.5
+          }
+        },
+        "per_layer": [
+          {
+            "layer": 0,
+            "zero_entropy_shift": 0.0001,
+            "zero_kl_div": 0.0,
+            "mean_entropy_shift": 0.0001,
+            "mean_kl_div": 0.0,
+            "kl_reduction": 0
+          },
+          {
+            "layer": 1,
+            "zero_entropy_shift": 0.0055,
+            "zero_kl_div": 0.0001,
+            "mean_entropy_shift": 0.0055,
+            "mean_kl_div": 0.0001,
+            "kl_reduction": 0
+          },
+          {
+            "layer": 2,
+            "zero_entropy_shift": 1.4692,
+            "zero_kl_div": 1.4939,
+            "mean_entropy_shift": 0.0292,
+            "mean_kl_div": 1.6424,
+            "kl_reduction": -0.0994
+          },
+          {
+            "layer": 3,
+            "zero_entropy_shift": 1.8789,
+            "zero_kl_div": 1.7395,
+            "mean_entropy_shift": -0.161,
+            "mean_kl_div": 1.7207,
+            "kl_reduction": 0.0108
+          },
+          {
+            "layer": 4,
+            "zero_entropy_shift": 1.8008,
+            "zero_kl_div": 1.4672,
+            "mean_entropy_shift": -0.3552,
+            "mean_kl_div": 1.9384,
+            "kl_reduction": -0.3212
+          },
+          {
+            "layer": 5,
+            "zero_entropy_shift": 1.3709,
+            "zero_kl_div": 1.0739,
+            "mean_entropy_shift": -0.3335,
+            "mean_kl_div": 1.6384,
+            "kl_reduction": -0.5257
+          },
+          {
+            "layer": 6,
+            "zero_entropy_shift": 1.0356,
+            "zero_kl_div": 0.6809,
+            "mean_entropy_shift": -0.2617,
+            "mean_kl_div": 1.3576,
+            "kl_reduction": -0.9938
+          },
+          {
+            "layer": 7,
+            "zero_entropy_shift": 1.3902,
+            "zero_kl_div": 1.1661,
+            "mean_entropy_shift": -0.2722,
+            "mean_kl_div": 1.3471,
+            "kl_reduction": -0.1552
+          },
+          {
+            "layer": 8,
+            "zero_entropy_shift": 0.2537,
+            "zero_kl_div": 0.0732,
+            "mean_entropy_shift": -0.2253,
+            "mean_kl_div": 0.0247,
+            "kl_reduction": 0.6626
+          },
+          {
+            "layer": 9,
+            "zero_entropy_shift": 0.4665,
+            "zero_kl_div": 0.085,
+            "mean_entropy_shift": 0.0074,
+            "mean_kl_div": 0.0074,
+            "kl_reduction": 0.9129
+          },
+          {
+            "layer": 10,
+            "zero_entropy_shift": 0.3443,
+            "zero_kl_div": 0.052,
+            "mean_entropy_shift": 0.0789,
+            "mean_kl_div": 0.0053,
+            "kl_reduction": 0.8981
+          },
+          {
+            "layer": 11,
+            "zero_entropy_shift": 0.2637,
+            "zero_kl_div": 0.0459,
+            "mean_entropy_shift": -0.0093,
+            "mean_kl_div": 0.0048,
+            "kl_reduction": 0.8954
+          },
+          {
+            "layer": 12,
+            "zero_entropy_shift": 0.0199,
+            "zero_kl_div": 0.0143,
+            "mean_entropy_shift": -0.0018,
+            "mean_kl_div": 0.0046,
+            "kl_reduction": 0.6783
+          },
+          {
+            "layer": 13,
+            "zero_entropy_shift": 0.165,
+            "zero_kl_div": 0.0234,
+            "mean_entropy_shift": 0.025,
+            "mean_kl_div": 0.0032,
+            "kl_reduction": 0.8632
+          },
+          {
+            "layer": 14,
+            "zero_entropy_shift": -0.063,
+            "zero_kl_div": 0.0104,
+            "mean_entropy_shift": -0.0663,
+            "mean_kl_div": 0.0042,
+            "kl_reduction": 0.5962
+          },
+          {
+            "layer": 15,
+            "zero_entropy_shift": -0.0158,
+            "zero_kl_div": 0.012,
+            "mean_entropy_shift": -0.0419,
+            "mean_kl_div": 0.0039,
+            "kl_reduction": 0.675
+          },
+          {
+            "layer": 16,
+            "zero_entropy_shift": 2.3686,
+            "zero_kl_div": 1.9784,
+            "mean_entropy_shift": -0.1204,
+            "mean_kl_div": 2.4951,
+            "kl_reduction": -0.2612
+          },
+          {
+            "layer": 17,
+            "zero_entropy_shift": 2.6321,
+            "zero_kl_div": 2.2128,
+            "mean_entropy_shift": -0.5073,
+            "mean_kl_div": 3.2251,
+            "kl_reduction": -0.4575
+          },
+          {
+            "layer": 18,
+            "zero_entropy_shift": 3.6735,
+            "zero_kl_div": 3.0535,
+            "mean_entropy_shift": -0.6591,
+            "mean_kl_div": 3.5278,
+            "kl_reduction": -0.1553
+          },
+          {
+            "layer": 19,
+            "zero_entropy_shift": 3.5124,
+            "zero_kl_div": 2.7733,
+            "mean_entropy_shift": -0.7023,
+            "mean_kl_div": 3.3703,
+            "kl_reduction": -0.2153
+          },
+          {
+            "layer": 20,
+            "zero_entropy_shift": 3.6057,
+            "zero_kl_div": 2.8337,
+            "mean_entropy_shift": -0.7284,
+            "mean_kl_div": 3.9958,
+            "kl_reduction": -0.4101
+          },
+          {
+            "layer": 21,
+            "zero_entropy_shift": 3.9671,
+            "zero_kl_div": 3.0459,
+            "mean_entropy_shift": -0.7382,
+            "mean_kl_div": 3.9743,
+            "kl_reduction": -0.3048
+          },
+          {
+            "layer": 22,
+            "zero_entropy_shift": 3.8633,
+            "zero_kl_div": 2.9703,
+            "mean_entropy_shift": -0.6612,
+            "mean_kl_div": 3.4885,
+            "kl_reduction": -0.1745
+          },
+          {
+            "layer": 23,
+            "zero_entropy_shift": 3.9952,
+            "zero_kl_div": 3.0539,
+            "mean_entropy_shift": -0.6693,
+            "mean_kl_div": 3.2836,
+            "kl_reduction": -0.0752
+          },
+          {
+            "layer": 24,
+            "zero_entropy_shift": 3.6845,
+            "zero_kl_div": 2.6964,
+            "mean_entropy_shift": -0.6878,
+            "mean_kl_div": 3.1286,
+            "kl_reduction": -0.1603
+          },
+          {
+            "layer": 25,
+            "zero_entropy_shift": 3.9358,
+            "zero_kl_div": 2.882,
+            "mean_entropy_shift": -0.7504,
+            "mean_kl_div": 2.9692,
+            "kl_reduction": -0.0303
+          },
+          {
+            "layer": 26,
+            "zero_entropy_shift": 3.8674,
+            "zero_kl_div": 2.7698,
+            "mean_entropy_shift": -0.5953,
+            "mean_kl_div": 2.6955,
+            "kl_reduction": 0.0268
+          },
+          {
+            "layer": 27,
+            "zero_entropy_shift": 4.0908,
+            "zero_kl_div": 3.1566,
+            "mean_entropy_shift": -0.7288,
+            "mean_kl_div": 2.7746,
+            "kl_reduction": 0.121
+          },
+          {
+            "layer": 28,
+            "zero_entropy_shift": 3.9767,
+            "zero_kl_div": 3.0534,
+            "mean_entropy_shift": -0.7151,
+            "mean_kl_div": 2.6503,
+            "kl_reduction": 0.132
+          },
+          {
+            "layer": 29,
+            "zero_entropy_shift": 3.4168,
+            "zero_kl_div": 2.9186,
+            "mean_entropy_shift": -0.4412,
+            "mean_kl_div": 2.0096,
+            "kl_reduction": 0.3115
+          },
+          {
+            "layer": 30,
+            "zero_entropy_shift": 3.8659,
+            "zero_kl_div": 3.0591,
+            "mean_entropy_shift": -0.6299,
+            "mean_kl_div": 2.1422,
+            "kl_reduction": 0.2997
+          },
+          {
+            "layer": 31,
+            "zero_entropy_shift": 2.5337,
+            "zero_kl_div": 1.6023,
+            "mean_entropy_shift": -0.5521,
+            "mean_kl_div": 1.0338,
+            "kl_reduction": 0.3548
+          }
+        ]
+      }
+    },
+    {
+      "model": "llama3.1_8b",
+      "hf_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "elapsed_s": 6.6,
+      "zero_logits_kl": 0.4092,
+      "mean_logits_kl": 0.0175,
+      "reduction_pct": 95.72336265884654,
+      "raw": {
+        "logits": {
+          "zero": {
+            "kl_div": 0.4092,
+            "top1_match": 0.5
+          },
+          "mean": {
+            "kl_div": 0.0175,
+            "top1_match": 1.0
+          }
+        },
+        "per_layer": [
+          {
+            "layer": 0,
+            "zero_entropy_shift": -0.0007,
+            "zero_kl_div": 0.0001,
+            "mean_entropy_shift": -0.0007,
+            "mean_kl_div": 0.0001,
+            "kl_reduction": 0
+          },
+          {
+            "layer": 1,
+            "zero_entropy_shift": 0.0054,
+            "zero_kl_div": 0.0002,
+            "mean_entropy_shift": 0.0054,
+            "mean_kl_div": 0.0002,
+            "kl_reduction": 0
+          },
+          {
+            "layer": 2,
+            "zero_entropy_shift": 1.9438,
+            "zero_kl_div": 1.4478,
+            "mean_entropy_shift": -0.0388,
+            "mean_kl_div": 0.0071,
+            "kl_reduction": 0.9951
+          },
+          {
+            "layer": 3,
+            "zero_entropy_shift": 3.1413,
+            "zero_kl_div": 1.1878,
+            "mean_entropy_shift": -0.0442,
+            "mean_kl_div": 0.0081,
+            "kl_reduction": 0.9932
+          },
+          {
+            "layer": 4,
+            "zero_entropy_shift": 1.203,
+            "zero_kl_div": 0.4973,
+            "mean_entropy_shift": 0.0023,
+            "mean_kl_div": 0.0096,
+            "kl_reduction": 0.9807
+          },
+          {
+            "layer": 5,
+            "zero_entropy_shift": 1.179,
+            "zero_kl_div": 0.3775,
+            "mean_entropy_shift": 0.003,
+            "mean_kl_div": 0.0062,
+            "kl_reduction": 0.9836
+          },
+          {
+            "layer": 6,
+            "zero_entropy_shift": 0.1676,
+            "zero_kl_div": 0.0577,
+            "mean_entropy_shift": -0.0487,
+            "mean_kl_div": 0.0046,
+            "kl_reduction": 0.9203
+          },
+          {
+            "layer": 7,
+            "zero_entropy_shift": 0.0958,
+            "zero_kl_div": 0.0776,
+            "mean_entropy_shift": -0.0903,
+            "mean_kl_div": 0.0055,
+            "kl_reduction": 0.9291
+          },
+          {
+            "layer": 8,
+            "zero_entropy_shift": -0.321,
+            "zero_kl_div": 0.0884,
+            "mean_entropy_shift": 0.0,
+            "mean_kl_div": 0.0107,
+            "kl_reduction": 0.879
+          },
+          {
+            "layer": 9,
+            "zero_entropy_shift": 0.019,
+            "zero_kl_div": 0.0768,
+            "mean_entropy_shift": 0.0428,
+            "mean_kl_div": 0.0085,
+            "kl_reduction": 0.8893
+          },
+          {
+            "layer": 10,
+            "zero_entropy_shift": -0.311,
+            "zero_kl_div": 0.0711,
+            "mean_entropy_shift": -0.059,
+            "mean_kl_div": 0.0132,
+            "kl_reduction": 0.8143
+          },
+          {
+            "layer": 11,
+            "zero_entropy_shift": -0.1758,
+            "zero_kl_div": 0.0683,
+            "mean_entropy_shift": -0.108,
+            "mean_kl_div": 0.0129,
+            "kl_reduction": 0.8111
+          },
+          {
+            "layer": 12,
+            "zero_entropy_shift": 0.0422,
+            "zero_kl_div": 0.0472,
+            "mean_entropy_shift": 0.0626,
+            "mean_kl_div": 0.0122,
+            "kl_reduction": 0.7415
+          },
+          {
+            "layer": 13,
+            "zero_entropy_shift": 0.0053,
+            "zero_kl_div": 0.072,
+            "mean_entropy_shift": 0.1359,
+            "mean_kl_div": 0.0194,
+            "kl_reduction": 0.7306
+          },
+          {
+            "layer": 14,
+            "zero_entropy_shift": 0.9905,
+            "zero_kl_div": 0.5184,
+            "mean_entropy_shift": 0.0264,
+            "mean_kl_div": 0.014,
+            "kl_reduction": 0.973
+          },
+          {
+            "layer": 15,
+            "zero_entropy_shift": 0.6296,
+            "zero_kl_div": 0.2873,
+            "mean_entropy_shift": -0.0694,
+            "mean_kl_div": 0.0138,
+            "kl_reduction": 0.952
+          },
+          {
+            "layer": 16,
+            "zero_entropy_shift": 1.7356,
+            "zero_kl_div": 0.8567,
+            "mean_entropy_shift": 0.0357,
+            "mean_kl_div": 0.0088,
+            "kl_reduction": 0.9897
+          },
+          {
+            "layer": 17,
+            "zero_entropy_shift": 1.1531,
+            "zero_kl_div": 0.4673,
+            "mean_entropy_shift": -0.0891,
+            "mean_kl_div": 0.0076,
+            "kl_reduction": 0.9837
+          },
+          {
+            "layer": 18,
+            "zero_entropy_shift": 3.5851,
+            "zero_kl_div": 1.7372,
+            "mean_entropy_shift": -0.0908,
+            "mean_kl_div": 0.0482,
+            "kl_reduction": 0.9723
+          },
+          {
+            "layer": 19,
+            "zero_entropy_shift": 2.859,
+            "zero_kl_div": 1.064,
+            "mean_entropy_shift": -0.0664,
+            "mean_kl_div": 0.0275,
+            "kl_reduction": 0.9742
+          },
+          {
+            "layer": 20,
+            "zero_entropy_shift": 3.1427,
+            "zero_kl_div": 1.2664,
+            "mean_entropy_shift": -0.0011,
+            "mean_kl_div": 0.0288,
+            "kl_reduction": 0.9773
+          },
+          {
+            "layer": 21,
+            "zero_entropy_shift": 3.503,
+            "zero_kl_div": 1.3866,
+            "mean_entropy_shift": -0.1107,
+            "mean_kl_div": 0.06,
+            "kl_reduction": 0.9567
+          },
+          {
+            "layer": 22,
+            "zero_entropy_shift": 3.55,
+            "zero_kl_div": 1.3987,
+            "mean_entropy_shift": -0.0717,
+            "mean_kl_div": 0.0461,
+            "kl_reduction": 0.967
+          },
+          {
+            "layer": 23,
+            "zero_entropy_shift": 3.7744,
+            "zero_kl_div": 1.4541,
+            "mean_entropy_shift": -0.0686,
+            "mean_kl_div": 0.0393,
+            "kl_reduction": 0.973
+          },
+          {
+            "layer": 24,
+            "zero_entropy_shift": 3.8632,
+            "zero_kl_div": 1.511,
+            "mean_entropy_shift": -0.0677,
+            "mean_kl_div": 0.0577,
+            "kl_reduction": 0.9618
+          },
+          {
+            "layer": 25,
+            "zero_entropy_shift": 4.1331,
+            "zero_kl_div": 1.6548,
+            "mean_entropy_shift": -0.113,
+            "mean_kl_div": 0.0813,
+            "kl_reduction": 0.9509
+          },
+          {
+            "layer": 26,
+            "zero_entropy_shift": 3.3043,
+            "zero_kl_div": 1.3081,
+            "mean_entropy_shift": -0.0268,
+            "mean_kl_div": 0.0698,
+            "kl_reduction": 0.9466
+          },
+          {
+            "layer": 27,
+            "zero_entropy_shift": 3.39,
+            "zero_kl_div": 1.4618,
+            "mean_entropy_shift": 0.0583,
+            "mean_kl_div": 0.0626,
+            "kl_reduction": 0.9572
+          },
+          {
+            "layer": 28,
+            "zero_entropy_shift": 3.1259,
+            "zero_kl_div": 1.2723,
+            "mean_entropy_shift": -0.0229,
+            "mean_kl_div": 0.0761,
+            "kl_reduction": 0.9402
+          },
+          {
+            "layer": 29,
+            "zero_entropy_shift": 3.9431,
+            "zero_kl_div": 1.7199,
+            "mean_entropy_shift": -0.0725,
+            "mean_kl_div": 0.1129,
+            "kl_reduction": 0.9344
+          },
+          {
+            "layer": 30,
+            "zero_entropy_shift": 2.4098,
+            "zero_kl_div": 1.0191,
+            "mean_entropy_shift": -0.3135,
+            "mean_kl_div": 0.1614,
+            "kl_reduction": 0.8416
+          },
+          {
+            "layer": 31,
+            "zero_entropy_shift": 3.1311,
+            "zero_kl_div": 1.6001,
+            "mean_entropy_shift": -0.1081,
+            "mean_kl_div": 0.0646,
+            "kl_reduction": 0.9596
+          }
+        ]
+      }
+    }
+  ]
+}

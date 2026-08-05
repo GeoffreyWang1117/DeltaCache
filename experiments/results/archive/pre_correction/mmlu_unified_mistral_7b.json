@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "model": "Mistral-7B",
+    "cr": 3.0,
+    "subjects": [
+      "abstract_algebra",
+      "computer_science",
+      "world_history",
+      "physics",
+      "biology"
+    ],
+    "timestamp": "2026-03-28T00:46:24.083881"
+  },
+  "results": [
+    {
+      "method": "full_kv",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    {
+      "method": "h2o_uniform",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    {
+      "method": "cake",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    {
+      "method": "kvtuner",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    {
+      "method": "kivi_uniform",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    {
+      "method": "layer_budget",
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    }
+  ]
+}

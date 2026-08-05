@@ -1,0 +1,1888 @@
+{
+  "metadata": {
+    "experiment": "unified_quality",
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda:0",
+    "compression_ratios": [
+      2.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "methods": [
+      "full_kv",
+      "adakv",
+      "cake",
+      "d2o",
+      "dynamickv",
+      "h2o_uniform",
+      "kivi_uniform",
+      "kvtuner",
+      "lava",
+      "pyramidkv",
+      "snapkv",
+      "squeeze_attention",
+      "xquant",
+      "layer_budget"
+    ],
+    "num_layers": 22,
+    "num_heads": 4,
+    "head_dim": 64,
+    "num_eval_texts": 8,
+    "load_in_4bit": false,
+    "timestamp": "2026-03-27T17:43:54.381150",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "summary": [
+    {
+      "method": "kivi_uniform",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 427.0,
+      "n_texts": 8
+    },
+    {
+      "method": "xquant",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1075,
+      "std_ppl": 2.9623,
+      "mean_ppl_ratio": 0.9992,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "adakv",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 564.8,
+      "n_texts": 8
+    },
+    {
+      "method": "cake",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 886.2,
+      "n_texts": 8
+    },
+    {
+      "method": "d2o",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 792.2,
+      "n_texts": 8
+    },
+    {
+      "method": "dynamickv",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 794.1,
+      "n_texts": 8
+    },
+    {
+      "method": "full_kv",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "h2o_uniform",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 794.8,
+      "n_texts": 8
+    },
+    {
+      "method": "lava",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 753.4,
+      "n_texts": 8
+    },
+    {
+      "method": "pyramidkv",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 790.5,
+      "n_texts": 8
+    },
+    {
+      "method": "snapkv",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 794.8,
+      "n_texts": 8
+    },
+    {
+      "method": "squeeze_attention",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 1017.5,
+      "n_texts": 8
+    },
+    {
+      "method": "kvtuner",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1115,
+      "std_ppl": 2.9568,
+      "mean_ppl_ratio": 1.0001,
+      "mean_memory_kb": 558.2,
+      "n_texts": 8
+    },
+    {
+      "method": "layer_budget",
+      "compression_ratio": 2.0,
+      "mean_ppl": 7.1154,
+      "std_ppl": 2.9518,
+      "mean_ppl_ratio": 1.0009,
+      "mean_memory_kb": 814.6,
+      "n_texts": 8
+    },
+    {
+      "method": "kvtuner",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.0491,
+      "std_ppl": 2.8743,
+      "mean_ppl_ratio": 0.9941,
+      "mean_memory_kb": 558.2,
+      "n_texts": 8
+    },
+    {
+      "method": "kivi_uniform",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 427.0,
+      "n_texts": 8
+    },
+    {
+      "method": "layer_budget",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.0809,
+      "std_ppl": 2.8857,
+      "mean_ppl_ratio": 0.9987,
+      "mean_memory_kb": 716.4,
+      "n_texts": 8
+    },
+    {
+      "method": "adakv",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 494.2,
+      "n_texts": 8
+    },
+    {
+      "method": "cake",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 690.5,
+      "n_texts": 8
+    },
+    {
+      "method": "d2o",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 527.4,
+      "n_texts": 8
+    },
+    {
+      "method": "dynamickv",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 545.6,
+      "n_texts": 8
+    },
+    {
+      "method": "full_kv",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "h2o_uniform",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 522.5,
+      "n_texts": 8
+    },
+    {
+      "method": "lava",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 560.6,
+      "n_texts": 8
+    },
+    {
+      "method": "pyramidkv",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 540.0,
+      "n_texts": 8
+    },
+    {
+      "method": "snapkv",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 522.5,
+      "n_texts": 8
+    },
+    {
+      "method": "squeeze_attention",
+      "compression_ratio": 3.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 748.0,
+      "n_texts": 8
+    },
+    {
+      "method": "xquant",
+      "compression_ratio": 3.0,
+      "mean_ppl": 8.5935,
+      "std_ppl": 2.419,
+      "mean_ppl_ratio": 1.3843,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "layer_budget",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.0396,
+      "std_ppl": 2.8713,
+      "mean_ppl_ratio": 0.9927,
+      "mean_memory_kb": 702.4,
+      "n_texts": 8
+    },
+    {
+      "method": "kivi_uniform",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 427.0,
+      "n_texts": 8
+    },
+    {
+      "method": "kvtuner",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 558.2,
+      "n_texts": 8
+    },
+    {
+      "method": "adakv",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 388.0,
+      "n_texts": 8
+    },
+    {
+      "method": "cake",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 576.2,
+      "n_texts": 8
+    },
+    {
+      "method": "d2o",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 452.6,
+      "n_texts": 8
+    },
+    {
+      "method": "dynamickv",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 462.6,
+      "n_texts": 8
+    },
+    {
+      "method": "full_kv",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "h2o_uniform",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 390.5,
+      "n_texts": 8
+    },
+    {
+      "method": "lava",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 496.4,
+      "n_texts": 8
+    },
+    {
+      "method": "pyramidkv",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 457.9,
+      "n_texts": 8
+    },
+    {
+      "method": "snapkv",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 390.5,
+      "n_texts": 8
+    },
+    {
+      "method": "squeeze_attention",
+      "compression_ratio": 4.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 617.4,
+      "n_texts": 8
+    },
+    {
+      "method": "xquant",
+      "compression_ratio": 4.0,
+      "mean_ppl": 10.8669,
+      "std_ppl": 3.2765,
+      "mean_ppl_ratio": 1.8612,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "layer_budget",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.0461,
+      "std_ppl": 2.874,
+      "mean_ppl_ratio": 0.9937,
+      "mean_memory_kb": 493.7,
+      "n_texts": 8
+    },
+    {
+      "method": "kivi_uniform",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 427.0,
+      "n_texts": 8
+    },
+    {
+      "method": "kvtuner",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.0493,
+      "std_ppl": 2.8653,
+      "mean_ppl_ratio": 0.9944,
+      "mean_memory_kb": 558.2,
+      "n_texts": 8
+    },
+    {
+      "method": "adakv",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 255.8,
+      "n_texts": 8
+    },
+    {
+      "method": "cake",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 479.4,
+      "n_texts": 8
+    },
+    {
+      "method": "d2o",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 440.0,
+      "n_texts": 8
+    },
+    {
+      "method": "dynamickv",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 440.2,
+      "n_texts": 8
+    },
+    {
+      "method": "full_kv",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    },
+    {
+      "method": "h2o_uniform",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 255.8,
+      "n_texts": 8
+    },
+    {
+      "method": "lava",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 458.5,
+      "n_texts": 8
+    },
+    {
+      "method": "pyramidkv",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 440.0,
+      "n_texts": 8
+    },
+    {
+      "method": "snapkv",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 255.8,
+      "n_texts": 8
+    },
+    {
+      "method": "squeeze_attention",
+      "compression_ratio": 6.0,
+      "mean_ppl": 7.1093,
+      "std_ppl": 2.9489,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_kb": 481.2,
+      "n_texts": 8
+    },
+    {
+      "method": "xquant",
+      "compression_ratio": 6.0,
+      "mean_ppl": 12.3488,
+      "std_ppl": 5.075,
+      "mean_ppl_ratio": 2.0053,
+      "mean_memory_kb": 1595.0,
+      "n_texts": 8
+    }
+  ],
+  "detailed_results": {
+    "full_kv@2.0": {
+      "method": "full_kv",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "adakv@2.0": {
+      "method": "adakv",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "cake@2.0": {
+      "method": "cake",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "d2o@2.0": {
+      "method": "d2o",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "dynamickv@2.0": {
+      "method": "dynamickv",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "h2o_uniform@2.0": {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "kivi_uniform@2.0": {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "kvtuner@2.0": {
+      "method": "kvtuner",
+      "cr": 2.0,
+      "ppls": [
+        6.9617,
+        6.7806,
+        4.9366,
+        2.2371,
+        11.1793,
+        7.0095,
+        11.0923,
+        6.695
+      ],
+      "ratios": [
+        1.0039,
+        0.998,
+        1.001,
+        1.001,
+        1.0,
+        0.998,
+        1.0039,
+        0.9951
+      ]
+    },
+    "lava@2.0": {
+      "method": "lava",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "pyramidkv@2.0": {
+      "method": "pyramidkv",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "snapkv@2.0": {
+      "method": "snapkv",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "squeeze_attention@2.0": {
+      "method": "squeeze_attention",
+      "cr": 2.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "xquant@2.0": {
+      "method": "xquant",
+      "cr": 2.0,
+      "ppls": [
+        6.9076,
+        6.8605,
+        4.8791,
+        2.2371,
+        11.1793,
+        7.0095,
+        11.0923,
+        6.695
+      ],
+      "ratios": [
+        0.9961,
+        1.0098,
+        0.9893,
+        1.001,
+        1.0,
+        0.998,
+        1.0039,
+        0.9951
+      ]
+    },
+    "layer_budget@2.0": {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "ppls": [
+        6.9685,
+        6.7872,
+        4.9366,
+        2.2371,
+        11.1793,
+        7.0163,
+        11.0706,
+        6.7278
+      ],
+      "ratios": [
+        1.0049,
+        0.999,
+        1.001,
+        1.001,
+        1.0,
+        0.999,
+        1.002,
+        1.0
+      ]
+    },
+    "full_kv@3.0": {
+      "method": "full_kv",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "adakv@3.0": {
+      "method": "adakv",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "cake@3.0": {
+      "method": "cake",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "d2o@3.0": {
+      "method": "d2o",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "dynamickv@3.0": {
+      "method": "dynamickv",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "h2o_uniform@3.0": {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "kivi_uniform@3.0": {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "kvtuner@3.0": {
+      "method": "kvtuner",
+      "cr": 3.0,
+      "ppls": [
+        6.9414,
+        6.9346,
+        4.9705,
+        2.2338,
+        10.9417,
+        6.989,
+        10.899,
+        6.4827
+      ],
+      "ratios": [
+        1.001,
+        1.0207,
+        1.0078,
+        0.9995,
+        0.9787,
+        0.9951,
+        0.9864,
+        0.9636
+      ]
+    },
+    "lava@3.0": {
+      "method": "lava",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "pyramidkv@3.0": {
+      "method": "pyramidkv",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "snapkv@3.0": {
+      "method": "snapkv",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "squeeze_attention@3.0": {
+      "method": "squeeze_attention",
+      "cr": 3.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "xquant@3.0": {
+      "method": "xquant",
+      "cr": 3.0,
+      "ppls": [
+        6.5784,
+        8.1949,
+        6.3387,
+        6.7344,
+        12.1825,
+        10.3594,
+        11.5793,
+        6.7806
+      ],
+      "ratios": [
+        0.9486,
+        1.2062,
+        1.2853,
+        3.0133,
+        1.0897,
+        1.475,
+        1.048,
+        1.0078
+      ]
+    },
+    "layer_budget@3.0": {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "ppls": [
+        6.9549,
+        6.8471,
+        4.9463,
+        2.2524,
+        11.0923,
+        7.0369,
+        10.8353,
+        6.682
+      ],
+      "ratios": [
+        1.0029,
+        1.0078,
+        1.0029,
+        1.0078,
+        0.9922,
+        1.002,
+        0.9807,
+        0.9932
+      ]
+    },
+    "full_kv@4.0": {
+      "method": "full_kv",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "adakv@4.0": {
+      "method": "adakv",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "cake@4.0": {
+      "method": "cake",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "d2o@4.0": {
+      "method": "d2o",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "dynamickv@4.0": {
+      "method": "dynamickv",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "h2o_uniform@4.0": {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "kivi_uniform@4.0": {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "kvtuner@4.0": {
+      "method": "kvtuner",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "lava@4.0": {
+      "method": "lava",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "pyramidkv@4.0": {
+      "method": "pyramidkv",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "snapkv@4.0": {
+      "method": "snapkv",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "squeeze_attention@4.0": {
+      "method": "squeeze_attention",
+      "cr": 4.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "xquant@4.0": {
+      "method": "xquant",
+      "cr": 4.0,
+      "ppls": [
+        7.9273,
+        10.9845,
+        6.6041,
+        11.4221,
+        14.1873,
+        14.4671,
+        14.1319,
+        7.2108
+      ],
+      "ratios": [
+        1.1432,
+        1.6168,
+        1.3391,
+        5.1108,
+        1.2691,
+        2.0599,
+        1.279,
+        1.0718
+      ]
+    },
+    "layer_budget@4.0": {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "ppls": [
+        7.0027,
+        6.9008,
+        4.9174,
+        2.2338,
+        11.0923,
+        7.0369,
+        10.6882,
+        6.4448
+      ],
+      "ratios": [
+        1.0098,
+        1.0157,
+        0.9971,
+        0.9995,
+        0.9922,
+        1.002,
+        0.9673,
+        0.9579
+      ]
+    },
+    "full_kv@6.0": {
+      "method": "full_kv",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "adakv@6.0": {
+      "method": "adakv",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "cake@6.0": {
+      "method": "cake",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "d2o@6.0": {
+      "method": "d2o",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "dynamickv@6.0": {
+      "method": "dynamickv",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "h2o_uniform@6.0": {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "kivi_uniform@6.0": {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "kvtuner@6.0": {
+      "method": "kvtuner",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        7.0301,
+        4.9608,
+        2.2305,
+        11.006,
+        7.0095,
+        10.772,
+        6.4511
+      ],
+      "ratios": [
+        1.0,
+        1.0348,
+        1.0059,
+        0.998,
+        0.9845,
+        0.998,
+        0.9749,
+        0.9589
+      ]
+    },
+    "lava@6.0": {
+      "method": "lava",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "pyramidkv@6.0": {
+      "method": "pyramidkv",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "snapkv@6.0": {
+      "method": "snapkv",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "squeeze_attention@6.0": {
+      "method": "squeeze_attention",
+      "cr": 6.0,
+      "ppls": [
+        6.9346,
+        6.7938,
+        4.9318,
+        2.2349,
+        11.1793,
+        7.0232,
+        11.049,
+        6.7278
+      ],
+      "ratios": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "xquant@6.0": {
+      "method": "xquant",
+      "cr": 6.0,
+      "ppls": [
+        7.5939,
+        12.3502,
+        6.7344,
+        10.3391,
+        15.5816,
+        20.8857,
+        17.0464,
+        8.2592
+      ],
+      "ratios": [
+        1.0951,
+        1.8179,
+        1.3655,
+        4.6262,
+        1.3938,
+        2.9738,
+        1.5428,
+        1.2276
+      ]
+    },
+    "layer_budget@6.0": {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "ppls": [
+        6.9549,
+        6.7938,
+        4.8791,
+        2.2458,
+        11.0275,
+        7.1617,
+        10.772,
+        6.5336
+      ],
+      "ratios": [
+        1.0029,
+        1.0,
+        0.9893,
+        1.0049,
+        0.9864,
+        1.0197,
+        0.9749,
+        0.9711
+      ]
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "model": "Llama-2-7B",
+    "seq_len": 1024,
+    "profiler": "hook-based",
+    "importance": "inverted",
+    "fill": "mean",
+    "timestamp": "2026-03-31T13:37:21.163248"
+  },
+  "summary": [
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ratio": 0.9944,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ratio": 1.3044,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ratio": 1.0039,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ratio": 1.459,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ratio": 1.0199,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ratio": 1.5881,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ratio": 1.0976,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ratio": 1.6855,
+      "n": 4
+    }
+  ]
+}

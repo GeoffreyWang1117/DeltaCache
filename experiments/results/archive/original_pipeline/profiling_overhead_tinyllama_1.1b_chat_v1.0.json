@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "experiment": "profiling_overhead",
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "num_layers": 22,
+    "n_warmup": 2,
+    "n_trials": 5,
+    "timestamp": "2026-03-07T23:11:06.196838",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "results": [
+    {
+      "seq_len": 128,
+      "prefill_ms": 29.66,
+      "prefill_with_attn_ms": 29.54,
+      "attn_overhead_pct": -0.41,
+      "gini_ms": 43.98,
+      "allocator_ms": 13.19,
+      "store_ms": 113.34,
+      "pipeline_ms": 170.51,
+      "total_overhead_pct": 574.41
+    },
+    {
+      "seq_len": 256,
+      "prefill_ms": 44.33,
+      "prefill_with_attn_ms": 42.65,
+      "attn_overhead_pct": -3.79,
+      "gini_ms": 43.58,
+      "allocator_ms": 30.3,
+      "store_ms": 104.84,
+      "pipeline_ms": 178.72,
+      "total_overhead_pct": 399.37
+    },
+    {
+      "seq_len": 512,
+      "prefill_ms": 87.22,
+      "prefill_with_attn_ms": 87.45,
+      "attn_overhead_pct": 0.26,
+      "gini_ms": 46.42,
+      "allocator_ms": 60.63,
+      "store_ms": 107.66,
+      "pipeline_ms": 214.71,
+      "total_overhead_pct": 246.42
+    },
+    {
+      "seq_len": 1024,
+      "prefill_ms": 183.63,
+      "prefill_with_attn_ms": 184.25,
+      "attn_overhead_pct": 0.34,
+      "gini_ms": 47.1,
+      "allocator_ms": 112.25,
+      "store_ms": 111.98,
+      "pipeline_ms": 271.32,
+      "total_overhead_pct": 148.1
+    }
+  ]
+}

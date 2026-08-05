@@ -1,0 +1,537 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "cr": 6.0,
+    "seq_len": 512,
+    "timestamp": "2026-03-31T02:03:57.408858"
+  },
+  "layerwise_loo": [
+    {
+      "layer": 0,
+      "gini": 0.6309,
+      "importance": 0.1824,
+      "retention": 0.1173,
+      "bits": 4,
+      "loo_improvement": 1.8072
+    },
+    {
+      "layer": 1,
+      "gini": 0.8848,
+      "importance": 0.2077,
+      "retention": 0.1042,
+      "bits": 4,
+      "loo_improvement": 1.9816
+    },
+    {
+      "layer": 2,
+      "gini": 0.8477,
+      "importance": 0.2355,
+      "retention": 0.1303,
+      "bits": 4,
+      "loo_improvement": 0.3536
+    },
+    {
+      "layer": 3,
+      "gini": 0.9141,
+      "importance": 0.2658,
+      "retention": 0.1173,
+      "bits": 4,
+      "loo_improvement": 0.6636
+    },
+    {
+      "layer": 4,
+      "gini": 0.8711,
+      "importance": 0.2984,
+      "retention": 0.1824,
+      "bits": 4,
+      "loo_improvement": 0.6343
+    },
+    {
+      "layer": 5,
+      "gini": 0.8691,
+      "importance": 0.3332,
+      "retention": 0.2085,
+      "bits": 4,
+      "loo_improvement": 1.0688
+    },
+    {
+      "layer": 6,
+      "gini": 0.8496,
+      "importance": 0.37,
+      "retention": 0.2736,
+      "bits": 4,
+      "loo_improvement": 0.731
+    },
+    {
+      "layer": 7,
+      "gini": 0.8457,
+      "importance": 0.4083,
+      "retention": 0.3257,
+      "bits": 4,
+      "loo_improvement": 0.4344
+    },
+    {
+      "layer": 8,
+      "gini": 0.8164,
+      "importance": 0.4478,
+      "retention": 0.456,
+      "bits": 4,
+      "loo_improvement": 1.1893
+    },
+    {
+      "layer": 9,
+      "gini": 0.834,
+      "importance": 0.4879,
+      "retention": 0.4691,
+      "bits": 4,
+      "loo_improvement": 0.8631
+    },
+    {
+      "layer": 10,
+      "gini": 0.8418,
+      "importance": 0.5282,
+      "retention": 0.4821,
+      "bits": 4,
+      "loo_improvement": 0.6518
+    },
+    {
+      "layer": 11,
+      "gini": 0.8164,
+      "importance": 0.5681,
+      "retention": 0.6645,
+      "bits": 4,
+      "loo_improvement": 0.308
+    },
+    {
+      "layer": 12,
+      "gini": 0.8398,
+      "importance": 0.6072,
+      "retention": 0.6124,
+      "bits": 4,
+      "loo_improvement": 0.4231
+    },
+    {
+      "layer": 13,
+      "gini": 0.8164,
+      "importance": 0.6449,
+      "retention": 0.8078,
+      "bits": 4,
+      "loo_improvement": 0.1997
+    },
+    {
+      "layer": 14,
+      "gini": 0.7461,
+      "importance": 0.6809,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0391
+    },
+    {
+      "layer": 15,
+      "gini": 0.7812,
+      "importance": 0.7149,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 16,
+      "gini": 0.8281,
+      "importance": 0.7466,
+      "retention": 0.9104,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 17,
+      "gini": 0.8398,
+      "importance": 0.7759,
+      "retention": 0.886,
+      "bits": 4,
+      "loo_improvement": 0.109
+    },
+    {
+      "layer": 18,
+      "gini": 0.8066,
+      "importance": 0.8027,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 19,
+      "gini": 0.8555,
+      "importance": 0.827,
+      "retention": 0.8339,
+      "bits": 4,
+      "loo_improvement": 0.047
+    },
+    {
+      "layer": 20,
+      "gini": 0.8398,
+      "importance": 0.8489,
+      "retention": 0.9886,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 21,
+      "gini": 0.8359,
+      "importance": 0.8684,
+      "retention": 0.9495,
+      "bits": 4,
+      "loo_improvement": 0.0237
+    },
+    {
+      "layer": 22,
+      "gini": 0.8691,
+      "importance": 0.8858,
+      "retention": 0.8078,
+      "bits": 4,
+      "loo_improvement": 0.0237
+    },
+    {
+      "layer": 23,
+      "gini": 0.9004,
+      "importance": 0.9011,
+      "retention": 0.5993,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 24,
+      "gini": 0.8887,
+      "importance": 0.9146,
+      "retention": 0.7036,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 25,
+      "gini": 0.8848,
+      "importance": 0.9264,
+      "retention": 0.7687,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 26,
+      "gini": 0.8691,
+      "importance": 0.9366,
+      "retention": 0.8453,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 27,
+      "gini": 0.8965,
+      "importance": 0.9456,
+      "retention": 0.6775,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 28,
+      "gini": 0.832,
+      "importance": 0.9533,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 29,
+      "gini": 0.8691,
+      "importance": 0.96,
+      "retention": 0.899,
+      "bits": 4,
+      "loo_improvement": 0.0628
+    },
+    {
+      "layer": 30,
+      "gini": 0.793,
+      "importance": 0.9657,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0
+    },
+    {
+      "layer": 31,
+      "gini": 0.7637,
+      "importance": 0.9707,
+      "retention": 1.0,
+      "bits": 4,
+      "loo_improvement": 0.0
+    }
+  ],
+  "attention_distortion": {
+    "logits": {
+      "zero": {
+        "kl_div": 0.2487,
+        "top1_match": 1.0
+      },
+      "mean": {
+        "kl_div": 0.0089,
+        "top1_match": 1.0
+      }
+    },
+    "per_layer": [
+      {
+        "layer": 0,
+        "zero_entropy_shift": 1.0535,
+        "zero_kl_div": 0.6729,
+        "mean_entropy_shift": -0.0271,
+        "mean_kl_div": 0.2096,
+        "kl_reduction": 0.6885
+      },
+      {
+        "layer": 1,
+        "zero_entropy_shift": 3.3881,
+        "zero_kl_div": 3.2084,
+        "mean_entropy_shift": 1.2443,
+        "mean_kl_div": 2.0782,
+        "kl_reduction": 0.3523
+      },
+      {
+        "layer": 2,
+        "zero_entropy_shift": 3.426,
+        "zero_kl_div": 3.3347,
+        "mean_entropy_shift": 0.2898,
+        "mean_kl_div": 2.9416,
+        "kl_reduction": 0.1179
+      },
+      {
+        "layer": 3,
+        "zero_entropy_shift": 3.9179,
+        "zero_kl_div": 3.5495,
+        "mean_entropy_shift": 0.0207,
+        "mean_kl_div": 3.443,
+        "kl_reduction": 0.03
+      },
+      {
+        "layer": 4,
+        "zero_entropy_shift": 3.5917,
+        "zero_kl_div": 3.2742,
+        "mean_entropy_shift": -0.2429,
+        "mean_kl_div": 3.363,
+        "kl_reduction": -0.0271
+      },
+      {
+        "layer": 5,
+        "zero_entropy_shift": 3.1381,
+        "zero_kl_div": 3.0036,
+        "mean_entropy_shift": -0.0106,
+        "mean_kl_div": 3.0221,
+        "kl_reduction": -0.0062
+      },
+      {
+        "layer": 6,
+        "zero_entropy_shift": 2.5714,
+        "zero_kl_div": 2.452,
+        "mean_entropy_shift": -0.1889,
+        "mean_kl_div": 2.4074,
+        "kl_reduction": 0.0182
+      },
+      {
+        "layer": 7,
+        "zero_entropy_shift": 2.3289,
+        "zero_kl_div": 2.3966,
+        "mean_entropy_shift": -0.4572,
+        "mean_kl_div": 1.9607,
+        "kl_reduction": 0.1819
+      },
+      {
+        "layer": 8,
+        "zero_entropy_shift": 2.15,
+        "zero_kl_div": 2.3707,
+        "mean_entropy_shift": -0.2463,
+        "mean_kl_div": 2.1256,
+        "kl_reduction": 0.1034
+      },
+      {
+        "layer": 9,
+        "zero_entropy_shift": 1.9623,
+        "zero_kl_div": 2.1756,
+        "mean_entropy_shift": -0.1443,
+        "mean_kl_div": 2.0889,
+        "kl_reduction": 0.0399
+      },
+      {
+        "layer": 10,
+        "zero_entropy_shift": 1.6295,
+        "zero_kl_div": 1.9189,
+        "mean_entropy_shift": -0.1297,
+        "mean_kl_div": 2.0396,
+        "kl_reduction": -0.0629
+      },
+      {
+        "layer": 11,
+        "zero_entropy_shift": 1.8896,
+        "zero_kl_div": 2.2107,
+        "mean_entropy_shift": -0.0827,
+        "mean_kl_div": 2.6903,
+        "kl_reduction": -0.2169
+      },
+      {
+        "layer": 12,
+        "zero_entropy_shift": 1.8284,
+        "zero_kl_div": 2.1369,
+        "mean_entropy_shift": 0.0055,
+        "mean_kl_div": 2.6654,
+        "kl_reduction": -0.2473
+      },
+      {
+        "layer": 13,
+        "zero_entropy_shift": 0.7951,
+        "zero_kl_div": 2.0457,
+        "mean_entropy_shift": -0.0691,
+        "mean_kl_div": 2.5836,
+        "kl_reduction": -0.2629
+      },
+      {
+        "layer": 14,
+        "zero_entropy_shift": 1.0318,
+        "zero_kl_div": 1.1071,
+        "mean_entropy_shift": -0.3546,
+        "mean_kl_div": 0.1934,
+        "kl_reduction": 0.8253
+      },
+      {
+        "layer": 15,
+        "zero_entropy_shift": 1.6996,
+        "zero_kl_div": 1.2864,
+        "mean_entropy_shift": 0.4476,
+        "mean_kl_div": 0.3082,
+        "kl_reduction": 0.7604
+      },
+      {
+        "layer": 16,
+        "zero_entropy_shift": 1.8053,
+        "zero_kl_div": 1.4084,
+        "mean_entropy_shift": 0.5239,
+        "mean_kl_div": 1.1704,
+        "kl_reduction": 0.169
+      },
+      {
+        "layer": 17,
+        "zero_entropy_shift": 1.7241,
+        "zero_kl_div": 1.963,
+        "mean_entropy_shift": 0.4617,
+        "mean_kl_div": 3.6162,
+        "kl_reduction": -0.8422
+      },
+      {
+        "layer": 18,
+        "zero_entropy_shift": 1.4915,
+        "zero_kl_div": 0.8711,
+        "mean_entropy_shift": 0.1368,
+        "mean_kl_div": 0.1311,
+        "kl_reduction": 0.8495
+      },
+      {
+        "layer": 19,
+        "zero_entropy_shift": 1.9263,
+        "zero_kl_div": 1.9273,
+        "mean_entropy_shift": 0.537,
+        "mean_kl_div": 3.4767,
+        "kl_reduction": -0.8039
+      },
+      {
+        "layer": 20,
+        "zero_entropy_shift": 0.9327,
+        "zero_kl_div": 0.9343,
+        "mean_entropy_shift": -0.3156,
+        "mean_kl_div": 1.1647,
+        "kl_reduction": -0.2466
+      },
+      {
+        "layer": 21,
+        "zero_entropy_shift": 1.4563,
+        "zero_kl_div": 0.8945,
+        "mean_entropy_shift": -0.2427,
+        "mean_kl_div": 0.966,
+        "kl_reduction": -0.0799
+      },
+      {
+        "layer": 22,
+        "zero_entropy_shift": 2.1917,
+        "zero_kl_div": 2.1327,
+        "mean_entropy_shift": 0.41,
+        "mean_kl_div": 3.2972,
+        "kl_reduction": -0.546
+      },
+      {
+        "layer": 23,
+        "zero_entropy_shift": 2.7017,
+        "zero_kl_div": 2.4484,
+        "mean_entropy_shift": -0.0732,
+        "mean_kl_div": 3.5792,
+        "kl_reduction": -0.4619
+      },
+      {
+        "layer": 24,
+        "zero_entropy_shift": 2.3631,
+        "zero_kl_div": 2.3732,
+        "mean_entropy_shift": -0.0122,
+        "mean_kl_div": 3.6693,
+        "kl_reduction": -0.5461
+      },
+      {
+        "layer": 25,
+        "zero_entropy_shift": 2.0504,
+        "zero_kl_div": 2.4798,
+        "mean_entropy_shift": 0.0386,
+        "mean_kl_div": 3.8862,
+        "kl_reduction": -0.5671
+      },
+      {
+        "layer": 26,
+        "zero_entropy_shift": 1.4533,
+        "zero_kl_div": 1.7541,
+        "mean_entropy_shift": -0.0626,
+        "mean_kl_div": 2.2529,
+        "kl_reduction": -0.2844
+      },
+      {
+        "layer": 27,
+        "zero_entropy_shift": 2.6383,
+        "zero_kl_div": 2.3374,
+        "mean_entropy_shift": -0.0884,
+        "mean_kl_div": 3.463,
+        "kl_reduction": -0.4816
+      },
+      {
+        "layer": 28,
+        "zero_entropy_shift": 0.6603,
+        "zero_kl_div": 0.5576,
+        "mean_entropy_shift": -0.4836,
+        "mean_kl_div": 0.1846,
+        "kl_reduction": 0.6689
+      },
+      {
+        "layer": 29,
+        "zero_entropy_shift": 1.3811,
+        "zero_kl_div": 1.3916,
+        "mean_entropy_shift": 0.3317,
+        "mean_kl_div": 2.384,
+        "kl_reduction": -0.7131
+      },
+      {
+        "layer": 30,
+        "zero_entropy_shift": 0.2883,
+        "zero_kl_div": 0.3208,
+        "mean_entropy_shift": -0.325,
+        "mean_kl_div": 0.1081,
+        "kl_reduction": 0.663
+      },
+      {
+        "layer": 31,
+        "zero_entropy_shift": 0.294,
+        "zero_kl_div": 0.2619,
+        "mean_entropy_shift": -0.1346,
+        "mean_kl_div": 0.0494,
+        "kl_reduction": 0.8114
+      }
+    ]
+  }
+}

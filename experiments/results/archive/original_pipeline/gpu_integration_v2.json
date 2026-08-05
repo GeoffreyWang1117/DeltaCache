@@ -1,0 +1,46 @@
+{
+  "memory_monitor": {
+    "total_gb": 25.296044032,
+    "initial_util": 0.011070321021174289,
+    "post_alloc_util": 0.0901610676007223,
+    "monitor_works": true
+  },
+  "async_transfer": {
+    "small_offload_ms": 0.7817869773134589,
+    "large_size_mb": 536.870912,
+    "d2h_bandwidth_gbs": 1.5836757063620925,
+    "h2d_bandwidth_gbs": 13.419707519407273,
+    "data_integrity": true
+  },
+  "kv_quantizer": {
+    "INT8": {
+      "compression_ratio": 1.9835351089588378,
+      "quant_time_ms": 299.27353002130985,
+      "deq_time_ms": 176.44244199618697,
+      "key_mse": 4.144873673794791e-05,
+      "value_mse": 6.787577149225399e-05,
+      "key_cosine": 1.003735899925232,
+      "value_cosine": 1.0037591457366943
+    },
+    "INT4": {
+      "compression_ratio": 1.9835351089588378,
+      "quant_time_ms": 288.56080304831266,
+      "deq_time_ms": 183.99120098911226,
+      "key_mse": 0.011864719912409782,
+      "value_mse": 0.019482068717479706,
+      "key_cosine": 0.9979076981544495,
+      "value_cosine": 0.994338870048523
+    }
+  },
+  "pressure_detection": {
+    "eviction_callbacks": 1,
+    "eviction_details": [
+      {
+        "bytes_to_free_mb": 7627.918541,
+        "pressure": "high",
+        "timestamp": 1771731039.865883
+      }
+    ],
+    "peak_util": 0.9015459069865047
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "error": "FileNotFoundError: DuoAttention profile not found at /root/.cache/duoattention_profiles/Qwen2.5-14B.pt\nRun offline profiling first:\n  python -m experiments.scripts.profile_duo_attention --model Qwen2.5-14B",
+  "task": "ppl",
+  "model": "Qwen2.5-14B",
+  "method": "duo_attention",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "_checkpoint_key": "qwen2.5-14b__ppl__duo_attention__cr2.0__seq1024",
+  "_timestamp": "2026-04-24T10:21:08.655476"
+}

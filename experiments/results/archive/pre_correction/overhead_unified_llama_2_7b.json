@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "model": "Llama-2-7B",
+    "n_trials": 3,
+    "timestamp": "2026-03-28T00:37:05.355574"
+  },
+  "results": [
+    {
+      "seq_len": 256,
+      "prefill_ms": 162.5,
+      "attn_overhead_pct": 9.7,
+      "gini_ms": 5.7,
+      "alloc_ms": 102.9,
+      "total_overhead_pct": 76.6
+    },
+    {
+      "seq_len": 512,
+      "prefill_ms": 241.4,
+      "attn_overhead_pct": -2.2,
+      "gini_ms": 17.0,
+      "alloc_ms": 159.8,
+      "total_overhead_pct": 71.1
+    },
+    {
+      "seq_len": 1024,
+      "prefill_ms": 446.9,
+      "attn_overhead_pct": -0.6,
+      "gini_ms": 11.9,
+      "alloc_ms": 301.3,
+      "total_overhead_pct": 69.5
+    }
+  ]
+}

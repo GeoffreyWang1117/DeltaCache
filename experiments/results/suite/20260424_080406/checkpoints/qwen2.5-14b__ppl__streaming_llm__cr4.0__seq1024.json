@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2.5-14B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 8.0716,
+  "std_ppl": 2.9098,
+  "ppl_ratio": 1.2634,
+  "full_ppl": 6.3886,
+  "mean_compress_ms": 7.18,
+  "mean_memory_bytes": 30277632,
+  "_checkpoint_key": "qwen2.5-14b__ppl__streaming_llm__cr4.0__seq1024",
+  "_timestamp": "2026-04-24T10:25:52.609105"
+}

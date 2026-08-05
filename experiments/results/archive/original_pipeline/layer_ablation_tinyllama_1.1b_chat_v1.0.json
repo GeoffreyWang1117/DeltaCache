@@ -1,0 +1,273 @@
+{
+  "metadata": {
+    "experiment": "layer_aware_ablation",
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda:0",
+    "num_layers": 32,
+    "num_prefixes": 10,
+    "full_cache_entries": 822,
+    "total_queries": 80,
+    "n_runs": 3,
+    "sigmoid_params": {
+      "k": 5.0,
+      "tau": 0.3
+    },
+    "timestamp": "2026-03-04T12:47:53.588244",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "variants": [
+    "lru",
+    "composite",
+    "sigmoid",
+    "uniform",
+    "inverse_sigmoid"
+  ],
+  "capacity_levels": [
+    10,
+    20,
+    30,
+    50
+  ],
+  "results": [
+    {
+      "variant": "lru",
+      "capacity_pct": 10,
+      "hit_rate": 0.7333333333333333,
+      "avg_latency_ms": 21.45569651911501,
+      "std_latency_ms": 5.503269347119906,
+      "tokens_reused": 1207,
+      "total_tokens": 6636,
+      "reuse_rate": 0.18188667872212175,
+      "num_evictions": 5888,
+      "total_requests": 80
+    },
+    {
+      "variant": "composite",
+      "capacity_pct": 10,
+      "hit_rate": 0.8291666666666666,
+      "avg_latency_ms": 20.989789050266456,
+      "std_latency_ms": 4.657764876864683,
+      "tokens_reused": 1109,
+      "total_tokens": 6636,
+      "reuse_rate": 0.16716897729555957,
+      "num_evictions": 6042,
+      "total_requests": 80
+    },
+    {
+      "variant": "sigmoid",
+      "capacity_pct": 10,
+      "hit_rate": 0.23333333333333334,
+      "avg_latency_ms": 19.109901727642864,
+      "std_latency_ms": 4.035078465946311,
+      "tokens_reused": 2577,
+      "total_tokens": 6636,
+      "reuse_rate": 0.3883363471971067,
+      "num_evictions": 5989,
+      "total_requests": 80
+    },
+    {
+      "variant": "uniform",
+      "capacity_pct": 10,
+      "hit_rate": 0.23333333333333334,
+      "avg_latency_ms": 19.044205397949554,
+      "std_latency_ms": 3.811673818611598,
+      "tokens_reused": 2577,
+      "total_tokens": 6636,
+      "reuse_rate": 0.3883363471971067,
+      "num_evictions": 5989,
+      "total_requests": 80
+    },
+    {
+      "variant": "inverse_sigmoid",
+      "capacity_pct": 10,
+      "hit_rate": 0.23333333333333334,
+      "avg_latency_ms": 19.482037418250304,
+      "std_latency_ms": 4.155733109777844,
+      "tokens_reused": 2577,
+      "total_tokens": 6636,
+      "reuse_rate": 0.3883363471971067,
+      "num_evictions": 5989,
+      "total_requests": 80
+    },
+    {
+      "variant": "lru",
+      "capacity_pct": 20,
+      "hit_rate": 0.8041666666666666,
+      "avg_latency_ms": 20.858164270369645,
+      "std_latency_ms": 4.853136434621674,
+      "tokens_reused": 1789,
+      "total_tokens": 6636,
+      "reuse_rate": 0.26964034558971267,
+      "num_evictions": 5275,
+      "total_requests": 80
+    },
+    {
+      "variant": "composite",
+      "capacity_pct": 20,
+      "hit_rate": 0.9625,
+      "avg_latency_ms": 20.553323761366,
+      "std_latency_ms": 3.931717327154302,
+      "tokens_reused": 1904,
+      "total_tokens": 6636,
+      "reuse_rate": 0.28702029334940726,
+      "num_evictions": 5350,
+      "total_requests": 80
+    },
+    {
+      "variant": "sigmoid",
+      "capacity_pct": 20,
+      "hit_rate": 0.2625,
+      "avg_latency_ms": 18.667353340424597,
+      "std_latency_ms": 3.5228761914361013,
+      "tokens_reused": 2859,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4309322885272252,
+      "num_evictions": 5301,
+      "total_requests": 80
+    },
+    {
+      "variant": "uniform",
+      "capacity_pct": 20,
+      "hit_rate": 0.2625,
+      "avg_latency_ms": 18.97920120100025,
+      "std_latency_ms": 3.8925937303684157,
+      "tokens_reused": 2859,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4309322885272252,
+      "num_evictions": 5301,
+      "total_requests": 80
+    },
+    {
+      "variant": "inverse_sigmoid",
+      "capacity_pct": 20,
+      "hit_rate": 0.2625,
+      "avg_latency_ms": 18.819375908545528,
+      "std_latency_ms": 3.747791389076648,
+      "tokens_reused": 2859,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4309322885272252,
+      "num_evictions": 5301,
+      "total_requests": 80
+    },
+    {
+      "variant": "lru",
+      "capacity_pct": 30,
+      "hit_rate": 0.9875,
+      "avg_latency_ms": 21.380195574602112,
+      "std_latency_ms": 5.04660875908673,
+      "tokens_reused": 2355,
+      "total_tokens": 6636,
+      "reuse_rate": 0.3549829214386176,
+      "num_evictions": 4526,
+      "total_requests": 80
+    },
+    {
+      "variant": "composite",
+      "capacity_pct": 30,
+      "hit_rate": 0.9791666666666666,
+      "avg_latency_ms": 20.592200786146957,
+      "std_latency_ms": 3.5217003250937022,
+      "tokens_reused": 2598,
+      "total_tokens": 6636,
+      "reuse_rate": 0.391500904159132,
+      "num_evictions": 4593,
+      "total_requests": 80
+    },
+    {
+      "variant": "sigmoid",
+      "capacity_pct": 30,
+      "hit_rate": 0.3375,
+      "avg_latency_ms": 18.90116923993143,
+      "std_latency_ms": 3.7995280188477465,
+      "tokens_reused": 3249,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4896021699819168,
+      "num_evictions": 4692,
+      "total_requests": 80
+    },
+    {
+      "variant": "uniform",
+      "capacity_pct": 30,
+      "hit_rate": 0.3375,
+      "avg_latency_ms": 18.549565280166764,
+      "std_latency_ms": 3.1464320132264043,
+      "tokens_reused": 3249,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4896021699819168,
+      "num_evictions": 4692,
+      "total_requests": 80
+    },
+    {
+      "variant": "inverse_sigmoid",
+      "capacity_pct": 30,
+      "hit_rate": 0.3375,
+      "avg_latency_ms": 18.706334655871615,
+      "std_latency_ms": 3.478575764784991,
+      "tokens_reused": 3249,
+      "total_tokens": 6636,
+      "reuse_rate": 0.4896021699819168,
+      "num_evictions": 4692,
+      "total_requests": 80
+    },
+    {
+      "variant": "lru",
+      "capacity_pct": 50,
+      "hit_rate": 0.9875,
+      "avg_latency_ms": 20.937280615908094,
+      "std_latency_ms": 4.48335671233258,
+      "tokens_reused": 3079,
+      "total_tokens": 6636,
+      "reuse_rate": 0.46403455897126783,
+      "num_evictions": 3477,
+      "total_requests": 80
+    },
+    {
+      "variant": "composite",
+      "capacity_pct": 50,
+      "hit_rate": 0.9875,
+      "avg_latency_ms": 19.976853762636892,
+      "std_latency_ms": 3.7501445587727247,
+      "tokens_reused": 3353,
+      "total_tokens": 6636,
+      "reuse_rate": 0.5052742616033755,
+      "num_evictions": 3300,
+      "total_requests": 80
+    },
+    {
+      "variant": "sigmoid",
+      "capacity_pct": 50,
+      "hit_rate": 0.6541666666666667,
+      "avg_latency_ms": 18.878472396560635,
+      "std_latency_ms": 4.294180652032989,
+      "tokens_reused": 4484,
+      "total_tokens": 6636,
+      "reuse_rate": 0.6758087201125176,
+      "num_evictions": 3481,
+      "total_requests": 80
+    },
+    {
+      "variant": "uniform",
+      "capacity_pct": 50,
+      "hit_rate": 0.6541666666666667,
+      "avg_latency_ms": 18.54774562622576,
+      "std_latency_ms": 3.122315639629686,
+      "tokens_reused": 4484,
+      "total_tokens": 6636,
+      "reuse_rate": 0.6758087201125176,
+      "num_evictions": 3481,
+      "total_requests": 80
+    },
+    {
+      "variant": "inverse_sigmoid",
+      "capacity_pct": 50,
+      "hit_rate": 0.6541666666666667,
+      "avg_latency_ms": 19.120820803800598,
+      "std_latency_ms": 4.579409116577273,
+      "tokens_reused": 4484,
+      "total_tokens": 6636,
+      "reuse_rate": 0.6758087201125176,
+      "num_evictions": 3481,
+      "total_requests": 80
+    }
+  ]
+}

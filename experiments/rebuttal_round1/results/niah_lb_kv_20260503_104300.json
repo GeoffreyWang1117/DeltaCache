@@ -1,0 +1,71 @@
+{
+  "date": "2026-05-03T10:42:12.208176",
+  "results": [
+    {
+      "model": "mistral_7b",
+      "cells": [
+        {
+          "method": "layer_budget",
+          "cr": 4.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget_kv",
+          "cr": 4.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget",
+          "cr": 6.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget_kv",
+          "cr": 6.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        }
+      ]
+    },
+    {
+      "model": "llama2_7b",
+      "cells": [
+        {
+          "method": "layer_budget",
+          "cr": 4.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget_kv",
+          "cr": 4.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget",
+          "cr": 6.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        },
+        {
+          "method": "layer_budget_kv",
+          "cr": 6.0,
+          "overall_accuracy": 0.0,
+          "depths": [],
+          "oom_count": 5
+        }
+      ]
+    }
+  ]
+}

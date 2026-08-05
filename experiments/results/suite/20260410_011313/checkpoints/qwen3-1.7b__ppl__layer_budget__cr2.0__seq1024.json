@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-1.7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 20.1042,
+  "std_ppl": 12.7581,
+  "ppl_ratio": 1.0021,
+  "full_ppl": 20.0615,
+  "mean_compress_ms": 142.52,
+  "mean_memory_bytes": 34763936,
+  "_checkpoint_key": "qwen3-1.7b__ppl__layer_budget__cr2.0__seq1024",
+  "_timestamp": "2026-04-10T17:03:35.670702"
+}

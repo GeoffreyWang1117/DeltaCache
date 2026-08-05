@@ -1,0 +1,49 @@
+{
+  "calibration_corpus": "wikitext-2-raw-v1 test",
+  "seq_len": 512,
+  "num_samples": 8,
+  "models": [
+    {
+      "hf_name": "mistralai/Mistral-7B-Instruct-v0.2",
+      "short": "mistral_7b",
+      "F8": 0.9998458581976593,
+      "F4": 0.9794271908467636,
+      "n_samples": 256
+    },
+    {
+      "hf_name": "meta-llama/Llama-2-7b-chat-hf",
+      "short": "llama2_7b",
+      "F8": 0.9997382306028157,
+      "F4": 0.9758432641392574,
+      "n_samples": 256
+    },
+    {
+      "hf_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "short": "llama3.1_8b",
+      "F8": 0.9998798572923988,
+      "F4": 0.981699830153957,
+      "n_samples": 256
+    },
+    {
+      "hf_name": "Qwen/Qwen3-8B",
+      "short": "qwen3_8b",
+      "F8": 0.9997111860041817,
+      "F4": 0.9682508001310958,
+      "n_samples": 288
+    },
+    {
+      "hf_name": "meta-llama/Llama-2-13b-chat-hf",
+      "short": "llama2_13b",
+      "F8": 0.9997645972296596,
+      "F4": 0.9780617332085967,
+      "n_samples": 320
+    },
+    {
+      "hf_name": "Qwen/Qwen2.5-14B-Instruct",
+      "short": "qwen2.5_14b",
+      "F8": 0.9998845976466934,
+      "F4": 0.9810220231302083,
+      "n_samples": 384
+    }
+  ]
+}

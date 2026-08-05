@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2-0.5B",
+  "method": "lava",
+  "compression_ratio": 3.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 13.773,
+  "std_ppl": 2.8071,
+  "ppl_ratio": 1.0384,
+  "full_ppl": 13.2641,
+  "mean_compress_ms": 413.58,
+  "mean_memory_bytes": 10057728,
+  "_checkpoint_key": "qwen2-0.5b__ppl__lava__cr3.0__seq4096",
+  "_timestamp": "2026-04-06T10:49:17.197851"
+}

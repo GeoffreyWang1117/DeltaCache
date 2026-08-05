@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "model": "Mistral-7B",
+    "n_trials": 3,
+    "timestamp": "2026-03-28T00:46:09.257351"
+  },
+  "results": [
+    {
+      "seq_len": 256,
+      "prefill_ms": 166.8,
+      "attn_overhead_pct": 8.6,
+      "gini_ms": 7.6,
+      "alloc_ms": 119.9,
+      "total_overhead_pct": 85.0
+    },
+    {
+      "seq_len": 512,
+      "prefill_ms": 260.5,
+      "attn_overhead_pct": -5.4,
+      "gini_ms": 7.0,
+      "alloc_ms": 166.7,
+      "total_overhead_pct": 61.3
+    },
+    {
+      "seq_len": 1024,
+      "prefill_ms": 475.7,
+      "attn_overhead_pct": -0.6,
+      "gini_ms": 9.3,
+      "alloc_ms": 512.8,
+      "total_overhead_pct": 109.2
+    }
+  ]
+}

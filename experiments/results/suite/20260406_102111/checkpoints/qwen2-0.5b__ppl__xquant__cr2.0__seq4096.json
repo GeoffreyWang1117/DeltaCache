@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2-0.5B",
+  "method": "xquant",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 13.2628,
+  "std_ppl": 2.7397,
+  "ppl_ratio": 0.9999,
+  "full_ppl": 13.2641,
+  "mean_compress_ms": 159.28,
+  "mean_memory_bytes": 15029472,
+  "_checkpoint_key": "qwen2-0.5b__ppl__xquant__cr2.0__seq4096",
+  "_timestamp": "2026-04-06T10:29:10.715546"
+}

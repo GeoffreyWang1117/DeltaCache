@@ -1,0 +1,505 @@
+{
+  "metadata": {
+    "model": "Mistral-7B-Instruct-v0.2",
+    "seq_len": 512,
+    "prefix_frac": 0.6,
+    "crs": [
+      2.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "methods": [
+      "full_kv",
+      "h2o_uniform",
+      "snapkv",
+      "pyramidkv",
+      "d2o",
+      "squeeze_attention",
+      "adakv",
+      "dynamickv",
+      "lava",
+      "cake",
+      "kvtuner",
+      "kivi_uniform",
+      "layer_budget"
+    ],
+    "n_texts": 6,
+    "num_layers": 32,
+    "num_heads": 8,
+    "head_dim": 128,
+    "source": "wikitext-2-raw-v1",
+    "timestamp": "2026-03-27T23:01:43.106046",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "summary": [
+    {
+      "method": "kvtuner",
+      "cr": 2.0,
+      "mean_ppl": 7.2487,
+      "std_ppl": 3.1881,
+      "mean_ratio": 0.9998,
+      "mean_mem_kb": 13753.6,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 39296.0,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19584.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19584.0,
+      "n": 6
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19524.0,
+      "n": 6
+    },
+    {
+      "method": "d2o",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19584.0,
+      "n": 6
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 20928.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 5132.7,
+      "n": 6
+    },
+    {
+      "method": "dynamickv",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19600.7,
+      "n": 6
+    },
+    {
+      "method": "lava",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 15862.0,
+      "n": 6
+    },
+    {
+      "method": "cake",
+      "cr": 2.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19648.0,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ppl": 7.2517,
+      "std_ppl": 3.1984,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 19670.2,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 9990.4,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 39296.0,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13056.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13056.0,
+      "n": 6
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13032.0,
+      "n": 6
+    },
+    {
+      "method": "d2o",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13032.7,
+      "n": 6
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 14336.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 4512.0,
+      "n": 6
+    },
+    {
+      "method": "dynamickv",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13064.7,
+      "n": 6
+    },
+    {
+      "method": "lava",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 11178.7,
+      "n": 6
+    },
+    {
+      "method": "cake",
+      "cr": 3.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 13217.3,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ppl": 7.2774,
+      "std_ppl": 3.1668,
+      "mean_ratio": 1.0048,
+      "mean_mem_kb": 16506.8,
+      "n": 6
+    },
+    {
+      "method": "kvtuner",
+      "cr": 3.0,
+      "mean_ppl": 7.2731,
+      "std_ppl": 3.0852,
+      "mean_ratio": 1.0068,
+      "mean_mem_kb": 13753.6,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 9990.4,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 39296.0,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 9728.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 9728.0,
+      "n": 6
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 9732.0,
+      "n": 6
+    },
+    {
+      "method": "d2o",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 9762.0,
+      "n": 6
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 11072.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 4455.3,
+      "n": 6
+    },
+    {
+      "method": "dynamickv",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 9781.3,
+      "n": 6
+    },
+    {
+      "method": "lava",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 8390.7,
+      "n": 6
+    },
+    {
+      "method": "cake",
+      "cr": 4.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 10217.3,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ppl": 7.2612,
+      "std_ppl": 3.111,
+      "mean_ratio": 1.0043,
+      "mean_mem_kb": 15035.1,
+      "n": 6
+    },
+    {
+      "method": "kvtuner",
+      "cr": 4.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 13753.6,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 9990.4,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 39296.0,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 6528.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 6528.0,
+      "n": 6
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 6488.0,
+      "n": 6
+    },
+    {
+      "method": "d2o",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 6503.3,
+      "n": 6
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 7808.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 4420.7,
+      "n": 6
+    },
+    {
+      "method": "dynamickv",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 6470.7,
+      "n": 6
+    },
+    {
+      "method": "lava",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 5716.0,
+      "n": 6
+    },
+    {
+      "method": "cake",
+      "cr": 6.0,
+      "mean_ppl": 7.2541,
+      "std_ppl": 3.2096,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 7504.7,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ppl": 7.2576,
+      "std_ppl": 3.1809,
+      "mean_ratio": 1.0016,
+      "mean_mem_kb": 11330.0,
+      "n": 6
+    },
+    {
+      "method": "kvtuner",
+      "cr": 6.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 13753.6,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ppl": 7.2803,
+      "std_ppl": 3.0922,
+      "mean_ratio": 1.0078,
+      "mean_mem_kb": 9990.4,
+      "n": 6
+    }
+  ]
+}

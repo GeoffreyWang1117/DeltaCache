@@ -1,0 +1,15 @@
+Exp B — Quantize-First Optimality: Qwen3-1.7B
+seq_len=1024  layers=28
+
+Quant-first Pareto dominance: 28.6%
+Greedy vs optimal mean gap:   0.00%
+Greedy vs optimal max gap:    0.33%
+
+  budget     token     quant    tok1st    qnt1st       opt    gap%
+    0.10    1.7947    0.0558    1.2346    1.2346    1.2346    0.00
+    0.15    1.7066    0.0558    0.8235    0.8235    0.8235    0.00
+    0.20    1.6054    0.0558    0.4417    0.4417    0.4417    0.00
+    0.25    1.4999    0.0558    0.0558    0.0558    0.0558    0.00
+    0.33    1.3496    0.0558    0.0558    0.0558    0.0558    0.00
+    0.50    1.0035    0.0558    0.0558    0.0002    0.0002    0.01
+    0.75    0.4975    0.0558    0.0558    0.0002    0.0002    0.01

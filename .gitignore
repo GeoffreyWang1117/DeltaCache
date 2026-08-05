@@ -66,3 +66,7 @@ baselines/h2o_official/
 *.fls
 *.out
 *.synctex.gz
+
+# Re-downloadable dataset caches
+experiments/suite/results/.longbench_cache/
+**/.longbench_cache/

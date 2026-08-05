@@ -1,0 +1,476 @@
+{
+  "metadata": {
+    "model": "Qwen/Qwen2-0.5B",
+    "num_layers": 24,
+    "num_kv_heads": 2,
+    "head_dim": 64,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_memory_gb": 23.6,
+    "timestamp": "2026-03-30T17:38:34.913344"
+  },
+  "test1_generate_dropin": {
+    "baseline": [
+      {
+        "prompt_len": 7,
+        "gen_tokens": 64,
+        "latency_ms": 1858.0,
+        "mem_delta_mb": 9.1
+      },
+      {
+        "prompt_len": 15,
+        "gen_tokens": 64,
+        "latency_ms": 1221.4,
+        "mem_delta_mb": 0.0
+      },
+      {
+        "prompt_len": 16,
+        "gen_tokens": 64,
+        "latency_ms": 1214.8,
+        "mem_delta_mb": 0.0
+      }
+    ],
+    "layerbudget": [
+      {
+        "prompt_len": 7,
+        "gen_tokens": 64,
+        "latency_ms": 1351.1,
+        "mem_delta_mb": 0.8,
+        "compressed": false,
+        "budget_mb": 1.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 15,
+        "gen_tokens": 64,
+        "latency_ms": 1283.0,
+        "mem_delta_mb": 0.1,
+        "compressed": false,
+        "budget_mb": 1.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 16,
+        "gen_tokens": 64,
+        "latency_ms": 1779.7,
+        "mem_delta_mb": 0.0,
+        "compressed": false,
+        "budget_mb": 1.0,
+        "token_match_rate": 1.0
+      }
+    ]
+  },
+  "test2_ppl_pipeline": [
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ppl": 12.4746,
+      "std_ppl": 3.6563,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.29,
+      "mean_mem_kb": 3684.0,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ppl": 12.4746,
+      "std_ppl": 3.6563,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 63.87,
+      "mean_mem_kb": 1882.8,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ppl": 12.4938,
+      "std_ppl": 3.689,
+      "mean_ratio": 1.0009,
+      "mean_compress_ms": 7.22,
+      "mean_mem_kb": 961.8,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ppl": 30.529,
+      "std_ppl": 9.7947,
+      "mean_ratio": 2.4928,
+      "mean_compress_ms": 5.15,
+      "mean_mem_kb": 1836.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 2.0,
+      "mean_ppl": 32.0614,
+      "std_ppl": 9.4826,
+      "mean_ratio": 2.727,
+      "mean_compress_ms": 4.88,
+      "mean_mem_kb": 1836.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 2.0,
+      "mean_ppl": 45.165,
+      "std_ppl": 15.5142,
+      "mean_ratio": 3.7703,
+      "mean_compress_ms": 14.85,
+      "mean_mem_kb": 656.2,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ppl": 12.4617,
+      "std_ppl": 3.6582,
+      "mean_ratio": 0.9986,
+      "mean_compress_ms": 62.86,
+      "mean_mem_kb": 1882.8,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ppl": 12.4746,
+      "std_ppl": 3.6563,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.28,
+      "mean_mem_kb": 3684.0,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ppl": 12.4938,
+      "std_ppl": 3.689,
+      "mean_ratio": 1.0009,
+      "mean_compress_ms": 7.27,
+      "mean_mem_kb": 961.8,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ppl": 36.5176,
+      "std_ppl": 11.507,
+      "mean_ratio": 3.0059,
+      "mean_compress_ms": 5.05,
+      "mean_mem_kb": 1224.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 3.0,
+      "mean_ppl": 39.0246,
+      "std_ppl": 12.277,
+      "mean_ratio": 3.318,
+      "mean_compress_ms": 5.18,
+      "mean_mem_kb": 1224.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 3.0,
+      "mean_ppl": 49.0178,
+      "std_ppl": 17.733,
+      "mean_ratio": 4.0825,
+      "mean_compress_ms": 14.71,
+      "mean_mem_kb": 484.8,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ppl": 12.4746,
+      "std_ppl": 3.6563,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.29,
+      "mean_mem_kb": 3684.0,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ppl": 12.4938,
+      "std_ppl": 3.689,
+      "mean_ratio": 1.0009,
+      "mean_compress_ms": 8.27,
+      "mean_mem_kb": 961.8,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ppl": 12.8687,
+      "std_ppl": 3.9552,
+      "mean_ratio": 1.0279,
+      "mean_compress_ms": 66.42,
+      "mean_mem_kb": 1802.0,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ppl": 40.4535,
+      "std_ppl": 12.0883,
+      "mean_ratio": 3.3636,
+      "mean_compress_ms": 5.37,
+      "mean_mem_kb": 912.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 4.0,
+      "mean_ppl": 42.9388,
+      "std_ppl": 13.6503,
+      "mean_ratio": 3.6436,
+      "mean_compress_ms": 4.44,
+      "mean_mem_kb": 912.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 4.0,
+      "mean_ppl": 51.5863,
+      "std_ppl": 18.8089,
+      "mean_ratio": 4.3174,
+      "mean_compress_ms": 14.53,
+      "mean_mem_kb": 401.4,
+      "n": 6
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ppl": 12.4746,
+      "std_ppl": 3.6563,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.4,
+      "mean_mem_kb": 3684.0,
+      "n": 6
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ppl": 12.4938,
+      "std_ppl": 3.689,
+      "mean_ratio": 1.0009,
+      "mean_compress_ms": 7.89,
+      "mean_mem_kb": 961.8,
+      "n": 6
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ppl": 16.7281,
+      "std_ppl": 4.5194,
+      "mean_ratio": 1.3647,
+      "mean_compress_ms": 47.8,
+      "mean_mem_kb": 1196.5,
+      "n": 6
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ppl": 46.4435,
+      "std_ppl": 13.7688,
+      "mean_ratio": 3.9195,
+      "mean_compress_ms": 4.63,
+      "mean_mem_kb": 612.0,
+      "n": 6
+    },
+    {
+      "method": "snapkv",
+      "cr": 6.0,
+      "mean_ppl": 48.9773,
+      "std_ppl": 15.3741,
+      "mean_ratio": 4.1596,
+      "mean_compress_ms": 4.15,
+      "mean_mem_kb": 612.0,
+      "n": 6
+    },
+    {
+      "method": "adakv",
+      "cr": 6.0,
+      "mean_ppl": 53.5558,
+      "std_ppl": 19.3651,
+      "mean_ratio": 4.4883,
+      "mean_compress_ms": 13.98,
+      "mean_mem_kb": 341.9,
+      "n": 6
+    }
+  ],
+  "test3_generation_quality": [
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 0.25,
+      "compressed": true,
+      "token_match": 0.22,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 0.5,
+      "compressed": true,
+      "token_match": 0.36,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 1.0,
+      "compressed": true,
+      "token_match": 0.79,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 0.25,
+      "compressed": true,
+      "token_match": 0.17,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 0.5,
+      "compressed": true,
+      "token_match": 0.35,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 1.0,
+      "compressed": true,
+      "token_match": 0.76,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 0.25,
+      "compressed": true,
+      "token_match": 0.19,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 0.5,
+      "compressed": true,
+      "token_match": 0.34,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 1.0,
+      "compressed": true,
+      "token_match": 0.8539,
+      "len_full": 100,
+      "len_lb": 89
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 0.25,
+      "compressed": true,
+      "token_match": 0.3261,
+      "len_full": 100,
+      "len_lb": 46
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 0.5,
+      "compressed": true,
+      "token_match": 0.3804,
+      "len_full": 100,
+      "len_lb": 92
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 1.0,
+      "compressed": true,
+      "token_match": 0.8,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    }
+  ],
+  "test4_scaling": [
+    {
+      "seq_len": 128,
+      "base_ms": 668.8,
+      "lb_ms": "error",
+      "speedup": "error",
+      "base_mem_mb": 7.1,
+      "lb_mem_mb": "error",
+      "mem_savings": "error",
+      "compressed": "ERROR: The size of tensor a (129) must match the size of tensor b (125) at non-singleto"
+    },
+    {
+      "seq_len": 256,
+      "base_ms": 732.2,
+      "lb_ms": "error",
+      "speedup": "error",
+      "base_mem_mb": 14.5,
+      "lb_mem_mb": "error",
+      "mem_savings": "error",
+      "compressed": "ERROR: The size of tensor a (257) must match the size of tensor b (253) at non-singleto"
+    },
+    {
+      "seq_len": 512,
+      "base_ms": 738.4,
+      "lb_ms": "error",
+      "speedup": "error",
+      "base_mem_mb": 39.9,
+      "lb_mem_mb": "error",
+      "mem_savings": "error",
+      "compressed": "ERROR: The size of tensor a (513) must match the size of tensor b (509) at non-singleto"
+    },
+    {
+      "seq_len": 1024,
+      "base_ms": 666.6,
+      "lb_ms": "error",
+      "speedup": "error",
+      "base_mem_mb": 137.2,
+      "lb_mem_mb": "error",
+      "mem_savings": "error",
+      "compressed": "ERROR: The size of tensor a (1025) must match the size of tensor b (1021) at non-single"
+    }
+  ]
+}

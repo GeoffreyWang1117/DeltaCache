@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2.5-72B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 4.4299,
+  "std_ppl": 2.0852,
+  "ppl_ratio": 1.0053,
+  "full_ppl": 4.4065,
+  "mean_compress_ms": 26.85,
+  "mean_memory_bytes": 101318400,
+  "_checkpoint_key": "qwen2.5-72b__ppl__kivi_uniform__cr4.0__seq2048",
+  "_timestamp": "2026-04-25T18:24:15.145831"
+}

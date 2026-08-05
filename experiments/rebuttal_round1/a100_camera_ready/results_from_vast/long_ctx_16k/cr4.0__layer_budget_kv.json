@@ -1,0 +1,14 @@
+{
+  "model": "mistral_7b",
+  "seq_len": 4096,
+  "cr": 4.0,
+  "method": "layer_budget_kv",
+  "n_chunks": 2,
+  "ppl_ratio_mean": 1.0312,
+  "ppl_ratio_per_chunk": [
+    1.0317,
+    1.0307
+  ],
+  "_checkpoint_key": "cr4.0__layer_budget_kv",
+  "_saved_at": "2026-05-04T03:23:12.688530"
+}

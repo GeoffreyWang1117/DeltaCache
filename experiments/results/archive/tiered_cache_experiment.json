@@ -1,0 +1,96 @@
+{
+  "tiered_offload_cycle": {
+    "offload_ms": 176.82568996679038,
+    "offload_bandwidth_gbs": 1.5180795055877616,
+    "quantize_ms": 588.8372350018471,
+    "compression_ratio": 1.991249392318911,
+    "compressed_size_mb": 134.807552,
+    "dequantize_ms": 363.040538970381,
+    "pin_memory_ms": 25.60658100992441,
+    "prefetch_ms": 20.425101974979043,
+    "prefetch_bandwidth_gbs": 13.142429170186572,
+    "key_cosine": 0.9999760389328003,
+    "value_cosine": 0.9999660849571228,
+    "key_mse": 4.805365824722685e-05,
+    "total_offload_pipeline_ms": 765.6629249686375,
+    "total_prefetch_pipeline_ms": 409.0722219552845
+  },
+  "multi_block_pressure": {
+    "total_blocks_created": 5061,
+    "gpu_blocks_final": 4113,
+    "cpu_blocks_final": 948,
+    "offloaded_count": 948,
+    "prefetched_count": 3,
+    "original_bytes": 3976200192,
+    "compressed_bytes": 1988100096,
+    "timeline_sample": [
+      {
+        "block_id": 5056,
+        "gpu_blocks": 4109,
+        "cpu_blocks": 948,
+        "gpu_util": 0.6951140841530933,
+        "pressure": "low"
+      },
+      {
+        "block_id": 5057,
+        "gpu_blocks": 4110,
+        "cpu_blocks": 948,
+        "gpu_util": 0.6951140841530933,
+        "pressure": "low"
+      },
+      {
+        "block_id": 5058,
+        "gpu_blocks": 4111,
+        "cpu_blocks": 948,
+        "gpu_util": 0.6951140841530933,
+        "pressure": "low"
+      },
+      {
+        "block_id": 5059,
+        "gpu_blocks": 4112,
+        "cpu_blocks": 948,
+        "gpu_util": 0.6959431276182877,
+        "pressure": "low"
+      },
+      {
+        "block_id": 5060,
+        "gpu_blocks": 4113,
+        "cpu_blocks": 948,
+        "gpu_util": 0.6959431276182877,
+        "pressure": "low"
+      }
+    ]
+  },
+  "pinned_vs_unpinned": {
+    "1mb": {
+      "unpinned_gbs": 0.47975575007562216,
+      "pinned_gbs": 1.5865132038058876,
+      "speedup": 3.306918580039554
+    },
+    "10mb": {
+      "unpinned_gbs": 1.7272162639621564,
+      "pinned_gbs": 11.011275544847575,
+      "speedup": 6.37515739898616
+    },
+    "50mb": {
+      "unpinned_gbs": 5.87561325863637,
+      "pinned_gbs": 13.16978218762204,
+      "speedup": 2.241431082664301
+    },
+    "100mb": {
+      "unpinned_gbs": 10.987135925400489,
+      "pinned_gbs": 13.142243241335757,
+      "speedup": 1.1961482346780663
+    },
+    "256mb": {
+      "unpinned_gbs": 10.6537498891857,
+      "pinned_gbs": 13.394071254426416,
+      "speedup": 1.257216603894778
+    },
+    "512mb": {
+      "unpinned_gbs": 10.938948714134456,
+      "pinned_gbs": 13.431217895736488,
+      "speedup": 1.2278344333383442
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "model": "Qwen/Qwen2-0.5B",
+    "seq_len": 512,
+    "block_size": 16,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-30T18:35:55.697597"
+  },
+  "block_layerbudget_summary": [
+    {
+      "cr": 2.0,
+      "mean_ppl": 11.4274,
+      "mean_ratio": 1.002,
+      "mean_compress_ms": 132.85,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "mean_ppl": 151.0243,
+      "mean_ratio": 12.0456,
+      "mean_compress_ms": 125.85,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "mean_ppl": 227.9044,
+      "mean_ratio": 18.0829,
+      "mean_compress_ms": 128.28,
+      "mean_freed_pct": 0.0042,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "mean_ppl": 314.5894,
+      "mean_ratio": 25.1778,
+      "mean_compress_ms": 90.7,
+      "mean_freed_pct": 0.3552,
+      "n": 4
+    }
+  ]
+}

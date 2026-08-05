@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2.5-14B",
+  "method": "minikv",
+  "compression_ratio": 6.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 6.7634,
+  "std_ppl": 2.7937,
+  "ppl_ratio": 1.0587,
+  "full_ppl": 6.3886,
+  "mean_compress_ms": 39.48,
+  "mean_memory_bytes": 10100964,
+  "_checkpoint_key": "qwen2.5-14b__ppl__minikv__cr6.0__seq1024",
+  "_timestamp": "2026-04-24T10:28:11.190202"
+}

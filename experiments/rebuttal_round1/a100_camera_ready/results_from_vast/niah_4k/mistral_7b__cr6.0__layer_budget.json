@@ -1,0 +1,75 @@
+{
+  "method": "layer_budget",
+  "cr": 6.0,
+  "seq_len": 4096,
+  "n_depths": 10,
+  "n_repeats": 3,
+  "overall_accuracy": 0.7333,
+  "depths": [
+    {
+      "depth": 0.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    {
+      "depth": 0.1111111111111111,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    {
+      "depth": 0.2222222222222222,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    {
+      "depth": 0.3333333333333333,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    {
+      "depth": 0.4444444444444444,
+      "correct": 1,
+      "total": 3,
+      "accuracy": 0.3333
+    },
+    {
+      "depth": 0.5555555555555556,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    {
+      "depth": 0.6666666666666666,
+      "correct": 1,
+      "total": 3,
+      "accuracy": 0.3333
+    },
+    {
+      "depth": 0.7777777777777778,
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    {
+      "depth": 0.8888888888888888,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    {
+      "depth": 1.0,
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    }
+  ],
+  "oom_count": 0,
+  "err_count": 0,
+  "model": "mistral_7b",
+  "_checkpoint_key": "mistral_7b__cr6.0__layer_budget",
+  "_saved_at": "2026-05-04T03:11:23.835691"
+}

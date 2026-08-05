@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "importance": "inverted",
+    "timestamp": "2026-03-31T02:12:25.380917"
+  },
+  "fixed_vs_online": [
+    {
+      "mode": "online",
+      "4x": 1.0119,
+      "6x": 1.3135
+    },
+    {
+      "mode": "fixed",
+      "4x": 1.0199,
+      "6x": 1.2816
+    },
+    {
+      "mode": "default",
+      "4x": 1.0062,
+      "6x": 1.2908
+    }
+  ],
+  "greedy_vs_random": [
+    {
+      "text": 0,
+      "cr": 4.0,
+      "greedy_score": 21.1026,
+      "best_random_score": 17.951,
+      "greedy_vs_random": 1.1756
+    },
+    {
+      "text": 0,
+      "cr": 6.0,
+      "greedy_score": 19.5797,
+      "best_random_score": 16.9341,
+      "greedy_vs_random": 1.1562
+    },
+    {
+      "text": 1,
+      "cr": 4.0,
+      "greedy_score": 21.0907,
+      "best_random_score": 17.4572,
+      "greedy_vs_random": 1.2081
+    },
+    {
+      "text": 1,
+      "cr": 6.0,
+      "greedy_score": 19.0981,
+      "best_random_score": 15.7914,
+      "greedy_vs_random": 1.2094
+    }
+  ]
+}

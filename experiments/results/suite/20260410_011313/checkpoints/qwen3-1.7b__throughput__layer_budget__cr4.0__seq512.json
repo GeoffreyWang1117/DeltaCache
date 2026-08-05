@@ -1,0 +1,35 @@
+{
+  "task": "throughput",
+  "model": "Qwen3-1.7B",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "gen_tokens": 64,
+  "baseline": {
+    "label": "baseline",
+    "TTFT_ms": 50.31,
+    "TPOT_ms": 32.56,
+    "prefill_ms": 50.31,
+    "decode_ms": 2083.56,
+    "e2e_ms": 2133.88,
+    "tokens_per_sec": 30.7,
+    "peak_mem_mb": 0.0,
+    "prefill_std": 5.18,
+    "decode_std": 80.89
+  },
+  "layerbudget": {
+    "label": "layerbudget_4.0x",
+    "TTFT_ms": 48.2,
+    "TPOT_ms": 32.46,
+    "prefill_ms": 48.2,
+    "decode_ms": 2077.13,
+    "e2e_ms": 2125.34,
+    "tokens_per_sec": 30.8,
+    "peak_mem_mb": 0.0,
+    "prefill_std": 1.5,
+    "decode_std": 18.56
+  },
+  "memory_savings_pct": 0,
+  "speedup": 1.004,
+  "_checkpoint_key": "qwen3-1.7b__throughput__layer_budget__cr4.0__seq512",
+  "_timestamp": "2026-04-11T09:09:01.312864"
+}

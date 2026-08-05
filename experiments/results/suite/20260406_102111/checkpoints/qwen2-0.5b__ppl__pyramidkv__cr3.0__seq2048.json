@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2-0.5B",
+  "method": "pyramidkv",
+  "compression_ratio": 3.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 16.9456,
+  "std_ppl": 6.1291,
+  "ppl_ratio": 1.0612,
+  "full_ppl": 15.9679,
+  "mean_compress_ms": 378.0,
+  "mean_memory_bytes": 5023744,
+  "_checkpoint_key": "qwen2-0.5b__ppl__pyramidkv__cr3.0__seq2048",
+  "_timestamp": "2026-04-06T10:41:38.784307"
+}

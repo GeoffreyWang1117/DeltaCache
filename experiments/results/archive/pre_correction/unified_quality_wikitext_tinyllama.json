@@ -1,0 +1,425 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "crs": [
+      2.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "methods": [
+      "full_kv",
+      "h2o_uniform",
+      "snapkv",
+      "pyramidkv",
+      "d2o",
+      "squeeze_attention",
+      "adakv",
+      "dynamickv",
+      "lava",
+      "cake",
+      "kvtuner",
+      "kivi_uniform",
+      "xquant",
+      "layer_budget"
+    ],
+    "n_texts": 8,
+    "avg_tokens": 246,
+    "timestamp": "2026-03-27T20:32:37.893728"
+  },
+  "summary": [
+    {
+      "method": "adakv",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 693.4
+    },
+    {
+      "method": "adakv",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 662.5
+    },
+    {
+      "method": "adakv",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 634.8
+    },
+    {
+      "method": "adakv",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 518.8
+    },
+    {
+      "method": "cake",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1617.0
+    },
+    {
+      "method": "cake",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1142.9
+    },
+    {
+      "method": "cake",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 939.8
+    },
+    {
+      "method": "cake",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 753.5
+    },
+    {
+      "method": "d2o",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1602.0
+    },
+    {
+      "method": "d2o",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1069.8
+    },
+    {
+      "method": "d2o",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 797.5
+    },
+    {
+      "method": "d2o",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 537.4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1609.4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1071.1
+    },
+    {
+      "method": "dynamickv",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 803.9
+    },
+    {
+      "method": "dynamickv",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 548.0
+    },
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1608.8
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1072.5
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 797.5
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 533.5
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 843.1
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 843.1
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 843.1
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 843.1
+    },
+    {
+      "method": "kvtuner",
+      "cr": 2.0,
+      "mean_ppl": 9.7512,
+      "mean_ratio": 1.0001,
+      "mean_mem_kb": 1131.9
+    },
+    {
+      "method": "kvtuner",
+      "cr": 3.0,
+      "mean_ppl": 9.831,
+      "mean_ratio": 1.008,
+      "mean_mem_kb": 1131.9
+    },
+    {
+      "method": "kvtuner",
+      "cr": 4.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 1131.9
+    },
+    {
+      "method": "kvtuner",
+      "cr": 6.0,
+      "mean_ppl": 9.861,
+      "mean_ratio": 1.0114,
+      "mean_mem_kb": 1131.9
+    },
+    {
+      "method": "lava",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1415.5
+    },
+    {
+      "method": "lava",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1031.8
+    },
+    {
+      "method": "lava",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 785.4
+    },
+    {
+      "method": "lava",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 593.2
+    },
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ppl": 9.7531,
+      "mean_ratio": 1.0004,
+      "mean_mem_kb": 1634.5
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ppl": 9.7586,
+      "mean_ratio": 1.0001,
+      "mean_mem_kb": 1234.1
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ppl": 9.8281,
+      "mean_ratio": 1.0063,
+      "mean_mem_kb": 1079.5
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ppl": 9.7881,
+      "mean_ratio": 1.004,
+      "mean_mem_kb": 841.4
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1602.0
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1070.2
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 800.6
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 544.9
+    },
+    {
+      "method": "snapkv",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1608.8
+    },
+    {
+      "method": "snapkv",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1072.5
+    },
+    {
+      "method": "snapkv",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 797.5
+    },
+    {
+      "method": "snapkv",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 533.5
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 2.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1837.0
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 3.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1293.9
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 4.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 1024.4
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 6.0,
+      "mean_ppl": 9.7481,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 756.2
+    },
+    {
+      "method": "xquant",
+      "cr": 2.0,
+      "mean_ppl": 9.7649,
+      "mean_ratio": 1.0013,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "xquant",
+      "cr": 3.0,
+      "mean_ppl": 11.7767,
+      "mean_ratio": 1.1797,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "xquant",
+      "cr": 4.0,
+      "mean_ppl": 13.2489,
+      "mean_ratio": 1.3205,
+      "mean_mem_kb": 3234.0
+    },
+    {
+      "method": "xquant",
+      "cr": 6.0,
+      "mean_ppl": 16.0075,
+      "mean_ratio": 1.6042,
+      "mean_mem_kb": 3234.0
+    }
+  ],
+  "detailed": {}
+}

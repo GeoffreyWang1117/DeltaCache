@@ -1,0 +1,21 @@
+Exp A — Layer Mechanism Analysis: Qwen3-0.6B
+Layers: 28, calibration: 3 × 512 tok
+
+metric                    Spearman vs gini   Spearman vs importance
+─────────────────────────────────────────────────────────────────
+block_influence           +0.074             +0.421                
+block_similarity          -0.074             -0.421                
+activation_entropy        +0.349             +0.241                
+activation_mean           +0.604             +0.980                
+activation_std            +0.582             +0.998                
+activation_sparsity       -0.580             -0.998                
+quant_sensitivity_int8    +0.203             +0.559                
+quant_sensitivity_fp16    +nan               +nan                  
+activation_range          +0.536             +0.157                
+weight_dynamic_range      +nan               +nan                  
+gradient_norm             -0.273             -0.560                
+gradient_norm_std         -0.417             -0.782                
+gradient_norm_max         -0.314             -0.657                
+gradient_norm_min         -0.204             -0.298                
+fisher_information        -0.303             -0.548                
+fisher_mean               -0.303             -0.548                

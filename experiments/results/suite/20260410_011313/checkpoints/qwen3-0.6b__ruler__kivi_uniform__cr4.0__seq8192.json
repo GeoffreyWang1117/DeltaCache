@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-0.6B",
+  "method": "kivi_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 8192,
+  "overall_accuracy": 0.225,
+  "per_task": {
+    "mkr_1": {
+      "correct": 3,
+      "total": 10,
+      "accuracy": 0.3
+    },
+    "mkr_5": {
+      "correct": 1,
+      "total": 10,
+      "accuracy": 0.1
+    },
+    "mkr_10": {
+      "correct": 4,
+      "total": 10,
+      "accuracy": 0.4
+    },
+    "vt": {
+      "correct": 1,
+      "total": 10,
+      "accuracy": 0.1
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__ruler__kivi_uniform__cr4.0__seq8192",
+  "_timestamp": "2026-04-10T16:27:12.341869"
+}

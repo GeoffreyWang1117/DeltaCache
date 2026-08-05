@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Qwen3-0.6B",
+  "method": "kivi_uniform",
+  "compression_ratio": 3.0,
+  "correct": 1,
+  "total": 35,
+  "accuracy": 0.0286,
+  "per_subject": {
+    "Algebra": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Counting & Probability": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Prealgebra": {
+      "correct": 1,
+      "total": 5,
+      "accuracy": 0.2
+    },
+    "Geometry": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Precalculus": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Number Theory": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Intermediate Algebra": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__math__kivi_uniform__cr3.0__seq0",
+  "_timestamp": "2026-04-10T09:09:16.561058"
+}

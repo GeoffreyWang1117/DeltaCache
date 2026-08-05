@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-1.7B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0.175,
+  "per_task": {
+    "mkr_1": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "mkr_5": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "mkr_10": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "vt": {
+      "correct": 7,
+      "total": 10,
+      "accuracy": 0.7
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__ruler__streaming_llm__cr4.0__seq4096",
+  "_timestamp": "2026-04-11T08:22:32.296133"
+}

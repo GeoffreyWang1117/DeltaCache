@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "budget_mb": 5.5,
+    "max_new_tokens": 64,
+    "sglang_url": "skipped",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-30T20:08:12.669201"
+  },
+  "results": [
+    {
+      "system": "hf_baseline",
+      "workload": "shared_prefix",
+      "n_queries": 15,
+      "latency_mean_ms": 992.2,
+      "latency_std_ms": 27.9,
+      "latency_p50_ms": 998.3,
+      "latency_p95_ms": 1032.3,
+      "ttft_mean_ms": 15.3,
+      "throughput_rps": 1.01,
+      "peak_gpu_mb": 8.4,
+      "extra": {}
+    },
+    {
+      "system": "deltacache_layerbudget",
+      "workload": "shared_prefix",
+      "n_queries": 15,
+      "latency_mean_ms": 975.1,
+      "latency_std_ms": 17.7,
+      "latency_p50_ms": 977.2,
+      "latency_p95_ms": 1001.1,
+      "ttft_mean_ms": 15.0,
+      "throughput_rps": 1.03,
+      "peak_gpu_mb": 8.4,
+      "extra": {
+        "budget_mb": 5.5,
+        "compressed_count": 0,
+        "total_queries": 15
+      }
+    },
+    {
+      "system": "hf_baseline",
+      "workload": "document_qa",
+      "n_queries": 8,
+      "latency_mean_ms": 955.6,
+      "latency_std_ms": 14.3,
+      "latency_p50_ms": 957.4,
+      "latency_p95_ms": 974.2,
+      "ttft_mean_ms": 14.7,
+      "throughput_rps": 1.05,
+      "peak_gpu_mb": 35.7,
+      "extra": {}
+    },
+    {
+      "system": "deltacache_layerbudget",
+      "workload": "document_qa",
+      "n_queries": 8,
+      "latency_mean_ms": 994.0,
+      "latency_std_ms": 21.9,
+      "latency_p50_ms": 1005.2,
+      "latency_p95_ms": 1025.5,
+      "ttft_mean_ms": 15.3,
+      "throughput_rps": 1.01,
+      "peak_gpu_mb": 35.7,
+      "extra": {
+        "budget_mb": 5.5,
+        "compressed_count": 8,
+        "total_queries": 8
+      }
+    },
+    {
+      "system": "hf_baseline",
+      "workload": "diverse",
+      "n_queries": 8,
+      "latency_mean_ms": 954.9,
+      "latency_std_ms": 25.5,
+      "latency_p50_ms": 960.4,
+      "latency_p95_ms": 982.1,
+      "ttft_mean_ms": 14.7,
+      "throughput_rps": 1.05,
+      "peak_gpu_mb": 2.6,
+      "extra": {}
+    },
+    {
+      "system": "deltacache_layerbudget",
+      "workload": "diverse",
+      "n_queries": 8,
+      "latency_mean_ms": 967.4,
+      "latency_std_ms": 24.2,
+      "latency_p50_ms": 967.0,
+      "latency_p95_ms": 996.4,
+      "ttft_mean_ms": 14.9,
+      "throughput_rps": 1.03,
+      "peak_gpu_mb": 2.6,
+      "extra": {
+        "budget_mb": 5.5,
+        "compressed_count": 0,
+        "total_queries": 8
+      }
+    }
+  ]
+}

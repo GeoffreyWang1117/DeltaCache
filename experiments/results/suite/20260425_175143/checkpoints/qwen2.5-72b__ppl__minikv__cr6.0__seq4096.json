@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "ppl",
+  "model": "Qwen2.5-72B",
+  "method": "minikv",
+  "compression_ratio": 6.0,
+  "seq_len": 4096,
+  "_checkpoint_key": "qwen2.5-72b__ppl__minikv__cr6.0__seq4096",
+  "_timestamp": "2026-04-25T18:31:10.027734"
+}

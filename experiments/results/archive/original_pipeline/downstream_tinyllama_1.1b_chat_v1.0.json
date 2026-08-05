@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "experiment": "downstream_evaluation",
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "compression_ratio": 3.0,
+    "load_in_4bit": false,
+    "timestamp": "2026-03-08T01:55:47.867698",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "mmlu": {
+    "per_subject": {
+      "abstract_algebra": {
+        "full": 0.15,
+        "layer_budget": 0.3,
+        "h2o": 0.25,
+        "cake": 0.2,
+        "n_questions": 20
+      },
+      "anatomy": {
+        "full": 0.25,
+        "layer_budget": 0.25,
+        "h2o": 0.2,
+        "cake": 0.2,
+        "n_questions": 20
+      },
+      "astronomy": {
+        "full": 0.35,
+        "layer_budget": 0.15,
+        "h2o": 0.15,
+        "cake": 0.15,
+        "n_questions": 20
+      },
+      "business_ethics": {
+        "full": 0.3,
+        "layer_budget": 0.3,
+        "h2o": 0.15,
+        "cake": 0.35,
+        "n_questions": 20
+      },
+      "clinical_knowledge": {
+        "full": 0.25,
+        "layer_budget": 0.15,
+        "h2o": 0.15,
+        "cake": 0.15,
+        "n_questions": 20
+      }
+    },
+    "average": {
+      "full": 0.26,
+      "layer_budget": 0.23,
+      "h2o": 0.18,
+      "cake": 0.21
+    }
+  }
+}

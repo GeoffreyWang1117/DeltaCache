@@ -1,0 +1,194 @@
+{
+  "paper": "LayerBudget: Per-Layer Token-Precision Joint Optimization for KV Cache Compression",
+  "venue": "NeurIPS 2026",
+  "round": 2,
+  "difficulty": "nightmare",
+  "review_date": "2026-05-03",
+  "paper_path": "/home/coder-gw/Projects/DeltaCache/paper/neurips2026/main.tex",
+  "notes": "Round-2 review on the post-round-1 manuscript. The paper has materially improved on most round-1 weaknesses: abstract reframed to match Tables 1/7, per-model F(b) added, approximation guarantee corrected, runtime contradiction reconciled, byte-CR clarified, inverted-importance scoped to Mistral, H2O reimpl validated against an algorithm-faithful variant. The 'joint vs quant-only at 6×' structural finding is now honestly disclosed in Table 12. Outstanding issues are now smaller and more concrete: per-chunk PPL bootstrap pending, second-architecture LOO with flipped-importance LB run pending, single-anchor coverage-law calibration unaddressed.",
+  "reviews": [
+    {
+      "reviewer": "R1 — Methodologist",
+      "persona": "Methodologist",
+      "focus": "Technical soundness, mathematical rigor, proof correctness",
+      "summary": "Round-2 manuscript materially improves on the methodological concerns I raised in round 1. The (1−1/e) submodular bound has been correctly retracted and replaced with an honest 'greedy as fast heuristic against a 500-trial random baseline' framing (§3.5). The fidelity constants F(b) are now measured per-model across six 7B–14B architectures (Table 4) rather than transferred from a single Mistral anchor. The runtime contradiction between '<1ms' (§3.4) and '100–513ms' (Table 14) is reconciled by separating the allocator inner loop from the full profiling pipeline. The remaining methodological concerns are smaller in scope: (i) the coverage-law power exponent (1−g_l) is still calibrated only on Mistral-7B with a single-figure MAE statistic; (ii) the C3-style capacity closure analogue (here: the marginal-gain allocator's termination) has no formal monotonicity guarantee; (iii) the joint > quant-only inversion at 6× (Table 12) remains structurally puzzling and the new caption explanation is plausible-sounding but not formally justified.",
+      "strengths_round1_addressed": [
+        "(1−1/e) bound corrected — §3.5 now reads 'we do not claim the standard (1−1/e) submodular bound' and points to the MCKP FPTAS literature as the appropriate frame.",
+        "F(b) per-model table replaces the single-anchor 0.9999/0.9964 claim. F(8) is consistently 0.9997–0.9999 across six models; F(4) ranges 0.968–0.982 — substantially lower than the round-1 single-anchor 0.9964 but still well-ordered against F(8). Allocator behavior unchanged because the relative ordering F(16)>F(8)>F(4) is preserved.",
+        "Runtime contradiction resolved: §3.4 states the allocator inner loop is <1ms and Table 14's 'Alloc' column is the full pipeline including Gini extraction across all layers."
+      ],
+      "strengths": [
+        "Per-model F(b) calibration (Table 4) is the kind of camera-ready strengthening reviewers should reward. F(8)=0.9997–0.9999 across six architectures is a stable result; F(4)=0.968–0.982 is more variable, and the paper now reports the spread explicitly rather than asserting a single number.",
+        "The §3.5 framing 'we do not claim the standard (1−1/e) submodular bound … Q is a product, and over the joint (n_l, b_l) action set the marginal-gain ordering shifts when bit-width changes' is exactly the right level of mathematical honesty — it concedes the action graph is not a matroid in the form the bound requires, and falls back to the empirical 118–119% number.",
+        "The inverted-importance scope-down (§3.2 + §5) is mathematically clean: rather than claim early-layer-bottleneck as a universal principle, the paper now reports three architectures with three patterns and frames the inverted-importance scheme as a Mistral-tuned default. The cost-model's marginal-gain ranking is correctly identified as the load-bearing component, with importance direction as an architecture-specific tuning parameter.",
+        "Table 12's caption now correctly explains the joint > quant-only inversion at 6× as a byte-budget regime artifact: at nominal 6× CR, INT4-across-all-layers is operating at effective ~4× memory while eviction methods are at ~6×, so the methods are not memory-matched. Honest disclosure."
+      ],
+      "weaknesses": [
+        "**The coverage law C(l, n) = (n/S)^(1−g_l) is still calibrated on Mistral-7B alone** (§3.2: 'mean absolute error between predicted and actual attention mass captured is 3.1%, with a consistent negative bias'). F(b) was re-measured per-model in this round; the coverage law was not. Given that the inverted-importance scope-down already concedes architecture dependence, the consistency story would be tighter if the paper reported per-model coverage-law fits (or at least per-model MAE).",
+        "**The marginal-gain allocator's termination guarantee is not stated.** Algorithm 1 has a 'while $B_{\\text{used}} < B$' loop that terminates only if at least one action with non-negative ΔQ/ΔM exists at every iteration. Under the modified F(b) values (Table 4) where F(4) ≈ 0.97, INT4→INT8 marginal gain is 0.03 per layer at fixed retention — large enough that the loop is never starved, but the paper should state the termination criterion formally rather than by appeal to empirical behavior.",
+        "**Table 12's joint > quant-only at 6× is now plausibly explained but not formally derived**. The new caption says 'INT4-across-all-layers consumes only ~25% of Full KV bytes (i.e., effective ~4×, not 6×)' — but at nominal CR=6× the byte budget should be exactly Full_KV/6. If quant-only's reported 6× is actually a 4× effective, where does the extra byte room go? This is presented as a budget-regime artifact, but the math is asserted rather than shown. Recommend either (a) the camera-ready Appendix C placeholder be filled with the actual byte-matched comparison, or (b) the §6 narrative explicitly state that the 'quantize first' rule is a regime-conditional one (CR ≤ 4×) rather than a universal principle.",
+        "**The greedy-vs-random comparison (118–119% of 500-trial random) is reported only at 4× and 6× on Mistral-7B** (§3.5). For a paper that uses greedy across 7 models, a per-model comparison at the headline CR=4× would tighten the heuristic claim. This is a small experiment ($O$(seconds) per model) once the allocator is in place."
+      ],
+      "questions": [
+        "What is the per-model coverage-law MAE? Is the 3.1% number from Mistral-7B representative of all six 7B–14B architectures, or is the spread substantial (which would justify per-model coverage-law calibration in addition to per-model F(b))?",
+        "What is the formal termination criterion for Algorithm 1? Specifically: under what conditions on (F, w, g) does the greedy loop always have a feasible action with non-negative ΔQ/ΔM?",
+        "For Table 12 row Joint-Mistral-6×=3.23, the new caption attributes the gap to byte-budget mismatch. Can the paper provide the actual byte-equivalent CR for the quant-only row (i.e., is it really ~4× when nominal 6×)? This is a 1-cell measurement that would close the loop on the round-1 'smoking gun' complaint.",
+        "Was greedy-vs-random compared on any model other than Mistral-7B?"
+      ],
+      "limitations": [
+        "Section 7's limitation (5) was updated this round to flag the F(b) re-measurement work but not the coverage-law transfer. Since that's the next-most-load-bearing constant in the cost model, recommend extending limitation (5) to mention coverage-law calibration explicitly."
+      ],
+      "scores": {
+        "Soundness": 3,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 3,
+        "Clarity": 3,
+        "Significance": 3
+      },
+      "overall": 6,
+      "confidence": 4,
+      "decision": "Weak Accept (round-1 borderline reject moves to weak accept after the (1−1/e) correction, per-model F(b), and runtime reconciliation; remaining methodological work is camera-ready scope)"
+    },
+
+    {
+      "reviewer": "R2 — Empiricist",
+      "persona": "Empiricist",
+      "focus": "Experimental design, baselines, ablations, reproducibility",
+      "summary": "Round-2 manuscript addresses several round-1 empirical concerns and creates one substantive new piece of evidence (the multi-architecture LOO study). Abstract is now honestly framed against Table 1's actual values. The H2O-vs-faithful-H2O verification (Table 15 caption) is the kind of reviewer-credibility move I asked for. The byte-CR audit's pipeline-vs-Table-9 reconciliation is now in Appendix C. The architecture-dependent eviction-bottleneck finding (§3.2) is a major honest scope-down. Two round-1 concerns are partially addressed (per-chunk paired bootstrap deferred to camera-ready; the layer-ablation n=10 sample size is unchanged). Two new concerns are added: the LOO-on-second-model finding is honestly reported but the paper does not yet report whether re-running LB with flipped importance on Llama-2-13B closes the 6× gap (the natural 30-min experiment), and the H2O sanity check used a 228-question subset rather than the full 1140 — credible but tighter would have been the full reproduction.",
+      "strengths_round1_addressed": [
+        "Abstract '≤1.01' overclaim corrected to '≤1.03 at 4× on the 7B suite, ≤1.01 on 13B–72B GQA' — matches Table 1.",
+        "NIAH 'maintains 100%' overclaim corrected to '100% on three of four 7B models, 73.3% on Mistral-7B' — matches Table 7.",
+        "Byte-CR denominator inconsistency resolved: pipeline mean_memory_bytes is internally consistent, only Table 9 used different (allocator-side) accounting; Table 9 caption now flags this and Appendix C provides reconciliation.",
+        "H2O reimpl validated: footnote in Table 15 now reports a faithful per-head + 0.1×seq_recent variant of H2O scores 29.4% on a 228-question subset (vs our reimpl's 34.6% on the same subset and 36.5% on full 1140). The 21pp MMLU advantage is real, not a reimpl artifact."
+      ],
+      "strengths": [
+        "Multi-architecture LOO is the highest-leverage new evidence in this round. Three models, three patterns (Mistral early-bottleneck; Llama-2-13B late-bottleneck; Qwen2.5-14B flat) is exactly the kind of failure-of-generalization a NeurIPS reviewer wants to see disclosed honestly. The paper's new framing — 'eviction-direction is layer-architecture-dependent' — is more interesting than the round-1 'protect early layers' principle.",
+        "H2O sanity check explicitly addresses a round-1 reviewer concern. The negative result (faithful per-head variant 5pp WORSE than our reimpl) is a strong defense against the 'reimpl bug' hypothesis.",
+        "The per-model F(b) table (Table 4) replaces a single-anchor calibration with six measured values. This is the right kind of strengthening for the camera-ready.",
+        "Table 12 caption now honestly explains the joint > quant-only at 6× phenomenon as a byte-budget regime artifact, not a cost-model failure."
+      ],
+      "weaknesses": [
+        "**Per-chunk paired-bootstrap CIs are not yet in the paper.** The round-1 PPL CI analysis showed 164/164 LB-vs-KIVI cells have overlapping unpaired CIs — a result the paper does not yet cite. The natural fix is to rerun the headline cells (Mistral / Llama-3.1-8B / Qwen3-8B / Qwen2.5-72B at CR=4× and 32K) with per-chunk JSONL output and apply paired bootstrap. This would either (a) tighten the CIs to show LB > KIVI is significant, or (b) honestly state 'indistinguishable from KIVI on PPL within current sample size.' The current paper takes neither stance and the 'matches KIVI' framing is therefore not statistically backed.",
+        "**LOO-on-second-model is reported but the natural follow-up experiment is not run.** §5 now states that on Llama-2-13B 'a per-architecture LOO probe is the recommended deployment recipe and would tighten the Llama-2-13B 6× ratio (currently 1.56) further' — but does not actually re-run LB with non-inverted importance on Llama-2-13B to demonstrate the tightening. This is one Vast.ai weekend run; until it is reported, the 'recommended recipe' is conjectural.",
+        "**Layer-ablation (Table 16) sample size is unchanged.** Round-1 raised that with n=5 prompts × 2 trials = 10, the 80% prefix match across all sparse configurations has a 95% CI of roughly ±25%, making the 'invariance across configurations' claim unsupported. The round-2 manuscript does not address this.",
+        "**H2O sanity check used a 228-question subset, not full 1140.** This is enough for a credible footnote but the camera-ready should rerun on full 1140 (~13 min wall time at the same throughput).",
+        "**The mean-fill 96% reduction was generalized to 90–96% across three models in the data (Mistral, Llama-2-7B 90.5%, Llama-3.1-8B 95.7%) but the abstract still says '96% on Mistral-7B'.** The broader claim '90–96% across three tested models' would be a fuller use of the rebuttal data.",
+        "**Coverage-law transfer is unaddressed.** F(b) was re-measured per-model in this round; the coverage-law power exponent (1−g_l) was not. R1 raises this; from an empirical-rigor standpoint, an MAE-per-model table would close the loop.",
+        "**Cross-layer coherence (limitation 3) is still unresolved.** Per-layer token selection means layer 0 may retain token 5 while layer 1 evicts it — the position-sensitive-task implications are not quantified. RoPE-based positional reasoning may be affected; the paper should at minimum measure GSM8K (which is in the eval matrix) under a 'forced same-token-set across layers' ablation to size this effect."
+      ],
+      "questions": [
+        "What is the LB-vs-KIVI paired-bootstrap CI on Mistral-7B at CR=4× 32K? This is the headline cell and ~30-minute rerun for per-chunk JSONL.",
+        "What is LB's PPL ratio on Llama-2-13B at 6× with non-inverted (sigmoid late-high) importance? The new §5 implies it would be lower than 1.56 — please measure.",
+        "Will the camera-ready include the full 1140-question H2O faithful reproduction, or stay with the 228-question subset?",
+        "What is the per-model coverage-law MAE? §3.2 reports 3.1% on Mistral-7B; for a power exponent (1−g_l) used across six architectures, the spread matters."
+      ],
+      "limitations": [
+        "Section 7 limitation (5) honestly flags the F(b) and inverted-importance single-anchor calibrations. Recommend extending to coverage-law transfer and to layer-ablation sample size."
+      ],
+      "scores": {
+        "Soundness": 3,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 2,
+        "Clarity": 3,
+        "Significance": 3
+      },
+      "overall": 5,
+      "confidence": 4,
+      "decision": "Borderline (round-1 reject moves to borderline after the abstract reframe, byte-CR clarification, and H2O sanity; would move to weak-accept if the paired-bootstrap CIs and the Llama-2-13B-with-flipped-importance run are added)"
+    },
+
+    {
+      "reviewer": "R3 — Visionary",
+      "persona": "Visionary",
+      "focus": "Novelty, significance, long-term impact, big picture",
+      "summary": "The round-2 paper is materially more interesting than the round-1 paper. The single most consequential change is the reframing of design principle (2): the round-1 paper claimed 'protect early layers' as a universal insight; the round-2 paper now reports three architectures with three patterns and frames the eviction-bottleneck location as architecture-dependent. This is a more honest and more cite-able story — it converts a fragile single-model finding into a general phenomenon (layer-specialization shifts with architecture/depth/training corpus) that subsequent papers will reference. The (n_l, b_l) joint MCKP framing remains the durable conceptual contribution. The remaining gap from publishable to genuinely strong is the absence of a follow-up experiment that operationalizes the architecture-dependent finding — i.e., re-running LB with per-architecture importance and showing it closes the late-bottleneck-model gap.",
+      "strengths_round1_addressed": [
+        "The 'protect early layers' design principle has been correctly scoped down to Mistral-specific, with the Llama-2-13B late-bottleneck and Qwen2.5-14B flat patterns now in §3.2 + §5. This is the round-1 visionary critique addressed head-on.",
+        "The cost-model is now framed honestly as a regime-ranker (with empirical 118–119% greedy-vs-random on Mistral-7B) rather than a quantitative predictor with universal constants. The per-model F(b) table makes this concrete.",
+        "Abstract reframe converts the round-1 'two universal principles' framing into 'one universal principle (quantize-first) + one architecture-dependent principle (importance direction)' — a cleaner contribution map."
+      ],
+      "strengths": [
+        "The architecture-dependent eviction-bottleneck observation is the paper's strongest new conceptual contribution. Three models, three patterns is a non-trivial empirical finding that contradicts the standard interpretability narrative (Geva 2023's 'late layers are where representations crystallize') in a specific way: when the question is *which layers tolerate KV eviction*, the answer is not universal. This deserves a §-of-its-own framing rather than being a paragraph in §5.",
+        "The (n_l, b_l) MCKP joint framing remains durable. Subsequent papers will cite this even if they replace the greedy solver — e.g., a learned allocator or a DP solver fits inside the same problem statement.",
+        "Mean-fill is a transferable artifact (96% Mistral, 90.5% Llama-2-7B, 95.7% Llama-3.1-8B in the round-2 rebuttal data). Even if the rest of the paper is replaced, the mean-fill recipe survives as a citable engineering trick.",
+        "The H2O sanity check is the kind of methodological honesty that NeurIPS audiences reward. A negative result (faithful variant is 5pp worse) doesn't help the paper's relative ranking but defends the credibility of every other comparison in the table."
+      ],
+      "weaknesses": [
+        "**The architecture-dependent finding is presented as a disclosure, not as a contribution.** §3.2 mentions it in passing; §5 expands it to a paragraph. A paper that *led* with 'we find KV-eviction sensitivity is architecturally heterogeneous, with three patterns across six tested models, and provide a one-line per-architecture recipe' would be a stronger NeurIPS contribution than the current 'we have a method, btw the importance direction matters'. Recommend a §6.x or even a §3.x called 'When does inverted importance help?' that frames this as a falsifiable observation.",
+        "**The follow-up experiment that would operationalize the architecture-dependent finding is not yet done.** §5 ends with 'a per-architecture LOO probe (5 prompts, <1min/model) is the recommended deployment recipe and would tighten the Llama-2-13B 6× ratio (currently 1.56) further' — but does not run it. One Vast.ai weekend on Llama-2-13B with non-inverted importance would convert this conjectural recipe into a measured improvement. *This is the single highest-leverage move available before camera-ready.*",
+        "**The paper still presents itself in a system-paper voice when the more durable contribution is the diagnostic.** The (sparse_only, spec_dense, spec_sparse) -style diagnostic in the EuroSys SAAI paper is a transferable debugging artifact. The LayerBudget analogue would be: 'how do you decide whether a model is early-bottleneck, late-bottleneck, or flat? — run a 5-prompt LOO probe with retention budget set to 6× CR.' This is a small reusable methodology that would survive even if the greedy allocator is replaced. Worth elevating from §5 paragraph to §3.x principle.",
+        "**The vLLM integration paragraph (§4.3) is still one paragraph of text** with no end-to-end serving-vs-vanilla-vLLM throughput numbers. The block-level integration claim (33.7% blocks freed at 6×) needs a serving comparison or should be downgraded to PoC."
+      ],
+      "questions": [
+        "Of the three round-2 design choices (quantize-first, architecture-dependent importance, mean-fill), which is the paper's central contribution? The abstract now lists two principles + mean-fill; a reader needs ranking guidance.",
+        "Is there a mechanistic story for why Mistral-7B is early-bottleneck and Llama-2-13B is late-bottleneck? Mistral-7B uses GQA (8 KV heads on 32 layers), Llama-2-13B uses MHA (40 KV heads on 40 layers). The attention-aggregation structure differs; the eviction bottleneck location may track the head/layer ratio. A 1-paragraph hypothesis would land well.",
+        "Does the cost-model's marginal-gain ranking handle the architecture-dependent regime correctly? On Llama-2-13B, the importance weights w_l are inverted (early-high) while the actual bottleneck is late — does the allocator end up retaining late-layer tokens despite the wrong importance signal, or does it under-retain them? The paper claims robustness; a sanity-check ablation would settle it."
+      ],
+      "limitations": [
+        "Section 7 captures the empirical limitations honestly. The conceptual limitation that the inverted-importance principle is Mistral-tuned is now in §3.2, but the broader limitation 'we cannot predict in advance which architecture lies in which regime' is the natural extension and is not flagged."
+      ],
+      "scores": {
+        "Soundness": 3,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 3,
+        "Clarity": 3,
+        "Significance": 3
+      },
+      "overall": 7,
+      "confidence": 3,
+      "decision": "Accept (lean accept). The architecture-dependent finding is the kind of observation NeurIPS audiences cite for years; the paper would be even stronger if it led with this rather than with the system."
+    },
+
+    {
+      "reviewer": "R4 — Skeptic",
+      "persona": "Skeptic",
+      "focus": "Overclaiming, missing baselines, unfair comparisons, cherry-picking",
+      "summary": "Round-2 manuscript addresses the central round-1 skeptic concerns at the level of headline framing. The abstract no longer overstates Table 1; the NIAH 'maintains 100%' overclaim is corrected to '100% on three of four 7B models, 73.3% on Mistral-7B'; the byte-CR denominator issue is reconciled in Appendix C; the H2O reimpl is now defended by an algorithm-faithful variant that is even worse (29.4%) than ours (34.6%). These are exactly the moves a skeptical reviewer asks for. What remains: (1) the per-chunk paired-bootstrap CIs are not yet computed, so the 'matches KIVI' claim is still statistically unsupported; (2) the architecture-dependent LOO finding is honestly disclosed but the recommended-recipe follow-up is not run; (3) the GSM8K 'LB > Full KV on three of four models' chain-of-thought-variance footnote is unchanged; (4) the layer-ablation n=10 sample size is unchanged. The trajectory from round 1 (overall 3) to round 2 (estimated 5) is real and fast; another round of the same magnitude lands the paper in clear-accept territory.",
+      "strengths_round1_addressed": [
+        "Abstract overclaim '≤1.01 at 4× on seven models' corrected to '≤1.03 at 4× on the 7B suite, ≤1.01 on 13B–72B GQA'. Matches Tables 1 and 19.",
+        "NIAH '100% retrieval' overclaim corrected to '100% on three of four 7B models, 73.3% on Mistral-7B'. Matches Table 7.",
+        "Byte-CR denominator issue: round-1 cited Table 9 as a smoking gun. Round-2 reconciliation via Appendix C shows the pipeline mean_memory_bytes is internally consistent across all methods within ±0.05 of nominal CR; only Table 9 used different (allocator-side) accounting that inflated all methods uniformly by ~2×. The complaint stands as 'fix Table 9 in camera-ready' rather than 'methodology bug throughout the paper'.",
+        "H2O reimpl sanity check directly tests the round-1 hypothesis 'our 36.5% is a reimpl bug'. The result is that a faithful per-head + 0.1×seq variant scores 29.4% on a 228-question MMLU subset (vs 34.6% for our reimpl on the same subset). H2O genuinely collapses; our reimpl is not the source of the gap. The 21pp MMLU advantage in Table 15 is defended. The new Table 15 caption documents this verification.",
+        "Inverted-importance generalization concern: §3.2 now explicitly notes the Mistral-7B finding is single-architecture and that LOO on Llama-2-13B and Qwen2.5-14B gives different patterns. This is the strongest available form of the round-1 'one-model claim presented as principle' criticism."
+      ],
+      "strengths": [
+        "The honesty of the architecture-dependent eviction-bottleneck disclosure is above-average for the subfield. A less honest paper would have suppressed the Llama-2-13B late-bottleneck result entirely; this paper publishes it with explicit numerical comparison.",
+        "The H2O faithful-variant verification is a transferable methodology contribution. The 228-question subset reproduction is reproducible (random seed=42 in `h2o_mmlu_compare.py`) and could be extended by future critics.",
+        "The per-model F(b) table sets a higher bar for cost-model calibration than is typical in the KV-compression subfield."
+      ],
+      "weaknesses": [
+        "**The 'matches KIVI' claim is still not statistically supported.** Round-1 raised the missing error bars complaint; the round-2 PPL bootstrap analysis (in the rebuttal data, not yet in the paper) found 164/164 LB-vs-KIVI cells have overlapping unpaired CIs. The paper does not cite this number; the 'matches KIVI' framing in the abstract continues to be presented as a direct comparison, not as an indistinguishability statement. The paired-bootstrap rerun is the natural fix and is one weekend of compute.",
+        "**The architecture-dependent LOO recipe is conjectural, not measured.** §5 closes with 'a per-architecture LOO probe (5 prompts, <1min/model) is the recommended deployment recipe and would tighten the Llama-2-13B 6× ratio (currently 1.56) further' — without actually running LB on Llama-2-13B with non-inverted importance to confirm the tightening. This is a strictly-better outcome with a 30-minute experiment cost. *The paper currently has the disclosure of a weakness without the resolution.* In an adversarial-review setting, a reviewer can read this paragraph as 'we found a problem, here is the recipe we *think* fixes it' — credit is given for honesty, not for closure.",
+        "**GSM8K Table 13: LayerBudget exceeds Full KV on three of four models** — the round-1 footnote 'chain-of-thought variance at small n=200' is unchanged. If variance dominates such that the compressed method beats Full KV by 35% relative on Llama-2, the same variance applies to all GSM8K rows in the table — meaning the H2O <3% number is also within the variance envelope. Either bump n to 500+ or drop GSM8K from the headline claims.",
+        "**Layer-ablation n=10 sample size** — round-1 raised this; round-2 unchanged. The 80% prefix match across all 7 sparse configurations on n=10 has a 95% CI of roughly ±25%, so the 'invariance across configurations' claim is not statistically supported.",
+        "**The 32K H2O collapse '83× PPL' headline is unchanged and uncalibrated.** R2 raised that it should be confirmed against the official H2O implementation. Round-2 H2O sanity check confirmed our reimpl is faithful at CR=4× MMLU 0-shot; a similar 32K-PPL spot-check at CR=4× would close this loop. The current 83× claim depends on our reimpl behaving correctly at long context, which is a different code path from the 4× MMLU one we tested.",
+        "**Coverage-law power exponent is not re-measured per model.** F(b) was; coverage law was not. The paper's cost-model is therefore half-calibrated.",
+        "**The paper claims compatibility with 17 baselines but Table 1 shows only 7.** Round-1 raised this; round-2 unchanged. Either include all 17 in the main table (with collapse rates and tuning notes) or list which 10 were dropped and why."
+      ],
+      "questions": [
+        "What is the LB-vs-KIVI paired-bootstrap CI on the headline cells? If the paper claims 'matches KIVI', the appropriate statistical test is a paired-t / paired-bootstrap on per-chunk PPL; the conservative unpaired CI in the rebuttal data shows 164/164 overlap.",
+        "On Llama-2-13B at CR=6×, what does LB achieve with non-inverted (sigmoid late-high) importance? The round-2 §5 conjectures it would be lower than 1.56 — please measure.",
+        "Was the H2O 32K Mistral 4× = 83× PPL collapse confirmed against the official H2O implementation? Our reimpl was confirmed faithful at MMLU CR=4×; long-context PPL is a different path.",
+        "Of the 17 baselines mentioned, which 10 are missing from Table 1, and why?",
+        "GSM8K n=200: how does variance scale, and at what n does the LB-vs-Full KV gap stabilize?"
+      ],
+      "limitations": [
+        "Section 7 is honestly stated but the most consequential remaining limitation — that the architecture-dependent LOO recipe is conjectural rather than measured — should be explicitly listed."
+      ],
+      "scores": {
+        "Soundness": 3,
+        "Presentation": 3,
+        "Contribution": 3,
+        "Originality": 2,
+        "Clarity": 3,
+        "Significance": 2
+      },
+      "overall": 5,
+      "confidence": 4,
+      "decision": "Borderline (lean accept). Round-1 reject (3/10) → round-2 borderline (5/10) is a substantial improvement driven by the abstract reframe, byte-CR clarification, H2O sanity, and architecture-dependent LOO disclosure. The paper crosses to weak-accept if (a) paired-bootstrap CIs are added, (b) the Llama-2-13B with-flipped-importance run is reported, (c) GSM8K n is bumped or scoped down. Each is one-day-of-work."
+    }
+  ]
+}

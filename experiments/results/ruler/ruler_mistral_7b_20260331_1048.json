@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "context_len": 2048,
+    "n_samples": 12,
+    "timestamp": "2026-03-31T10:48:39.137724"
+  },
+  "results": [
+    {
+      "task": "niah",
+      "method": "full_kv",
+      "cr": 1.0,
+      "accuracy": 0.25,
+      "correct": 3.0,
+      "total": 12
+    },
+    {
+      "task": "niah",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "accuracy": 0.25,
+      "correct": 3.0,
+      "total": 12
+    },
+    {
+      "task": "niah",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "accuracy": 0.25,
+      "correct": 3.0,
+      "total": 12
+    },
+    {
+      "task": "niah",
+      "method": "h2o",
+      "cr": 2.0,
+      "accuracy": 0.1667,
+      "correct": 2.0,
+      "total": 12
+    },
+    {
+      "task": "niah",
+      "method": "h2o",
+      "cr": 4.0,
+      "accuracy": 0.1667,
+      "correct": 2.0,
+      "total": 12
+    },
+    {
+      "task": "niah",
+      "method": "kivi",
+      "cr": 2.0,
+      "accuracy": 0.25,
+      "correct": 3.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "full_kv",
+      "cr": 1.0,
+      "accuracy": 1.0,
+      "correct": 12.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "accuracy": 1.0,
+      "correct": 12.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "accuracy": 1.0,
+      "correct": 12.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "h2o",
+      "cr": 2.0,
+      "accuracy": 0.6667,
+      "correct": 8.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "h2o",
+      "cr": 4.0,
+      "accuracy": 0.25,
+      "correct": 3.0,
+      "total": 12
+    },
+    {
+      "task": "mkr",
+      "method": "kivi",
+      "cr": 2.0,
+      "accuracy": 1.0,
+      "correct": 12.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "full_kv",
+      "cr": 1.0,
+      "accuracy": 0.5833,
+      "correct": 7.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "accuracy": 0.5833,
+      "correct": 7.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "accuracy": 0.6667,
+      "correct": 8.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "h2o",
+      "cr": 2.0,
+      "accuracy": 0.0,
+      "correct": 0.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "h2o",
+      "cr": 4.0,
+      "accuracy": 0.0,
+      "correct": 0.0,
+      "total": 12
+    },
+    {
+      "task": "vt",
+      "method": "kivi",
+      "cr": 2.0,
+      "accuracy": 0.6667,
+      "correct": 8.0,
+      "total": 12
+    }
+  ]
+}

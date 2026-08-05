@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "model": "meta-llama/Llama-2-7b-chat-hf",
+    "model_short": "Llama-2-7B",
+    "timestamp": "2026-03-30T23:31:09.761491"
+  },
+  "fill_ablation": [
+    {
+      "fill": "zero",
+      "cr": 4.0,
+      "mean_ratio": 1.1655,
+      "n": 4
+    },
+    {
+      "fill": "mean",
+      "cr": 4.0,
+      "mean_ratio": 1.0351,
+      "n": 4
+    },
+    {
+      "fill": "median",
+      "cr": 4.0,
+      "mean_ratio": 1.0353,
+      "n": 4
+    },
+    {
+      "fill": "random",
+      "cr": 4.0,
+      "mean_ratio": 1.0343,
+      "n": 4
+    },
+    {
+      "fill": "zero",
+      "cr": 6.0,
+      "mean_ratio": 45.0862,
+      "n": 4
+    },
+    {
+      "fill": "mean",
+      "cr": 6.0,
+      "mean_ratio": 1.134,
+      "n": 4
+    },
+    {
+      "fill": "median",
+      "cr": 6.0,
+      "mean_ratio": 1.1151,
+      "n": 4
+    },
+    {
+      "fill": "random",
+      "cr": 6.0,
+      "mean_ratio": 1.1682,
+      "n": 4
+    }
+  ],
+  "budget_sweep": [
+    {
+      "cr": 1.5,
+      "combined": 0.999,
+      "importance_only": 0.999,
+      "gini_capped_0.7": 0.999,
+      "winner": "combined"
+    },
+    {
+      "cr": 2.0,
+      "combined": 0.9998,
+      "importance_only": 0.9998,
+      "gini_capped_0.7": 0.9998,
+      "winner": "combined"
+    },
+    {
+      "cr": 2.5,
+      "combined": 1.0123,
+      "importance_only": 1.0123,
+      "gini_capped_0.7": 1.0123,
+      "winner": "combined"
+    },
+    {
+      "cr": 3.0,
+      "combined": 1.0189,
+      "importance_only": 1.0189,
+      "gini_capped_0.7": 1.0189,
+      "winner": "combined"
+    },
+    {
+      "cr": 3.5,
+      "combined": 1.0211,
+      "importance_only": 1.0211,
+      "gini_capped_0.7": 1.0211,
+      "winner": "combined"
+    },
+    {
+      "cr": 4.0,
+      "combined": 1.1655,
+      "importance_only": 1.1155,
+      "gini_capped_0.7": 1.1155,
+      "winner": "importance_only"
+    },
+    {
+      "cr": 5.0,
+      "combined": 29.8616,
+      "importance_only": 13.5782,
+      "gini_capped_0.7": 17.0397,
+      "winner": "importance_only"
+    },
+    {
+      "cr": 6.0,
+      "combined": 45.0862,
+      "importance_only": 36.9645,
+      "gini_capped_0.7": 50.7085,
+      "winner": "importance_only"
+    },
+    {
+      "cr": 7.0,
+      "combined": 59.4181,
+      "importance_only": 68.6193,
+      "gini_capped_0.7": 92.9458,
+      "winner": "combined"
+    },
+    {
+      "cr": 8.0,
+      "combined": 124.4911,
+      "importance_only": 123.2786,
+      "gini_capped_0.7": 128.2395,
+      "winner": "importance_only"
+    }
+  ]
+}

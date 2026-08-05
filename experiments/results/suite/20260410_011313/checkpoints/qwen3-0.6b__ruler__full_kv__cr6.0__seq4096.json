@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-0.6B",
+  "method": "full_kv",
+  "compression_ratio": 6.0,
+  "seq_len": 4096,
+  "overall_accuracy": 0.175,
+  "per_task": {
+    "mkr_1": {
+      "correct": 1,
+      "total": 10,
+      "accuracy": 0.1
+    },
+    "mkr_5": {
+      "correct": 3,
+      "total": 10,
+      "accuracy": 0.3
+    },
+    "mkr_10": {
+      "correct": 2,
+      "total": 10,
+      "accuracy": 0.2
+    },
+    "vt": {
+      "correct": 1,
+      "total": 10,
+      "accuracy": 0.1
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__ruler__full_kv__cr6.0__seq4096",
+  "_timestamp": "2026-04-10T16:39:05.362298"
+}

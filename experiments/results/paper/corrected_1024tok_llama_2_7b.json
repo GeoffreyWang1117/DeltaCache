@@ -1,0 +1,507 @@
+{
+  "metadata": {
+    "experiment": "CORRECTED_zero_fill_eviction",
+    "model": "Llama-2-7B",
+    "seq_len": 1024,
+    "prefix_frac": 0.6,
+    "eviction_fill": "ZERO (not full KV)",
+    "crs": [
+      2.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "methods": [
+      "full_kv",
+      "h2o_uniform",
+      "snapkv",
+      "pyramidkv",
+      "d2o",
+      "squeeze_attention",
+      "adakv",
+      "dynamickv",
+      "lava",
+      "cake",
+      "kvtuner",
+      "kivi_uniform",
+      "layer_budget"
+    ],
+    "n_texts": 4,
+    "num_layers": 32,
+    "num_heads": 32,
+    "head_dim": 128,
+    "source": "wikitext-2-raw-v1",
+    "timestamp": "2026-03-29T00:23:35.348895",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "summary": [
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ppl": 8.2642,
+      "std_ppl": 3.1518,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 314368.0,
+      "n": 4
+    },
+    {
+      "method": "kvtuner",
+      "cr": 2.0,
+      "mean_ppl": 8.2701,
+      "std_ppl": 3.1603,
+      "mean_ratio": 1.0005,
+      "mean_mem_kb": 155316.8,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ppl": 8.2701,
+      "std_ppl": 3.1603,
+      "mean_ratio": 1.0005,
+      "mean_mem_kb": 157772.8,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "cake",
+      "cr": 2.0,
+      "mean_ppl": 55.6249,
+      "std_ppl": 36.495,
+      "mean_ratio": 7.1088,
+      "mean_mem_kb": 157184.0,
+      "n": 4
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 2.0,
+      "mean_ppl": 343.9525,
+      "std_ppl": 73.4739,
+      "mean_ratio": 53.1301,
+      "mean_mem_kb": 162304.0,
+      "n": 4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 2.0,
+      "mean_ppl": 1395.0854,
+      "std_ppl": 111.4422,
+      "mean_ratio": 200.2367,
+      "mean_mem_kb": 156908.0,
+      "n": 4
+    },
+    {
+      "method": "d2o",
+      "cr": 2.0,
+      "mean_ppl": 1481.6192,
+      "std_ppl": 237.2323,
+      "mean_ratio": 211.0359,
+      "mean_mem_kb": 156908.0,
+      "n": 4
+    },
+    {
+      "method": "lava",
+      "cr": 2.0,
+      "mean_ppl": 1493.9657,
+      "std_ppl": 218.1958,
+      "mean_ratio": 212.5458,
+      "mean_mem_kb": 157012.0,
+      "n": 4
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 2.0,
+      "mean_ppl": 1554.6897,
+      "std_ppl": 170.1626,
+      "mean_ratio": 218.7728,
+      "mean_mem_kb": 156688.0,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ppl": 1559.5226,
+      "std_ppl": 193.1454,
+      "mean_ratio": 219.5761,
+      "mean_mem_kb": 157184.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 2.0,
+      "mean_ppl": 1568.5067,
+      "std_ppl": 269.5981,
+      "mean_ratio": 223.1658,
+      "mean_mem_kb": 157184.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 2.0,
+      "mean_ppl": 2228.759,
+      "std_ppl": 285.2567,
+      "mean_ratio": 325.2953,
+      "mean_mem_kb": 41448.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ppl": 8.2642,
+      "std_ppl": 3.1518,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 314368.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ppl": 8.4076,
+      "std_ppl": 3.2466,
+      "mean_ratio": 1.0163,
+      "mean_mem_kb": 157772.8,
+      "n": 4
+    },
+    {
+      "method": "kvtuner",
+      "cr": 3.0,
+      "mean_ppl": 8.4053,
+      "std_ppl": 3.2426,
+      "mean_ratio": 1.0163,
+      "mean_mem_kb": 103740.8,
+      "n": 4
+    },
+    {
+      "method": "cake",
+      "cr": 3.0,
+      "mean_ppl": 183.0558,
+      "std_ppl": 35.1642,
+      "mean_ratio": 25.5834,
+      "mean_mem_kb": 104784.0,
+      "n": 4
+    },
+    {
+      "method": "d2o",
+      "cr": 3.0,
+      "mean_ppl": 1812.7656,
+      "std_ppl": 272.3388,
+      "mean_ratio": 266.9728,
+      "mean_mem_kb": 104552.0,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ppl": 1868.15,
+      "std_ppl": 265.6218,
+      "mean_ratio": 270.5257,
+      "mean_mem_kb": 104448.0,
+      "n": 4
+    },
+    {
+      "method": "lava",
+      "cr": 3.0,
+      "mean_ppl": 1840.7143,
+      "std_ppl": 271.2302,
+      "mean_ratio": 270.5735,
+      "mean_mem_kb": 104696.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 3.0,
+      "mean_ppl": 1900.2781,
+      "std_ppl": 354.3744,
+      "mean_ratio": 277.0275,
+      "mean_mem_kb": 104448.0,
+      "n": 4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 3.0,
+      "mean_ppl": 1936.1696,
+      "std_ppl": 280.4713,
+      "mean_ratio": 286.1365,
+      "mean_mem_kb": 104548.0,
+      "n": 4
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 3.0,
+      "mean_ppl": 2049.3492,
+      "std_ppl": 239.233,
+      "mean_ratio": 293.88,
+      "mean_mem_kb": 104496.0,
+      "n": 4
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 3.0,
+      "mean_ppl": 2162.0848,
+      "std_ppl": 299.0381,
+      "mean_ratio": 317.01,
+      "mean_mem_kb": 109824.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 3.0,
+      "mean_ppl": 2364.0122,
+      "std_ppl": 260.5041,
+      "mean_ratio": 342.4222,
+      "mean_mem_kb": 28216.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ppl": 8.2642,
+      "std_ppl": 3.1518,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 314368.0,
+      "n": 4
+    },
+    {
+      "method": "kvtuner",
+      "cr": 4.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ppl": 8.6256,
+      "std_ppl": 3.1994,
+      "mean_ratio": 1.0512,
+      "mean_mem_kb": 156572.2,
+      "n": 4
+    },
+    {
+      "method": "cake",
+      "cr": 4.0,
+      "mean_ppl": 387.481,
+      "std_ppl": 200.6853,
+      "mean_ratio": 51.9684,
+      "mean_mem_kb": 78592.0,
+      "n": 4
+    },
+    {
+      "method": "d2o",
+      "cr": 4.0,
+      "mean_ppl": 1953.7259,
+      "std_ppl": 251.0988,
+      "mean_ratio": 287.4275,
+      "mean_mem_kb": 78420.0,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ppl": 2021.4279,
+      "std_ppl": 259.6279,
+      "mean_ratio": 292.7331,
+      "mean_mem_kb": 78336.0,
+      "n": 4
+    },
+    {
+      "method": "lava",
+      "cr": 4.0,
+      "mean_ppl": 1990.9477,
+      "std_ppl": 262.1374,
+      "mean_ratio": 293.2114,
+      "mean_mem_kb": 78540.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 4.0,
+      "mean_ppl": 2040.8359,
+      "std_ppl": 333.5288,
+      "mean_ratio": 297.9073,
+      "mean_mem_kb": 78336.0,
+      "n": 4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 4.0,
+      "mean_ppl": 2128.8286,
+      "std_ppl": 310.4216,
+      "mean_ratio": 315.1423,
+      "mean_mem_kb": 78388.0,
+      "n": 4
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 4.0,
+      "mean_ppl": 2187.645,
+      "std_ppl": 164.2952,
+      "mean_ratio": 315.791,
+      "mean_mem_kb": 78096.0,
+      "n": 4
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 4.0,
+      "mean_ppl": 2334.9432,
+      "std_ppl": 361.0977,
+      "mean_ratio": 343.8171,
+      "mean_mem_kb": 83712.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 4.0,
+      "mean_ppl": 2434.7842,
+      "std_ppl": 243.8618,
+      "mean_ratio": 352.0525,
+      "mean_mem_kb": 22784.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ppl": 8.2642,
+      "std_ppl": 3.1518,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 314368.0,
+      "n": 4
+    },
+    {
+      "method": "kvtuner",
+      "cr": 6.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ppl": 8.3253,
+      "std_ppl": 3.1891,
+      "mean_ratio": 1.0076,
+      "mean_mem_kb": 79180.8,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ppl": 659.1949,
+      "std_ppl": 263.5493,
+      "mean_ratio": 91.5787,
+      "mean_mem_kb": 104202.6,
+      "n": 4
+    },
+    {
+      "method": "cake",
+      "cr": 6.0,
+      "mean_ppl": 1011.2641,
+      "std_ppl": 192.3248,
+      "mean_ratio": 133.6023,
+      "mean_mem_kb": 52384.0,
+      "n": 4
+    },
+    {
+      "method": "d2o",
+      "cr": 6.0,
+      "mean_ppl": 2113.2599,
+      "std_ppl": 277.3368,
+      "mean_ratio": 310.6936,
+      "mean_mem_kb": 52276.0,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ppl": 2138.5793,
+      "std_ppl": 288.181,
+      "mean_ratio": 311.8719,
+      "mean_mem_kb": 52224.0,
+      "n": 4
+    },
+    {
+      "method": "lava",
+      "cr": 6.0,
+      "mean_ppl": 2154.0401,
+      "std_ppl": 272.821,
+      "mean_ratio": 317.3978,
+      "mean_mem_kb": 52144.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 6.0,
+      "mean_ppl": 2227.2846,
+      "std_ppl": 267.2636,
+      "mean_ratio": 325.0306,
+      "mean_mem_kb": 52224.0,
+      "n": 4
+    },
+    {
+      "method": "pyramidkv",
+      "cr": 6.0,
+      "mean_ppl": 2264.962,
+      "std_ppl": 190.5064,
+      "mean_ratio": 328.7319,
+      "mean_mem_kb": 52128.0,
+      "n": 4
+    },
+    {
+      "method": "dynamickv",
+      "cr": 6.0,
+      "mean_ppl": 2255.3937,
+      "std_ppl": 310.4422,
+      "mean_ratio": 334.57,
+      "mean_mem_kb": 52196.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 6.0,
+      "mean_ppl": 2458.8197,
+      "std_ppl": 247.6624,
+      "mean_ratio": 356.1695,
+      "mean_mem_kb": 20020.0,
+      "n": 4
+    },
+    {
+      "method": "squeeze_attention",
+      "cr": 6.0,
+      "mean_ppl": 2437.0865,
+      "std_ppl": 373.3465,
+      "mean_ratio": 360.0956,
+      "mean_mem_kb": 57344.0,
+      "n": 4
+    }
+  ]
+}

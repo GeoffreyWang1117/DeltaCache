@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Qwen2.5-14B",
+  "method": "streaming_llm",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "n_samples_target": 50,
+  "overall_accuracy": 0.385,
+  "per_task": {
+    "mkr_1": {
+      "correct": 20,
+      "total": 50,
+      "accuracy": 0.4,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 12,
+      "total": 50,
+      "accuracy": 0.24,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 11,
+      "total": 50,
+      "accuracy": 0.22,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 34,
+      "total": 50,
+      "accuracy": 0.68,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "qwen2.5-14b__ruler__streaming_llm__cr4.0__seq2048",
+  "_timestamp": "2026-04-24T13:50:01.726037"
+}

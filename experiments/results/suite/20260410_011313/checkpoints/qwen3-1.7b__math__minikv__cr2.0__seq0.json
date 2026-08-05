@@ -1,0 +1,48 @@
+{
+  "task": "math",
+  "model": "Qwen3-1.7B",
+  "method": "minikv",
+  "compression_ratio": 2.0,
+  "correct": 6,
+  "total": 35,
+  "accuracy": 0.1714,
+  "per_subject": {
+    "Algebra": {
+      "correct": 3,
+      "total": 5,
+      "accuracy": 0.6
+    },
+    "Counting & Probability": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Prealgebra": {
+      "correct": 1,
+      "total": 5,
+      "accuracy": 0.2
+    },
+    "Geometry": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    },
+    "Precalculus": {
+      "correct": 1,
+      "total": 5,
+      "accuracy": 0.2
+    },
+    "Number Theory": {
+      "correct": 1,
+      "total": 5,
+      "accuracy": 0.2
+    },
+    "Intermediate Algebra": {
+      "correct": 0,
+      "total": 5,
+      "accuracy": 0.0
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__math__minikv__cr2.0__seq0",
+  "_timestamp": "2026-04-10T23:40:28.527364"
+}

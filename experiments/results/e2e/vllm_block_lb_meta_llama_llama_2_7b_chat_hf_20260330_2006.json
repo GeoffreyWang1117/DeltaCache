@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "model": "meta-llama/Llama-2-7b-chat-hf",
+    "seq_len": 512,
+    "block_size": 16,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-30T20:06:37.387950"
+  },
+  "block_layerbudget_summary": [
+    {
+      "cr": 2.0,
+      "mean_ppl": 7.6035,
+      "mean_ratio": 0.9995,
+      "mean_compress_ms": 179.73,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "mean_ppl": 7.6645,
+      "mean_ratio": 1.0059,
+      "mean_compress_ms": 182.46,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "mean_ppl": 7.6652,
+      "mean_ratio": 1.0064,
+      "mean_compress_ms": 183.01,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "mean_ppl": 292.9327,
+      "mean_ratio": 40.2116,
+      "mean_compress_ms": 134.29,
+      "mean_freed_pct": 0.3355,
+      "n": 4
+    }
+  ]
+}

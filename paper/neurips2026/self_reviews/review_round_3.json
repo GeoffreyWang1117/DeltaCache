@@ -1,0 +1,128 @@
+{
+  "paper": "LayerBudget: Per-Layer Token-Precision Joint Optimization for KV Cache Compression",
+  "venue": "NeurIPS 2026",
+  "round": 3,
+  "date": "2026-05-03",
+  "difficulty": "nightmare",
+  "context": "Round 3 after R1 and R4 round-2 weaknesses were addressed. New experiments added in Round 3: Llama-2-7B head-to-head, paired-bootstrap CIs, xKV head-to-head, LayerBudget-KV (n_l, b_K_l, b_V_l) extension. Paper grew from 18 to 19 pages.",
+  "reviews": [
+    {
+      "reviewer_id": "R1",
+      "persona": "Methodologist",
+      "summary": "The paper formalizes per-layer (n_l, b_l) joint allocation as MCKP and proposes a greedy marginal-gain solver. Round-3 adds an independent-bits variant LayerBudget-KV that closes the extreme-CR gap. Methodology is now mostly defensible after the (1-1/e) bound was retracted in Round 2; the FPTAS reference (Kellerer 2004) is appropriate for the discrete formulation. However several methodological gaps remain.",
+      "strengths": [
+        "MCKP formulation with FPTAS reference is correct for the discrete (n_l, b_l) action space; the prior (1-1/e) error has been removed.",
+        "Coverage law calibration MAE 3.1% is reported with units; the inverted-importance signal is now scoped to a Mistral-7B-tuned default rather than universal.",
+        "Per-model F(b) calibration (Table 2) supports the fidelity model across 6 architectures rather than a single anchor."
+      ],
+      "weaknesses": [
+        "The 118-119% greedy-vs-optimal claim in §3.5 lacks a denominator: optimal is approximated by what — brute-force at small L, an LP relaxation, or the FPTAS at coarse resolution? The empirical statement is unfalsifiable without specification.",
+        "LayerBudget-KV at moderate CR is suspiciously flat at PPL ratio 1.036 (Mistral) and 1.026 (Llama-2) across CR=2, 3, 4. The text in §7(6) attributes this to a 'trade-off' but does not explain why the allocator's plan is approximately budget-invariant at moderate CR. Without a mechanistic explanation, the result reads as solver degeneracy, not a 'CR-stable' property.",
+        "The transferability of the coverage law (calibrated on Mistral-7B) and the inverted-importance default to Llama-2 / Qwen2.5 / 13B+ is acknowledged in §7(5) as untested; this is a real methodological gap given the architecture-dependence finding in §3.2.",
+        "The greedy convergence claim 'allocator <1ms in isolation' is given without iteration count or seq_len dependency. For 80-layer Qwen2.5-72B at S=32K, the inner loop is O(80 × 32768/8) = 327K iterations — does this still hit <1ms?"
+      ],
+      "questions": [
+        "What is the optimum that 'greedy achieves 118-119% of'? Please state the comparator (LP, brute-force, FPTAS) and the L,S regime where the comparison was run.",
+        "Why is LayerBudget-KV's PPL ratio approximately invariant across CR=2-4×? Is the budget consistently underutilized, or are upgrades not paying off relative to token-adds?",
+        "For the LB-KV solver, did the authors verify that increasing the iteration budget changes the allocation? A simple ablation (iters × 10) would distinguish convergence from degeneracy."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R2",
+      "persona": "Empiricist",
+      "summary": "The empirical evaluation is broad: 17 baselines × 7 models (7B-72B) × 8 tasks. Round-3 adds three new comparisons (Llama-2-7B head-to-head, xKV, LB-KV) with paired-bootstrap CIs on per-chunk PPL. Coverage is impressive but the new head-to-head results have notable methodological caveats that limit their force.",
+      "strengths": [
+        "Paired-bootstrap CIs (n_boot=10000) on per-chunk paired differences are a meaningful upgrade; they scope the 'matches KIVI' claim to 2-3× honestly.",
+        "Llama-2-7B head-to-head completes the architecture pairing started by Mistral-7B and reveals that the regime crossover with MoE-nD is Mistral-specific, not universal.",
+        "The xKV head-to-head (Table tab:xkv-vs-lb in Appendix) measures both Single-SVD and group-of-2 SVD variants, and the framing acknowledges that xKV's published gains are at long context."
+      ],
+      "weaknesses": [
+        "The MoE-nD baseline is the authors' faithful re-implementation — not the authors' code. In a head-to-head where the Round-2 paper claimed regime crossover and Round-3 paper claims partial dominance, this is a major confounder. xKV the same way (we re-implemented Single SVD and group-2). Both should be flagged in main-text rather than only in caption.",
+        "All Round-3 head-to-head experiments are at seq=1024 with n=6 chunks. The sample size is small. The LB-KV claim of 'flat ~1.03 across CRs' relies on per-cell paired differences with 6 paired draws — the CIs are wide, e.g., LB vs MoE-nD at CR=4× CI [-0.073, +0.034] still covers zero.",
+        "LayerBudget-KV is evaluated on PPL only, not on NIAH / MMLU / GSM8K / RULER. The paper's main quality story (NIAH 100% retrieval, MMLU equal to Full KV) is not extended to LB-KV, so the 'extreme-CR variant' is an incomplete recommendation.",
+        "Long-context evaluation (16K-32K, §4.3) is only for the original LayerBudget. If LB-KV is a recommended deployment variant, its long-context behavior should be measured too."
+      ],
+      "questions": [
+        "How were the n=6 chunks selected? If they are the first 6 of WikiText-2 test set, did the authors check that the per-chunk variance is not driving the cross-CR flatness in LB-KV?",
+        "Did the authors run NIAH or MMLU on LayerBudget-KV at CR=6×? If LB-KV's PPL is 1.06 but NIAH drops to 50%, that should change the recommendation.",
+        "For xKV at long context (16K+) where xKV's reported gains apply, did the authors run a sanity-check head-to-head?"
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R3",
+      "persona": "Visionary",
+      "summary": "The paper identifies a concrete production gap (per-layer joint allocation in moderate-CR serving) and offers a tractable algorithm with measurable end-to-end gains (24-72% memory savings, 100% NIAH retrieval up to 72B). The Round-3 LB-KV variant turns the prior limitation into a paired contribution. But the conceptual originality remains contested by concurrent MoE-nD, and the Round-3 framing now reads as 'two design points of the same idea' rather than a singular contribution.",
+      "strengths": [
+        "Architecture-dependent importance direction (early-bottleneck on Mistral-7B GQA, late-bottleneck on Llama-2-13B MHA, flat on Qwen2.5-14B GQA) is a genuinely novel and useful observation; it converts the 'inverted importance' design choice into a per-architecture diagnostic.",
+        "The end-to-end deployment story (PagedAttention bridge, 33.7% memory savings on Mistral, <5% TPOT overhead) gives the paper systems credibility that the related work (MoE-nD, xKV) lacks.",
+        "Demonstrating mean-fill's 96% KL reduction is a clean, transferable technique that any KV-eviction paper could adopt; it has standalone significance."
+      ],
+      "weaknesses": [
+        "MoE-nD (concurrent, same per-layer joint formulation under global memory budget) sits very close conceptually. The paper's differentiators are: online vs offline solver, closed-form coverage law, architecture-dependence finding, and now two design points (LB and LB-KV). Each is incremental and the bundle does not feel like a singular contribution.",
+        "The LB / LB-KV split presented as 'complementary operating regimes of the same framework' is creative but feels like face-saving — a single allocator that handles both regimes (e.g., automatic selection of shared vs independent b based on detected CR) would be a stronger framing.",
+        "Long-context impact is demonstrated at 32K, but the field is moving to 100K-4M (HCAttention 4M, xKV 65K, LongCache 1M+). The paper's 32K result is not the cutting edge, and the architecture-dependence finding has not been extended past 14B parameters."
+      ],
+      "questions": [
+        "Could the authors propose a unified solver that adaptively selects between shared b_l and independent (b_K, b_V) based on the budget regime, rather than shipping two design points?",
+        "What is the architecture-dependence story at 70B+ scale? The LOO finding on 13B-14B does not necessarily transfer to 72B."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 2,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 3,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R4",
+      "persona": "Skeptic",
+      "summary": "Round 3 attempts to address the round-2 head-to-head gaps and the extreme-CR weakness. Several new claims are added but their evidence is thin or has unflagged confounders. The LB-KV table in particular has a result pattern that is plausibly consistent with solver degeneracy, and the 'matches KIVI' claim has been tightened but other overclaims persist.",
+      "strengths": [
+        "Author transparency has improved: §7(5) and (6) acknowledge real limitations; the (1-1/e) error from Round 2 has been removed; the byte-CR reconciliation appendix is admirable.",
+        "The xKV head-to-head, although against a re-implementation, gives an apples-to-apples WikiText-2 PPL comparison that the prior version of the paper lacked entirely."
+      ],
+      "weaknesses": [
+        "Table 4 LayerBudget-KV row shows PPL ratio = 1.036 at CR=2, 3, AND 4× on Mistral-7B (and 1.026 across the same three CRs on Llama-2-7B). Three identical values across a 2× budget range is suspicious — either the allocator's plan is identical at three different budgets (solver degeneracy), or the per-chunk noise is dominating the cross-CR signal. Section §7(6) names this a 'CR-stable property' but a flat output at three different inputs is not stability — it is invariance, which usually means the allocator is not using the additional budget. The paper should either (a) show the per-layer (n_l, b_K_l, b_V_l) plan at each CR and confirm they differ, or (b) acknowledge that LB-KV is currently solver-bound.",
+        "The MoE-nD baseline is OUR re-implementation, the xKV baseline is OUR re-implementation, and the LB-KV baseline is OUR new method. In a head-to-head that the paper uses to claim partial dominance, this is a stack of confounders. Not running the official artifacts (even on a single shared dataset) is a major caveat that the abstract and intro should acknowledge — currently mentioned only in table captions.",
+        "Table 3 MiniKV row at Mistral-7B CR=6× shows '11.9' (no × symbol or unit). If this is a PPL ratio of 11.9×, it's the worst result in the table by 2 orders of magnitude and deserves a footnote; if it's a typo for 1.19, that's a different (much smaller) ratio. Either way, the row needs proofreading.",
+        "The 96% KL reduction from mean-fill is reported on Mistral-7B at CR=6× only. The 97.5% PPL improvement on Llama-2-7B is in the same family but reported at a different metric. A reader cannot tell whether mean-fill's gain holds across architectures or is a Mistral-specific effect.",
+        "The 'LayerBudget achieves 24-72% memory savings' headline is at CR=2× only (Table 14 in Appendix). Higher CRs would yield higher savings, but the paper's headline does not call out that the savings figure is the FLOOR not the average — it's the point where the method offers least compression."
+      ],
+      "questions": [
+        "For Table tab:moend-vs-lb, please publish the (n_l, b_K_l, b_V_l) allocation at each CR for at least one chunk on each model. The LB-KV 1.036/1.036/1.036 pattern needs a mechanism check.",
+        "What is '11.9' in Table 3? If it is a PPL ratio of 11.9×, why is MiniKV included in 'Ph' category but not flagged in the analysis text? If it's a typo, please fix.",
+        "For at least one head-to-head cell (e.g., Mistral-7B CR=4×), did the authors run MoE-nD's official code on the same WikiText-2 test set to validate that the re-implementation reproduces MoE-nD's published behavior?"
+      ],
+      "soundness": 2,
+      "presentation": 2,
+      "contribution": 2,
+      "originality": 2,
+      "clarity": 2,
+      "significance": 2,
+      "overall": 5,
+      "confidence": 4,
+      "decision": "borderline_reject"
+    }
+  ]
+}

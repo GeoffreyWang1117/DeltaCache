@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2-0.5B",
+  "method": "snapkv",
+  "compression_ratio": 2.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 13.4742,
+  "std_ppl": 2.6275,
+  "ppl_ratio": 1.0158,
+  "full_ppl": 13.2641,
+  "mean_compress_ms": 25.0,
+  "mean_memory_bytes": 15089664,
+  "_checkpoint_key": "qwen2-0.5b__ppl__snapkv__cr2.0__seq4096",
+  "_timestamp": "2026-04-06T10:25:47.321951"
+}

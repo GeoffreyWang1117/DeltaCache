@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "model": "Llama-2-7B",
+    "cr": 3.0,
+    "n_questions": 43,
+    "eval": "CORRECTED_zero_fill",
+    "timestamp": "2026-03-29T00:32:49.826350"
+  },
+  "results": [
+    {
+      "method": "full_kv",
+      "correct": 34,
+      "total": 43,
+      "accuracy": 0.7907
+    },
+    {
+      "method": "h2o_uniform",
+      "correct": 2,
+      "total": 43,
+      "accuracy": 0.0465
+    },
+    {
+      "method": "cake",
+      "correct": 19,
+      "total": 43,
+      "accuracy": 0.4419
+    },
+    {
+      "method": "kvtuner",
+      "correct": 33,
+      "total": 43,
+      "accuracy": 0.7674
+    },
+    {
+      "method": "kivi_uniform",
+      "correct": 35,
+      "total": 43,
+      "accuracy": 0.814
+    },
+    {
+      "method": "layer_budget",
+      "correct": 33,
+      "total": 43,
+      "accuracy": 0.7674
+    }
+  ]
+}

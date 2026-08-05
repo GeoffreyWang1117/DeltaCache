@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "model": "Mistral-7B",
+    "cr": 3.0,
+    "n_questions": 43,
+    "subjects": [
+      "abstract_algebra",
+      "computer_science",
+      "world_history",
+      "physics",
+      "biology",
+      "mathematics",
+      "chemistry",
+      "economics"
+    ],
+    "timestamp": "2026-03-28T22:05:15.242993"
+  },
+  "results": [
+    {
+      "method": "full_kv",
+      "correct": 33,
+      "total": 43,
+      "accuracy": 0.7674
+    },
+    {
+      "method": "h2o_uniform",
+      "correct": 33,
+      "total": 43,
+      "accuracy": 0.7674
+    },
+    {
+      "method": "cake",
+      "correct": 33,
+      "total": 43,
+      "accuracy": 0.7674
+    },
+    {
+      "method": "kvtuner",
+      "correct": 32,
+      "total": 43,
+      "accuracy": 0.7442
+    },
+    {
+      "method": "kivi_uniform",
+      "correct": 32,
+      "total": 43,
+      "accuracy": 0.7442
+    },
+    {
+      "method": "layer_budget",
+      "correct": 32,
+      "total": 43,
+      "accuracy": 0.7442
+    }
+  ]
+}

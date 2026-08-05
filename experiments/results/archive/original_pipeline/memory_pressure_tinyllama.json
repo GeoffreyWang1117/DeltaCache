@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda",
+    "num_prefixes": 5,
+    "queries_per_prefix": 15,
+    "total_requests": 75,
+    "baseline_latency_ms": 20.560510910581797,
+    "timestamp": "2026-01-27T18:48:03.490386"
+  },
+  "results": [
+    {
+      "experiment_name": "standard_cache",
+      "eviction_policy": "lru",
+      "cache_limit_mb": 0,
+      "total_requests": 75,
+      "cache_hits": 74,
+      "cache_misses": 1,
+      "hit_rate": 0.9866666666666667,
+      "avg_latency_ms": 15.84478274298211,
+      "baseline_latency_ms": 20.560510910581797,
+      "speedup": 1.2976202478818053,
+      "peak_memory_mb": 2301.220703125,
+      "tokens_reused": 7589,
+      "total_tokens": 8771,
+      "reuse_rate": 0.865237715197811
+    },
+    {
+      "experiment_name": "standard_cache",
+      "eviction_policy": "composite",
+      "cache_limit_mb": 0,
+      "total_requests": 75,
+      "cache_hits": 74,
+      "cache_misses": 1,
+      "hit_rate": 0.9866666666666667,
+      "avg_latency_ms": 15.30511105277886,
+      "baseline_latency_ms": 20.560510910581797,
+      "speedup": 1.343375480235326,
+      "peak_memory_mb": 2301.220703125,
+      "tokens_reused": 7589,
+      "total_tokens": 8771,
+      "reuse_rate": 0.865237715197811
+    },
+    {
+      "experiment_name": "standard_cache",
+      "eviction_policy": "tiered",
+      "cache_limit_mb": 0,
+      "total_requests": 75,
+      "cache_hits": 74,
+      "cache_misses": 1,
+      "hit_rate": 0.9866666666666667,
+      "avg_latency_ms": 15.963344490155578,
+      "baseline_latency_ms": 20.560510910581797,
+      "speedup": 1.2879826607301021,
+      "peak_memory_mb": 2301.220703125,
+      "tokens_reused": 7589,
+      "total_tokens": 8771,
+      "reuse_rate": 0.865237715197811
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "error": "CUDA OOM",
+  "task": "ppl",
+  "model": "Qwen2.5-72B",
+  "method": "snapkv",
+  "compression_ratio": 3.0,
+  "seq_len": 4096,
+  "_checkpoint_key": "qwen2.5-72b__ppl__snapkv__cr3.0__seq4096",
+  "_timestamp": "2026-04-25T18:21:49.678950"
+}

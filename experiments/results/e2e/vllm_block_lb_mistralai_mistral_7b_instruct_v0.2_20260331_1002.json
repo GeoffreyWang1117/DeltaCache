@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "seq_len": 512,
+    "block_size": 8,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-31T10:02:24.344249"
+  },
+  "block_layerbudget_summary": [
+    {
+      "cr": 2.0,
+      "mean_ppl": 5.8484,
+      "mean_ratio": 0.9998,
+      "mean_compress_ms": 362.34,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "mean_ppl": 5.8814,
+      "mean_ratio": 1.0054,
+      "mean_compress_ms": 360.88,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "mean_ppl": 5.887,
+      "mean_ratio": 1.0062,
+      "mean_compress_ms": 365.91,
+      "mean_freed_pct": 0.0016,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "mean_ppl": 16.0588,
+      "mean_ratio": 2.7931,
+      "mean_compress_ms": 266.82,
+      "mean_freed_pct": 0.345,
+      "n": 4
+    }
+  ]
+}

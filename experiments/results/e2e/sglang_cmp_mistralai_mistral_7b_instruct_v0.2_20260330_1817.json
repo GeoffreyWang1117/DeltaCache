@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "budget_mb": 32.0,
+    "max_new_tokens": 64,
+    "sglang_url": "skipped",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-30T18:17:22.964993"
+  },
+  "results": [
+    {
+      "system": "hf_baseline",
+      "workload": "shared_prefix",
+      "n_queries": 15,
+      "latency_mean_ms": 2476.6,
+      "latency_std_ms": 36.7,
+      "latency_p50_ms": 2492.2,
+      "latency_p95_ms": 2548.3,
+      "ttft_mean_ms": 38.1,
+      "throughput_rps": 0.4,
+      "peak_gpu_mb": 247.4,
+      "extra": {}
+    },
+    {
+      "system": "deltacache_layerbudget",
+      "workload": "shared_prefix",
+      "n_queries": 15,
+      "latency_mean_ms": 2443.2,
+      "latency_std_ms": 38.1,
+      "latency_p50_ms": 2451.4,
+      "latency_p95_ms": 2498.2,
+      "ttft_mean_ms": 37.6,
+      "throughput_rps": 0.41,
+      "peak_gpu_mb": 247.4,
+      "extra": {
+        "budget_mb": 32.0,
+        "compressed_count": 0,
+        "total_queries": 15
+      }
+    },
+    {
+      "system": "hf_baseline",
+      "workload": "document_qa",
+      "n_queries": 8,
+      "latency_mean_ms": 2497.8,
+      "latency_std_ms": 36.4,
+      "latency_p50_ms": 2517.1,
+      "latency_p95_ms": 2540.7,
+      "ttft_mean_ms": 38.4,
+      "throughput_rps": 0.4,
+      "peak_gpu_mb": 293.7,
+      "extra": {}
+    },
+    {
+      "system": "deltacache_layerbudget",
+      "workload": "document_qa",
+      "n_queries": 8,
+      "latency_mean_ms": 2592.2,
+      "latency_std_ms": 93.5,
+      "latency_p50_ms": 2638.0,
+      "latency_p95_ms": 2651.0,
+      "ttft_mean_ms": 40.4,
+      "throughput_rps": 0.39,
+      "peak_gpu_mb": 293.7,
+      "extra": {
+        "budget_mb": 32.0,
+        "compressed_count": 8,
+        "total_queries": 8
+      }
+    }
+  ]
+}

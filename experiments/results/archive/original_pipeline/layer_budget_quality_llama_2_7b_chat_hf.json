@@ -1,0 +1,433 @@
+{
+  "metadata": {
+    "experiment": "layer_budget_quality",
+    "model": "meta-llama/Llama-2-7b-chat-hf",
+    "device": "cuda:0",
+    "compression_ratio": 6.0,
+    "num_layers": 32,
+    "num_heads": 32,
+    "head_dim": 128,
+    "num_eval_texts": 8,
+    "timestamp": "2026-03-08T01:44:42.014021",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "summary": [
+    {
+      "method": "full_kv",
+      "compression_ratio": 1.0,
+      "mean_perplexity": 8.131,
+      "std_perplexity": 7.3895,
+      "mean_ppl_ratio": 1.0,
+      "mean_memory_bytes": 31522816,
+      "n_texts": 8
+    },
+    {
+      "method": "h2o_uniform",
+      "compression_ratio": 6.0,
+      "mean_perplexity": 473.728,
+      "std_perplexity": 495.4139,
+      "mean_ppl_ratio": 114.5873,
+      "mean_memory_bytes": 5046272,
+      "n_texts": 8
+    },
+    {
+      "method": "cake",
+      "compression_ratio": 6.0,
+      "mean_perplexity": 143.5594,
+      "std_perplexity": 202.6436,
+      "mean_ppl_ratio": 30.6244,
+      "mean_memory_bytes": 10962944,
+      "n_texts": 8
+    },
+    {
+      "method": "kvtuner",
+      "compression_ratio": 6.0,
+      "mean_perplexity": 8.1412,
+      "std_perplexity": 7.2989,
+      "mean_ppl_ratio": 1.016,
+      "mean_memory_bytes": 31522816,
+      "n_texts": 8
+    },
+    {
+      "method": "layer_budget",
+      "compression_ratio": 6.0,
+      "mean_perplexity": 47.6684,
+      "std_perplexity": 88.2399,
+      "mean_ppl_ratio": 4.5278,
+      "mean_memory_bytes": 8979486,
+      "n_texts": 8
+    }
+  ],
+  "detailed_results": {
+    "full_kv": [
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 5.168477330872253,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 37748736
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 12.993550578338562,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 31981568
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 1.9417200787026123,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 4.534517802910525,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 24117248
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 13.095460258581369,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 30408704
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 2.8182970301013217,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 22.538712245181248,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "full_kv",
+        "compression_ratio": 1.0,
+        "perplexity": 1.9569491780275887,
+        "perplexity_ratio": 1.0,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 39845888
+      }
+    ],
+    "h2o_uniform": [
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 144.4099673433467,
+        "perplexity_ratio": 27.94052447144534,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 6291456
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 244.69193226422038,
+        "perplexity_ratio": 18.83179895971962,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 5242880
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 39.172256347947744,
+        "perplexity_ratio": 20.17399767227068,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 4718592
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 133.5573869140851,
+        "perplexity_ratio": 29.453492679719986,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 3670016
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 146.11222634120347,
+        "perplexity_ratio": 11.157471631854794,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 4718592
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 1204.4159022708138,
+        "perplexity_ratio": 427.3559136623415,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 4718592
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 1237.8035409730126,
+        "perplexity_ratio": 54.9190001410863,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 4718592
+      },
+      {
+        "method": "h2o_uniform",
+        "compression_ratio": 6.0,
+        "perplexity": 639.6604572352473,
+        "perplexity_ratio": 326.86615698418996,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 6291456
+      }
+    ],
+    "cake": [
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 29.396022468352484,
+        "perplexity_ratio": 5.687559524110652,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 11534336
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 78.82163381626928,
+        "perplexity_ratio": 6.066212105848279,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10633216
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 3.0772102929353626,
+        "perplexity_ratio": 1.5847857405849375,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10584064
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 5.5830016535272735,
+        "perplexity_ratio": 1.2312227884393285,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10600448
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 28.827451925481085,
+        "perplexity_ratio": 2.2013317100932475,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10895360
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 106.48123261036584,
+        "perplexity_ratio": 37.78211858901817,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10895360
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 573.3879280792671,
+        "perplexity_ratio": 25.440137033643385,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 11026432
+      },
+      {
+        "method": "cake",
+        "compression_ratio": 6.0,
+        "perplexity": 322.9003462251159,
+        "perplexity_ratio": 165.00190697367395,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 11534336
+      }
+    ],
+    "kvtuner": [
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 5.083380853138446,
+        "perplexity_ratio": 0.9835354839953518,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 37748736
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 12.182493960703473,
+        "perplexity_ratio": 0.9375800622974297,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 31981568
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 1.8893454923465525,
+        "perplexity_ratio": 0.9730267060991331,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 4.874338363834946,
+        "perplexity_ratio": 1.074940837304973,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 24117248
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 13.484791569471833,
+        "perplexity_ratio": 1.0297302502701529,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 30408704
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 3.110444447050267,
+        "perplexity_ratio": 1.1036609746341897,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 22.494734284035275,
+        "perplexity_ratio": 0.9980487811074754,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 29360128
+      },
+      {
+        "method": "kvtuner",
+        "compression_ratio": 6.0,
+        "perplexity": 2.0102160171192995,
+        "perplexity_ratio": 1.0272193267407173,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 39845888
+      }
+    ],
+    "layer_budget": [
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 30.329152388418176,
+        "perplexity_ratio": 5.868102043759899,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 11998688
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 29.511075247281195,
+        "perplexity_ratio": 2.2712094796074336,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 10121804
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 2.672221519519926,
+        "perplexity_ratio": 1.3762135690049664,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 8884208
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 6.63645625841439,
+        "perplexity_ratio": 1.4635417803751296,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 7458104
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 17.14654807625046,
+        "perplexity_ratio": 1.3093505487914745,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 7310576
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 21.632974546568068,
+        "perplexity_ratio": 7.675902971018755,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 7441712
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 264.57506218047985,
+        "perplexity_ratio": 11.738694709013187,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 7605632
+      },
+      {
+        "method": "layer_budget",
+        "compression_ratio": 6.0,
+        "perplexity": 8.84354221991859,
+        "perplexity_ratio": 4.519045419887708,
+        "kl_divergence": 0.0,
+        "top1_agreement": 0.0,
+        "memory_bytes": 11015168
+      }
+    ]
+  }
+}

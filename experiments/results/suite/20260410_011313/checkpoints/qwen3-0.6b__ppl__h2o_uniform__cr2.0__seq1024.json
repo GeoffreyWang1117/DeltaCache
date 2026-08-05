@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-0.6B",
+  "method": "h2o_uniform",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 28.1176,
+  "std_ppl": 12.5287,
+  "ppl_ratio": 1.0575,
+  "full_ppl": 26.5894,
+  "mean_compress_ms": 10.07,
+  "mean_memory_bytes": 35209216,
+  "_checkpoint_key": "qwen3-0.6b__ppl__h2o_uniform__cr2.0__seq1024",
+  "_timestamp": "2026-04-10T01:14:50.708718"
+}

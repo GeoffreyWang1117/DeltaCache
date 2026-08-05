@@ -1,0 +1,37 @@
+{
+  "task": "ruler",
+  "model": "Qwen2.5-14B",
+  "method": "h2o_uniform",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "n_samples_target": 50,
+  "overall_accuracy": 0.51,
+  "per_task": {
+    "mkr_1": {
+      "correct": 36,
+      "total": 50,
+      "accuracy": 0.72,
+      "oom_skipped": 0
+    },
+    "mkr_5": {
+      "correct": 14,
+      "total": 50,
+      "accuracy": 0.28,
+      "oom_skipped": 0
+    },
+    "mkr_10": {
+      "correct": 14,
+      "total": 50,
+      "accuracy": 0.28,
+      "oom_skipped": 0
+    },
+    "vt": {
+      "correct": 38,
+      "total": 50,
+      "accuracy": 0.76,
+      "oom_skipped": 0
+    }
+  },
+  "_checkpoint_key": "qwen2.5-14b__ruler__h2o_uniform__cr4.0__seq2048",
+  "_timestamp": "2026-04-24T13:58:43.505162"
+}

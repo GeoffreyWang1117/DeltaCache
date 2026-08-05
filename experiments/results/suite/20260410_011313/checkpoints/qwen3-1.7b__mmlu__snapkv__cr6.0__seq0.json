@@ -1,0 +1,29 @@
+{
+  "task": "mmlu",
+  "model": "Qwen3-1.7B",
+  "method": "snapkv",
+  "compression_ratio": 6.0,
+  "correct": 0,
+  "total": 12,
+  "accuracy": 0.0,
+  "n_subjects": 3,
+  "per_subject": {
+    "abstract_algebra": {
+      "correct": 0,
+      "total": 4,
+      "accuracy": 0.0
+    },
+    "anatomy": {
+      "correct": 0,
+      "total": 4,
+      "accuracy": 0.0
+    },
+    "astronomy": {
+      "correct": 0,
+      "total": 4,
+      "accuracy": 0.0
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__mmlu__snapkv__cr6.0__seq0",
+  "_timestamp": "2026-04-11T06:38:23.004247"
+}

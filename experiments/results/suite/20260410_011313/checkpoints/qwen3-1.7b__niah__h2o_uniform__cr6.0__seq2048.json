@@ -1,0 +1,42 @@
+{
+  "task": "niah",
+  "model": "Qwen3-1.7B",
+  "method": "h2o_uniform",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.2,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "25.0%": {
+      "depth": 0.25,
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "50.0%": {
+      "depth": 0.5,
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "75.0%": {
+      "depth": 0.75,
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__niah__h2o_uniform__cr6.0__seq2048",
+  "_timestamp": "2026-04-11T07:05:46.462290"
+}

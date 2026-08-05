@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "timestamp": "2026-03-30T23:30:11.103563"
+  },
+  "fill_ablation": [
+    {
+      "fill": "zero",
+      "cr": 4.0,
+      "mean_ratio": 1.0394,
+      "n": 4
+    },
+    {
+      "fill": "mean",
+      "cr": 4.0,
+      "mean_ratio": 1.0138,
+      "n": 4
+    },
+    {
+      "fill": "median",
+      "cr": 4.0,
+      "mean_ratio": 1.0158,
+      "n": 4
+    },
+    {
+      "fill": "random",
+      "cr": 4.0,
+      "mean_ratio": 1.0138,
+      "n": 4
+    },
+    {
+      "fill": "zero",
+      "cr": 6.0,
+      "mean_ratio": 3.2312,
+      "n": 4
+    },
+    {
+      "fill": "mean",
+      "cr": 6.0,
+      "mean_ratio": 1.1859,
+      "n": 4
+    },
+    {
+      "fill": "median",
+      "cr": 6.0,
+      "mean_ratio": 1.1858,
+      "n": 4
+    },
+    {
+      "fill": "random",
+      "cr": 6.0,
+      "mean_ratio": 1.1963,
+      "n": 4
+    }
+  ]
+}

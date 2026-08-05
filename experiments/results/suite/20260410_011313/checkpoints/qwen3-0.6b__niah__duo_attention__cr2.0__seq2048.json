@@ -1,0 +1,42 @@
+{
+  "task": "niah",
+  "model": "Qwen3-0.6B",
+  "method": "duo_attention",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.6,
+  "per_depth": {
+    "0.0%": {
+      "depth": 0.0,
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "25.0%": {
+      "depth": 0.25,
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "50.0%": {
+      "depth": 0.5,
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "75.0%": {
+      "depth": 0.75,
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "100.0%": {
+      "depth": 1.0,
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__niah__duo_attention__cr2.0__seq2048",
+  "_timestamp": "2026-04-10T14:39:28.194102"
+}

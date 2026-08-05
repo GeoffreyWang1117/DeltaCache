@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-0.6B",
+  "method": "evolkv",
+  "compression_ratio": 2.0,
+  "seq_len": 1024,
+  "prefix_len": 614,
+  "n_chunks": 6,
+  "mean_ppl": 29.2772,
+  "std_ppl": 13.0899,
+  "ppl_ratio": 1.1011,
+  "full_ppl": 26.5894,
+  "mean_compress_ms": 984.15,
+  "mean_memory_bytes": 35175765,
+  "_checkpoint_key": "qwen3-0.6b__ppl__evolkv__cr2.0__seq1024",
+  "_timestamp": "2026-04-10T01:15:33.899747"
+}

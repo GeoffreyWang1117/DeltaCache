@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-1.7B",
+  "method": "dynamickv",
+  "compression_ratio": 6.0,
+  "seq_len": 4096,
+  "prefix_len": 2457,
+  "n_chunks": 6,
+  "mean_ppl": 24.5263,
+  "std_ppl": 5.832,
+  "ppl_ratio": 1.0976,
+  "full_ppl": 22.3455,
+  "mean_compress_ms": 21.09,
+  "mean_memory_bytes": 46919680,
+  "_checkpoint_key": "qwen3-1.7b__ppl__dynamickv__cr6.0__seq4096",
+  "_timestamp": "2026-04-10T17:24:20.324435"
+}

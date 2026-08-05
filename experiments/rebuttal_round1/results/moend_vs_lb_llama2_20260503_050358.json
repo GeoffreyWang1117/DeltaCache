@@ -1,0 +1,176 @@
+{
+  "date": "2026-05-03T05:03:58.160791",
+  "results": [
+    {
+      "model": "llama2_7b",
+      "seq_len": 1024,
+      "n_chunks": 6,
+      "prefix_len": 614,
+      "cells": [
+        {
+          "cr": 2.0,
+          "methods": {
+            "full_kv": {
+              "ppl_ratio_mean": 1.0,
+              "ppl_ratio_per_chunk": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0059,
+              "ppl_ratio_per_chunk": [
+                1.0039,
+                1.0177,
+                1.0059,
+                0.9903,
+                1.0177,
+                1.0
+              ]
+            },
+            "moend_perlayer": {
+              "ppl_ratio_mean": 1.0269,
+              "ppl_ratio_per_chunk": [
+                1.0,
+                1.0138,
+                1.002,
+                1.142,
+                1.002,
+                1.002
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 0.9956,
+              "ppl_ratio_per_chunk": [
+                0.9912,
+                0.9942,
+                1.002,
+                0.9903,
+                1.0,
+                0.9961
+              ]
+            }
+          }
+        },
+        {
+          "cr": 3.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0059,
+              "ppl_ratio_per_chunk": [
+                1.0039,
+                1.0177,
+                1.0059,
+                0.9903,
+                1.0177,
+                1.0
+              ]
+            },
+            "moend_perlayer": {
+              "ppl_ratio_mean": 1.0463,
+              "ppl_ratio_per_chunk": [
+                1.1287,
+                1.0217,
+                1.002,
+                1.1178,
+                1.0059,
+                1.002
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.0039,
+              "ppl_ratio_per_chunk": [
+                1.0,
+                1.0059,
+                1.0039,
+                1.0059,
+                1.0059,
+                1.002
+              ]
+            }
+          }
+        },
+        {
+          "cr": 4.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0059,
+              "ppl_ratio_per_chunk": [
+                1.0039,
+                1.0177,
+                1.0059,
+                0.9903,
+                1.0177,
+                1.0
+              ]
+            },
+            "moend_perlayer": {
+              "ppl_ratio_mean": 1.0882,
+              "ppl_ratio_per_chunk": [
+                1.3483,
+                1.0217,
+                1.0118,
+                1.1178,
+                1.0297,
+                1.0
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.0209,
+              "ppl_ratio_per_chunk": [
+                1.0138,
+                1.05,
+                1.0157,
+                1.0,
+                1.0338,
+                1.0118
+              ]
+            }
+          }
+        },
+        {
+          "cr": 6.0,
+          "methods": {
+            "kivi_uniform": {
+              "ppl_ratio_mean": 1.0059,
+              "ppl_ratio_per_chunk": [
+                1.0039,
+                1.0177,
+                1.0059,
+                0.9903,
+                1.0177,
+                1.0
+              ]
+            },
+            "moend_perlayer": {
+              "ppl_ratio_mean": 1.1365,
+              "ppl_ratio_per_chunk": [
+                1.4607,
+                1.05,
+                1.0378,
+                1.1287,
+                1.0749,
+                1.0666
+              ]
+            },
+            "layer_budget": {
+              "ppl_ratio_mean": 1.099,
+              "ppl_ratio_per_chunk": [
+                1.16,
+                1.0813,
+                1.1112,
+                1.0378,
+                1.1555,
+                1.048
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

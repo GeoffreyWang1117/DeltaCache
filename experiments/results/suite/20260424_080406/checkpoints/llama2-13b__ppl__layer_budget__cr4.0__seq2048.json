@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "layer_budget",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 6.4071,
+  "std_ppl": 1.2405,
+  "ppl_ratio": 1.14,
+  "full_ppl": 5.6202,
+  "mean_compress_ms": 1012.58,
+  "mean_memory_bytes": 251485280,
+  "_checkpoint_key": "llama2-13b__ppl__layer_budget__cr4.0__seq2048",
+  "_timestamp": "2026-04-24T08:13:13.823097"
+}

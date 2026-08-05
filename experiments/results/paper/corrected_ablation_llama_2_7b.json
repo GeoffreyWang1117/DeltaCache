@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "model": "Llama-2-7B",
+    "seq_len": 512,
+    "cr": 3.0,
+    "eval": "CORRECTED_zero_fill",
+    "timestamp": "2026-03-29T00:32:23.911527"
+  },
+  "results": [
+    {
+      "variant": "eviction_only",
+      "mean_ppl": 7.6063,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 157184.0
+    },
+    {
+      "variant": "quant_only",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "joint",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "sparsity_only",
+      "mean_ppl": 7.6588,
+      "mean_ratio": 1.0026,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "importance_only",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "combined",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "bits_4_16",
+      "mean_ppl": 7.79,
+      "mean_ratio": 1.0196,
+      "mean_mem_kb": 86458.8
+    },
+    {
+      "variant": "bits_4_8_16",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "per_input",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    },
+    {
+      "variant": "fixed_profile",
+      "mean_ppl": 7.7851,
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "coverage_mae": 0.0391,
+  "fidelity_int8": 1.0,
+  "fidelity_int4": 0.9964,
+  "gini_range": [
+    0.704,
+    0.985
+  ],
+  "gini_mean": 0.933
+}

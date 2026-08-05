@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "experiment": "layer_budget_quality_sweep",
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "quantization": "4-bit (bitsandbytes)",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "results": {
+    "2.0x": {
+      "full_kv": {
+        "ppl": 4.11,
+        "ratio": 1.0,
+        "memory_kb": 7440.0
+      },
+      "h2o_uniform": {
+        "ppl": 4.83,
+        "ratio": 1.2045,
+        "memory_kb": 3696.0
+      },
+      "cake": {
+        "ppl": 5.13,
+        "ratio": 1.2673,
+        "memory_kb": 4020.0
+      },
+      "kvtuner": {
+        "ppl": 4.11,
+        "ratio": 0.9998,
+        "memory_kb": 7440.0
+      },
+      "layer_budget": {
+        "ppl": 4.07,
+        "ratio": 0.9978,
+        "memory_kb": 3837.0
+      }
+    },
+    "3.0x": {
+      "full_kv": {
+        "ppl": 4.11,
+        "ratio": 1.0,
+        "memory_kb": 7440.0
+      },
+      "h2o_uniform": {
+        "ppl": 6.48,
+        "ratio": 1.5033,
+        "memory_kb": 2448.0
+      },
+      "cake": {
+        "ppl": 5.19,
+        "ratio": 1.3315,
+        "memory_kb": 3267.5
+      },
+      "kvtuner": {
+        "ppl": 4.24,
+        "ratio": 1.0196,
+        "memory_kb": 7440.0
+      },
+      "layer_budget": {
+        "ppl": 4.39,
+        "ratio": 1.0811,
+        "memory_kb": 3354.0
+      }
+    },
+    "4.0x": {
+      "full_kv": {
+        "ppl": 4.11,
+        "ratio": 1.0,
+        "memory_kb": 7440.0
+      },
+      "h2o_uniform": {
+        "ppl": 9.56,
+        "ratio": 2.621,
+        "memory_kb": 1808.0
+      },
+      "cake": {
+        "ppl": 5.01,
+        "ratio": 1.295,
+        "memory_kb": 2923.0
+      },
+      "kvtuner": {
+        "ppl": 4.22,
+        "ratio": 1.0178,
+        "memory_kb": 7440.0
+      },
+      "layer_budget": {
+        "ppl": 4.41,
+        "ratio": 1.0793,
+        "memory_kb": 3197.0
+      }
+    },
+    "6.0x": {
+      "full_kv": {
+        "ppl": 4.11,
+        "ratio": 1.0,
+        "memory_kb": 7440.0
+      },
+      "h2o_uniform": {
+        "ppl": 13.64,
+        "ratio": 3.4688,
+        "memory_kb": 1200.0
+      },
+      "cake": {
+        "ppl": 5.08,
+        "ratio": 1.3034,
+        "memory_kb": 2675.0
+      },
+      "kvtuner": {
+        "ppl": 4.22,
+        "ratio": 1.0178,
+        "memory_kb": 7440.0
+      },
+      "layer_budget": {
+        "ppl": 4.97,
+        "ratio": 1.2107,
+        "memory_kb": 2250.1
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "experiment": "layer_budget_ablation",
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "compression_ratio": 3.0,
+    "load_in_4bit": false,
+    "num_layers": 22,
+    "num_texts": 8,
+    "timestamp": "2026-03-07T22:23:03.593906",
+    "gpu": "NVIDIA GeForce RTX 3090"
+  },
+  "ablations": {
+    "component": {
+      "full_kv": {
+        "perplexity": 6.5542,
+        "ppl_ratio": 1.0,
+        "memory_kb": 1001.0
+      },
+      "eviction_only": {
+        "perplexity": 17.0164,
+        "ppl_ratio": 2.5963,
+        "memory_kb": 331.0
+      },
+      "quant_only": {
+        "perplexity": 6.5925,
+        "ppl_ratio": 1.0058,
+        "memory_kb": 548.0
+      },
+      "joint": {
+        "perplexity": 6.4919,
+        "ppl_ratio": 0.9905,
+        "memory_kb": 481.3
+      }
+    },
+    "signal": {
+      "full_kv": {
+        "perplexity": 6.5542,
+        "ppl_ratio": 1.0,
+        "memory_kb": 1001.0
+      },
+      "sparsity_only": {
+        "perplexity": 6.5251,
+        "ppl_ratio": 0.9956,
+        "memory_kb": 496.0
+      },
+      "importance_only": {
+        "perplexity": 6.586,
+        "ppl_ratio": 1.0049,
+        "memory_kb": 526.4
+      },
+      "combined": {
+        "perplexity": 6.4919,
+        "ppl_ratio": 0.9905,
+        "memory_kb": 481.3
+      }
+    },
+    "precision": {
+      "full_kv": {
+        "perplexity": 6.5542,
+        "ppl_ratio": 1.0,
+        "memory_kb": 1001.0
+      },
+      "bits_4_16": {
+        "perplexity": 6.5826,
+        "ppl_ratio": 1.0043,
+        "memory_kb": 551.4
+      },
+      "bits_4_8_16": {
+        "perplexity": 6.4919,
+        "ppl_ratio": 0.9905,
+        "memory_kb": 481.3
+      }
+    },
+    "selection": {
+      "full_kv": {
+        "perplexity": 6.5542,
+        "ppl_ratio": 1.0,
+        "memory_kb": 1001.0
+      },
+      "h2o_selection": {
+        "perplexity": 6.4919,
+        "ppl_ratio": 0.9905,
+        "memory_kb": 481.3
+      },
+      "random_selection": {
+        "perplexity": 6.5265,
+        "ppl_ratio": 0.9958,
+        "memory_kb": 481.3
+      }
+    },
+    "profile": {
+      "full_kv": {
+        "perplexity": 6.5542,
+        "ppl_ratio": 1.0,
+        "memory_kb": 1001.0
+      },
+      "per_input_profile": {
+        "perplexity": 6.4919,
+        "ppl_ratio": 0.9905,
+        "memory_kb": 481.3
+      },
+      "fixed_profile": {
+        "perplexity": 6.585,
+        "ppl_ratio": 1.0047,
+        "memory_kb": 500.3
+      }
+    }
+  }
+}

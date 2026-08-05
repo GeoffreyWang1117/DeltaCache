@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-1.7B",
+  "method": "layer_budget",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.175,
+  "per_task": {
+    "mkr_1": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "mkr_5": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "mkr_10": {
+      "correct": 2,
+      "total": 10,
+      "accuracy": 0.2
+    },
+    "vt": {
+      "correct": 5,
+      "total": 10,
+      "accuracy": 0.5
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__ruler__layer_budget__cr2.0__seq2048",
+  "_timestamp": "2026-04-11T07:15:08.772437"
+}

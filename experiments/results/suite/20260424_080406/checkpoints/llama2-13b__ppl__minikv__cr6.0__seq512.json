@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "minikv",
+  "compression_ratio": 6.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 419.7082,
+  "std_ppl": 595.5381,
+  "ppl_ratio": 51.5326,
+  "full_ppl": 8.1445,
+  "mean_compress_ms": 28.58,
+  "mean_memory_bytes": 42144260,
+  "_checkpoint_key": "llama2-13b__ppl__minikv__cr6.0__seq512",
+  "_timestamp": "2026-04-24T08:14:45.664502"
+}

@@ -1,0 +1,128 @@
+{
+  "paper": "LayerBudget: Per-Layer Token-Precision Joint Optimization for KV Cache Compression",
+  "venue": "NeurIPS 2026",
+  "round": 4,
+  "date": "2026-05-03",
+  "difficulty": "nightmare",
+  "context": "Round 4 after round-3 critical items addressed: (1) Table 3 MiniKV 11.92 footnoted as catastrophic 2-bit+pyramid collapse; (2) §7(6) rewritten with plan-dump diagnostic showing all 32 layers differ between CR=2× and CR=6× — flatness from quantize-only regime; (3) §2 explicit caveat that MoE-nD/xKV are our re-implementations; (4) §1 contribution tightened to specify '500-trial random-search at 4-6× on Mistral-7B'.",
+  "reviews": [
+    {
+      "reviewer_id": "R1",
+      "persona": "Methodologist",
+      "summary": "Round-4 fixes have substantively addressed my round-3 critical items. The 118-119% claim is now properly grounded in the §1 contribution. The LB-KV plan-invariance concern was actually misframing on my part: the plan dump reveals plans differ on all 32 layers between CR=2× and CR=6×, and the moderate-CR PPL flatness is a coherent quantize-only-regime explanation. The greedy convergence claim about '<1ms allocator' remains underspecified at large L, S.",
+      "strengths": [
+        "MCKP formulation with FPTAS reference is correct; the (1-1/e) bound was correctly retracted in round 2 and stays out in round 4.",
+        "Plan-dump diagnostic in §7(6) gives a falsifiable mechanism for the LB-KV moderate-CR flatness: mean b_K shifts 8.0→4.0, mean n_l shifts 1020→676 across CR=2-6×. This converts a suspicious result into a defensible one.",
+        "Per-model F(b) calibration (Table 2) gives the fidelity model architectural breadth across 6 architectures.",
+        "The §1 contribution wording '118-119% of the best 500-trial random-search quality score at 4-6× on Mistral-7B' is now specific and falsifiable."
+      ],
+      "weaknesses": [
+        "The greedy convergence statement '<1ms allocator-only' is reported only for Mistral-7B (32 layers, S=1024). Qwen2.5-72B (80 layers, S=32K) would have ~327K iterations in the inner loop; the paper does not characterize whether the <1ms holds at this scale.",
+        "Calibration transfer (§7(5)) remains a real methodological gap: coverage power-law calibrated on Mistral-7B is transferred unchanged to 6 other architectures including 72B. The architecture-dependence finding from §3.2 implies this transfer is risky.",
+        "The 'quantize-only regime' explanation for LB-KV moderate-CR flatness depends on F(8) ≈ F(4) at fixed n_l. But Table 4 LB at CR=4× = 1.020 (not flat) — meaning shared-b_l LB DOES distinguish CR=3× from CR=4× via differential token retention. Why does LB-KV's independent-bits formulation lose this differentiation? The explanation should clarify the asymmetry."
+      ],
+      "questions": [
+        "What is the allocator runtime at L=80, S=32K (Qwen2.5-72B at long context)? A line in Table 5 (or §3.4 footnote) extrapolating from the Mistral measurement would suffice.",
+        "Why does LB at CR=2-4× show graded PPL (1.000, 1.006, 1.020) while LB-KV is flat at 1.036? If both are in the quantize-only regime, the difference is in the importance-driven (n_l, b_l) coupling that LB has but LB-KV's independent K/V loses. Worth one sentence in §7(6)."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 7,
+      "confidence": 4,
+      "decision": "accept"
+    },
+    {
+      "reviewer_id": "R2",
+      "persona": "Empiricist",
+      "summary": "Round-4 brings the methodological story to a defensible state but leaves two empirical gaps from round 3 unaddressed: LB-KV is still PPL-only (no NIAH/MMLU/RULER) and long-context (16K-32K) is still LayerBudget-only. The new re-implementation caveat in §2 is well-placed but it shifts the burden of proof onto a camera-ready commitment that the paper does not cash in.",
+      "strengths": [
+        "Empirical scope is broad: 17 baselines, 7 models 7B-72B, 8 evaluation tasks (PPL, MMLU, NIAH, GSM8K, LongBench, RULER, end-to-end memory, TPOT).",
+        "Round-4 addition of the MoE-nD/xKV/LB-KV re-implementation caveat in §2 main text increases honesty of the head-to-head; the three explanations for divergence (eval harness / calibration / impl) are constructive.",
+        "Plan-dump diagnostic in §7(6) is the kind of internal-consistency check that strengthens a complex method paper.",
+        "Paired-bootstrap CIs (n_boot=10000) on per-chunk PPL ratios give a concrete tightness for the 'matches KIVI' claim at 2-3×."
+      ],
+      "weaknesses": [
+        "LayerBudget-KV is still evaluated on PPL only; no NIAH, MMLU, GSM8K, or RULER numbers exist. The paper's main quality differentiator (NIAH 100% vs KIVI 93%) is missing for the variant the paper recommends at extreme CR.",
+        "Long-context evaluation (§4.3, 16K-32K) is for LayerBudget only. Since LB-KV is shipped as the extreme-CR variant, its long-context behavior is a top-of-list missing experiment.",
+        "All round-3/4 head-to-head experiments (Llama-2-7B, xKV, LB-KV) are at S=1024, n=6 chunks. The cross-CR LB-KV claim ('flat at 1.03') is supported by 6 paired draws per cell — wide CIs.",
+        "The new §2 caveat names three sources of divergence (eval harness, calibration, implementation) and commits to a camera-ready update against official code. This commitment is honest but it converts the head-to-head claim into a placeholder rather than evidence: a reviewer cannot today verify the comparison is fair."
+      ],
+      "questions": [
+        "Could the authors run a single-cell sanity check using MoE-nD's official code (whatever subset is publicly available) on Mistral-7B WikiText-2 at CR=4× to confirm that the re-implementation reproduces the published method within ±2pp?",
+        "What is the projected timeline / availability of NIAH and MMLU numbers for LayerBudget-KV? If a 30-min RTX 3090 budget would close this gap, the paper would benefit from including even partial numbers."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R3",
+      "persona": "Visionary",
+      "summary": "The round-4 fixes are surgical and effective, but they don't change the conceptual question the paper raises. With LB and LB-KV presented as 'complementary operating regimes', the paper now reads as a careful empirical study of the per-layer joint allocation design space rather than a single methodological contribution. That framing is fine and citable, but it caps the paper's significance below 'breakthrough'.",
+      "strengths": [
+        "The architecture-dependent importance-direction finding (early-bottleneck on Mistral-7B GQA, late-bottleneck on Llama-2-13B MHA, flat on Qwen2.5-14B GQA) is the paper's most cited-worthy insight; it converts an opaque hyperparameter into a measurable per-architecture diagnostic.",
+        "End-to-end systems story (PagedAttention bridge + 33.7% memory savings + <5% TPOT overhead at 7B-8B scale) gives the paper rare deployment credibility.",
+        "Mean-fill (96% KL reduction on Mistral, 97.5% PPL improvement on Llama-2 at 6×) is a transferable technique that any KV-eviction paper could adopt; standalone significance.",
+        "Plan-dump diagnostic for LB-KV is exactly the kind of mechanism-level transparency that makes a paper trustworthy."
+      ],
+      "weaknesses": [
+        "The LB / LB-KV split is now explicitly framed in §7(6) as 'production default vs extreme-CR variant'. This framing is honest but caps the paper at 'two design points of the same idea' rather than 'we found the right design point'. A unified allocator that automatically selects between shared and independent K/V based on detected budget regime would be a stronger conceptual contribution.",
+        "MoE-nD (concurrent, same per-layer joint formulation) remains the closest contribution and the paper's differentiation now relies on a bundle of incremental advances (online vs offline solver, closed-form coverage, architecture-dependence, two design points). No single dimension dominates.",
+        "Long-context impact is at 32K — solid but below the field's current ceiling (xKV at 65K, HCAttention at 4M, LongCache at 1M+). Without a 100K+ result the paper's contribution to long-context-serving is bounded."
+      ],
+      "questions": [
+        "Could the paper propose a unified solver that adaptively routes between shared-b_l and independent-(b_K, b_V) based on detected CR / architecture? The decision rule could be derived from the same coverage law.",
+        "At 70B+ scale, does the architecture-dependence finding from §3.2 still hold? Qwen2.5-72B (80 layers GQA) would close this scaling-of-finding gap."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 2,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 3,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R4",
+      "persona": "Skeptic",
+      "summary": "Round-4 substantively answers my round-3 critical items: the MiniKV 11.92 is footnoted with mechanism (2-bit + pyramid), the LB-KV plan-dump diagnostic refutes solver-degeneracy, and the §2 re-implementation caveat is now explicit. I am no longer at borderline_reject. Remaining concerns are about completeness rather than correctness.",
+      "strengths": [
+        "Plan-dump diagnostic in §7(6) is the right answer to my round-3 LB-KV degeneracy concern: 32-of-32 layers differ between CR=2× and CR=6×, and the quantize-only-regime explanation is mechanistically coherent. This is a textbook example of how to defend a suspicious-looking result.",
+        "MiniKV 11.92 footnote is exactly the right disclosure: it converts a confusing table cell into transparency.",
+        "§2 re-implementation caveat is honest, well-placed in the main text rather than buried, and lists falsifiable sources of divergence.",
+        "Author transparency now extends to: byte-CR reconciliation appendix, plan-dump diagnostic, three-source caveat, paired-bootstrap CIs, scoped 'matches KIVI' claim. The paper is more honest than it was in round 1."
+      ],
+      "weaknesses": [
+        "The §2 caveat commits to 'updating against official code at camera-ready'. This is honest but kicks the verification can — a reviewer at submission time cannot today confirm the head-to-head is fair. If MoE-nD's official code becomes available between submission and decision, the authors should plan a rebuttal-time update.",
+        "LB-KV is still PPL-only on a 6-chunk WikiText-2 setup; the paper's strongest quality differentiator (NIAH, MMLU) is unmeasured for the variant the paper recommends at extreme CR. R2's complaint, but it is a real gap.",
+        "The 24-72% memory savings headline is stated without the CR=2× qualifier in some places (abstract / conclusion). The Appendix Table 14 makes it clear but the headline-level claim should match.",
+        "Mean-fill's 96% KL reduction is on Mistral-7B at CR=6× only; the 97.5% PPL improvement on Llama-2-7B is at the same CR but a different metric. Without a multi-architecture mean-fill table, the 96% number reads as a Mistral artifact."
+      ],
+      "questions": [
+        "Could the authors add a one-line 'memory savings range across CRs' to the abstract or §1? Currently 'achieves 24-72% KV memory savings depending on architecture' implies the spread is architectural; the actual spread is also CR-dependent (savings grow with CR).",
+        "Would a single mean-fill ablation cell on Llama-2-7B at CR=6× under matched conditions (logits KL, not PPL) cost more than 30 min of GPU time? If not, the 96% claim would benefit."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    }
+  ]
+}

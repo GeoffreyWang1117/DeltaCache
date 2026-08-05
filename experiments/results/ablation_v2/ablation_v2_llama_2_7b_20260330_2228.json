@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "model": "Llama-2-7B",
+    "seq_len": 512,
+    "timestamp": "2026-03-30T22:28:31.101059"
+  },
+  "summary": [
+    {
+      "cr": 3.0,
+      "variant": "eviction_only",
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 157184.0,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "variant": "quant_only",
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "variant": "joint",
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "variant": "bits_4_16",
+      "mean_ratio": 1.0196,
+      "mean_mem_kb": 86458.8,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "variant": "bits_4_8_16",
+      "mean_ratio": 1.0189,
+      "mean_mem_kb": 79142.4,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "variant": "eviction_only",
+      "mean_ratio": 1.1561,
+      "mean_mem_kb": 154932.0,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "variant": "quant_only",
+      "mean_ratio": 1.0093,
+      "mean_mem_kb": 79142.4,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "variant": "joint",
+      "mean_ratio": 1.1655,
+      "mean_mem_kb": 78015.8,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "variant": "bits_4_16",
+      "mean_ratio": 1.1655,
+      "mean_mem_kb": 78015.8,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "variant": "bits_4_8_16",
+      "mean_ratio": 1.1655,
+      "mean_mem_kb": 78015.8,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "variant": "eviction_only",
+      "mean_ratio": 44.7075,
+      "mean_mem_kb": 102584.0,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "variant": "quant_only",
+      "mean_ratio": 1.0093,
+      "mean_mem_kb": 79142.4,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "variant": "joint",
+      "mean_ratio": 45.0862,
+      "mean_mem_kb": 51829.0,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "variant": "bits_4_16",
+      "mean_ratio": 45.0862,
+      "mean_mem_kb": 51829.0,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "variant": "bits_4_8_16",
+      "mean_ratio": 45.0862,
+      "mean_mem_kb": 51829.0,
+      "n": 4
+    }
+  ]
+}

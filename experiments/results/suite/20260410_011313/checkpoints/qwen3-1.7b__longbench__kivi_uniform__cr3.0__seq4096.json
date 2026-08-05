@@ -1,0 +1,37 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-1.7B",
+  "method": "kivi_uniform",
+  "compression_ratio": 3.0,
+  "seq_len": 4096,
+  "overall_mean": 0.0794,
+  "n_tasks": 4,
+  "per_task": {
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.1095,
+      "std": 0.109,
+      "n": 10
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0813,
+      "std": 0.0601,
+      "n": 10
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1267,
+      "std": 0.0313,
+      "n": 10
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 10
+    }
+  },
+  "_checkpoint_key": "qwen3-1.7b__longbench__kivi_uniform__cr3.0__seq4096",
+  "_timestamp": "2026-04-10T19:27:48.491654"
+}

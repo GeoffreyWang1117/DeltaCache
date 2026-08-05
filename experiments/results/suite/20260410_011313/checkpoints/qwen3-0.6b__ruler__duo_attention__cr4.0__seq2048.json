@@ -1,0 +1,32 @@
+{
+  "task": "ruler",
+  "model": "Qwen3-0.6B",
+  "method": "duo_attention",
+  "compression_ratio": 4.0,
+  "seq_len": 2048,
+  "overall_accuracy": 0.225,
+  "per_task": {
+    "mkr_1": {
+      "correct": 1,
+      "total": 10,
+      "accuracy": 0.1
+    },
+    "mkr_5": {
+      "correct": 2,
+      "total": 10,
+      "accuracy": 0.2
+    },
+    "mkr_10": {
+      "correct": 0,
+      "total": 10,
+      "accuracy": 0.0
+    },
+    "vt": {
+      "correct": 6,
+      "total": 10,
+      "accuracy": 0.6
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__ruler__duo_attention__cr4.0__seq2048",
+  "_timestamp": "2026-04-10T16:07:51.490457"
+}

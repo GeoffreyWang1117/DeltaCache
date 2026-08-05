@@ -1,0 +1,189 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "timestamp": "2026-03-31T02:08:41.705508"
+  },
+  "summary": [
+    {
+      "variant": "flat +floor0.15",
+      "cr": 4.0,
+      "mean_ratio": 1.006
+    },
+    {
+      "variant": "inverted",
+      "cr": 4.0,
+      "mean_ratio": 1.0079
+    },
+    {
+      "variant": "inverted +floor0.25",
+      "cr": 4.0,
+      "mean_ratio": 1.0079
+    },
+    {
+      "variant": "inverted +floor0.15",
+      "cr": 4.0,
+      "mean_ratio": 1.0099
+    },
+    {
+      "variant": "flat",
+      "cr": 4.0,
+      "mean_ratio": 1.01
+    },
+    {
+      "variant": "flat +floor0.25",
+      "cr": 4.0,
+      "mean_ratio": 1.01
+    },
+    {
+      "variant": "u_shaped",
+      "cr": 4.0,
+      "mean_ratio": 1.0218
+    },
+    {
+      "variant": "u_shaped +floor0.15",
+      "cr": 4.0,
+      "mean_ratio": 1.0218
+    },
+    {
+      "variant": "u_shaped +floor0.25",
+      "cr": 4.0,
+      "mean_ratio": 1.0218
+    },
+    {
+      "variant": "sigmoid (default)",
+      "cr": 4.0,
+      "mean_ratio": 1.0394
+    },
+    {
+      "variant": "sigmoid (default) +floor0.25",
+      "cr": 4.0,
+      "mean_ratio": 1.0394
+    },
+    {
+      "variant": "sigmoid (default) +floor0.15",
+      "cr": 4.0,
+      "mean_ratio": 1.0414
+    },
+    {
+      "variant": "inverted",
+      "cr": 5.0,
+      "mean_ratio": 1.0688
+    },
+    {
+      "variant": "inverted +floor0.15",
+      "cr": 5.0,
+      "mean_ratio": 1.0688
+    },
+    {
+      "variant": "inverted +floor0.25",
+      "cr": 5.0,
+      "mean_ratio": 1.0688
+    },
+    {
+      "variant": "u_shaped +floor0.15",
+      "cr": 5.0,
+      "mean_ratio": 1.1181
+    },
+    {
+      "variant": "u_shaped",
+      "cr": 5.0,
+      "mean_ratio": 1.1295
+    },
+    {
+      "variant": "u_shaped +floor0.25",
+      "cr": 5.0,
+      "mean_ratio": 1.1295
+    },
+    {
+      "variant": "flat",
+      "cr": 5.0,
+      "mean_ratio": 1.2549
+    },
+    {
+      "variant": "flat +floor0.25",
+      "cr": 5.0,
+      "mean_ratio": 1.2549
+    },
+    {
+      "variant": "flat +floor0.15",
+      "cr": 5.0,
+      "mean_ratio": 1.2668
+    },
+    {
+      "variant": "sigmoid (default) +floor0.25",
+      "cr": 5.0,
+      "mean_ratio": 2.0115
+    },
+    {
+      "variant": "sigmoid (default) +floor0.15",
+      "cr": 5.0,
+      "mean_ratio": 2.0238
+    },
+    {
+      "variant": "sigmoid (default)",
+      "cr": 5.0,
+      "mean_ratio": 2.0618
+    },
+    {
+      "variant": "inverted",
+      "cr": 6.0,
+      "mean_ratio": 1.2828
+    },
+    {
+      "variant": "inverted +floor0.15",
+      "cr": 6.0,
+      "mean_ratio": 1.2828
+    },
+    {
+      "variant": "inverted +floor0.25",
+      "cr": 6.0,
+      "mean_ratio": 1.2985
+    },
+    {
+      "variant": "u_shaped",
+      "cr": 6.0,
+      "mean_ratio": 1.4408
+    },
+    {
+      "variant": "u_shaped +floor0.25",
+      "cr": 6.0,
+      "mean_ratio": 1.4408
+    },
+    {
+      "variant": "u_shaped +floor0.15",
+      "cr": 6.0,
+      "mean_ratio": 1.4464
+    },
+    {
+      "variant": "flat +floor0.15",
+      "cr": 6.0,
+      "mean_ratio": 1.7247
+    },
+    {
+      "variant": "flat",
+      "cr": 6.0,
+      "mean_ratio": 1.7342
+    },
+    {
+      "variant": "flat +floor0.25",
+      "cr": 6.0,
+      "mean_ratio": 1.7415
+    },
+    {
+      "variant": "sigmoid (default) +floor0.25",
+      "cr": 6.0,
+      "mean_ratio": 3.0792
+    },
+    {
+      "variant": "sigmoid (default) +floor0.15",
+      "cr": 6.0,
+      "mean_ratio": 3.1669
+    },
+    {
+      "variant": "sigmoid (default)",
+      "cr": 6.0,
+      "mean_ratio": 3.2312
+    }
+  ]
+}

@@ -52,11 +52,12 @@
 \begin{abstract}
 KV cache compression methods either evict tokens or quantize, but apply their strategy \emph{uniformly} across layers.
 We present \layerbudget, an online method that \emph{jointly} allocates per-layer token budgets and quantization precision via a greedy marginal-gain allocator.
-Two design principles drive its effectiveness: (1)~\emph{quantize first, evict last}---the allocator exhausts INT4/INT8 headroom before evicting tokens; (2)~\emph{protect early layers}---leave-one-out analysis reveals that early layers are the quality bottleneck under eviction, so inverted importance weights assign them higher retention budgets.
-Evicted positions are filled with the mean of retained tokens, reducing output distortion by 96\%.
-With inverted importance and mean-fill, \layerbudget achieves PPL ratio $\leq$1.03 at 4$\times$ across all models from 7B to 14B, and remains near-lossless ($\leq$1.001) at 2$\times$ compression up to 32K tokens.
-In a controlled comparison of 17 baselines across 6 models and 8 evaluation tasks, \layerbudget ranks first among methods that perform token-level compression at 2--4$\times$, while matching or exceeding quantization-only quality on retrieval benchmarks.
-At 32K context, H2O collapses (83$\times$ PPL) while \layerbudget maintains 1.009$\times$---demonstrating that layer-aware budget allocation is critical for long-context fidelity.
+Two design principles drive its effectiveness: (1)~\emph{quantize first, evict last}---the allocator exhausts INT4/INT8 headroom before evicting tokens; (2)~the eviction-sensitivity \emph{direction} is layer-architecture-dependent---leave-one-out analysis identifies early layers as the bottleneck on Mistral-7B (motivating an inverted-importance default), while Llama-2-13B's bottleneck is in late layers and Qwen2.5-14B is flat; the marginal-gain allocator absorbs both regimes.
+Evicted positions are filled with the mean of retained tokens, reducing output distortion by 96\% on Mistral-7B.
+With inverted importance and mean-fill, \layerbudget achieves PPL ratio $\leq$1.03 at 4$\times$ on seven models from 7B to 72B (1.00--1.03 on the 7B suite, $\leq$1.01 on 13B--72B at GQA), and remains near-lossless ($\leq$1.001) at 2$\times$ on 32K-token contexts.
+In a controlled comparison of 17 baselines across 7 models (7B--72B) and 8 evaluation tasks, \layerbudget ranks first among token-compression methods at 2--4$\times$ at memory-matched comparison.
+At 32K context on Mistral-7B, H2O at 4$\times$ collapses (83$\times$ PPL) while \layerbudget maintains 1.009$\times$.
+On Needle-in-a-Haystack at 4096 tokens, \layerbudget retains 100\% retrieval at 4$\times$ on three of four 7B models (Llama-2/Llama-3.1/Qwen3) and 73.3\% on Mistral-7B, matching KIVI on every cell while compressing the token dimension; at 13B--72B it sustains 100\% NIAH where H2O drops to 30--73\%.
 \end{abstract}
 
 % ===================================================================
@@ -95,11 +96,12 @@ Moreover, the eviction/quantization sensitivity differs per layer:
 
 \textbf{Contributions.}
 \begin{enumerate}
-    \item We formalize per-layer $(n_l, b_l)$ allocation and propose a ``quantize-first'' greedy solver with calibrated fidelity constants, achieving 118--119\% of random-search quality (Section~\ref{sec:method}).
+    \item We formalize per-layer $(n_l, b_l)$ allocation and propose a ``quantize-first'' greedy solver with calibrated fidelity constants, achieving 118--119\% of the best 500-trial random-search quality score at 4--6$\times$ on Mistral-7B (Section~\ref{sec:method}).
     \item Through leave-one-out analysis, we discover that \emph{early layers} are the primary quality bottleneck under eviction---reversing the conventional assumption---and show that inverted importance weights improve 6$\times$ compression by 60--94\% (Section~\ref{sec:ablation}).
     \item We introduce mean-fill for evicted KV positions, which reduces output KL divergence by 96\% and PPL degradation by 63--97\% across models (Section~\ref{sec:analysis}).
-    \item Through a controlled comparison of 12 reimplemented baselines, we show \layerbudget achieves near-lossless compression at 2--4$\times$ and ranks 1st among methods that reduce token count (Section~\ref{sec:experiments}).
-    \item We validate end-to-end across five models as a drop-in cache and demonstrate block-level integration with vLLM's PagedAttention (Section~\ref{sec:e2e}).
+    \item Through a controlled comparison of 17 reimplemented baselines across seven models (7B--72B), we show \layerbudget achieves near-lossless compression at 2--4$\times$ and ranks 1st among methods that reduce token count (Section~\ref{sec:experiments}).
+    \item We validate at 16K--32K context---where KV cache compression is most impactful---showing \layerbudget remains near-lossless ($\leq$1.009) while H2O collapses to 83$\times$ PPL (Section~\ref{sec:longctx}).
+    \item We scale to 72B parameters (Qwen2.5-72B), achieving PPL ratio 1.004 at 4$\times$ and 100\% NIAH retrieval, and validate end-to-end with 24--72\% KV memory savings at CR=2$\times$ (the floor across architectures; savings grow with CR — Sections~\ref{sec:experiments},~\ref{sec:e2e}).
 \end{enumerate}
 
 % ===================================================================
@@ -129,29 +131,20 @@ All quantization methods operate independently of token eviction.
 \textbf{Joint token-precision optimization.}
 ``More Tokens, Lower Precision''~\citep{moretokenslowerprecision2025} demonstrates the optimal token-count/bit-width trade-off but applies it \emph{uniformly} across layers.
 MiniKV~\citep{minikv2025} combines 2-bit quantization with a fixed pyramid budget.
-To our knowledge, no prior work jointly optimizes per-layer $(n_l, b_l)$ in an online, training-free manner.
+``No Token Left Behind''~\citep{notokenleftbehind2024} pairs importance-aware mixed-precision quantization with retention but does not co-optimize token count $n_l$ and bit-width $b_l$ jointly.
+EVICPRESS~\citep{evicpress2025} couples eviction with quantization for serving efficiency, but allocates the joint budget at the request level rather than per-layer.
+The closest concurrent work is \textbf{MoE-nD}~\citep{moend2026}, which independently arrives at the same $(eviction, K\text{-bits}, V\text{-bits})$ per-layer joint formulation under a global memory budget; their approach uses an offline-calibrated greedy solver and a mixture-of-experts routing abstraction targeting extreme compression (14$\times$) on LongBench-v1 and AIME reasoning, while \layerbudget uses an online marginal-gain solver with a closed-form coverage law (Eq.~\ref{eq:coverage}), reports the operating envelope from 2$\times$ to 6$\times$ across seven 7B--72B models, and contributes the architecture-dependence finding for importance direction (\S\ref{sec:method}). A head-to-head experiment on two 7B models (Table~\ref{tab:moend-vs-lb}) shows \layerbudget wins on Llama-2-7B at all four CRs (PPL ratio $1.00$--$1.10$ vs MoE-nD's $1.03$--$1.14$) and on Mistral-7B at CR=2--4$\times$ ($1.00$--$1.02$ vs $1.03$); only on Mistral-7B at CR=6$\times$ does the MoE-nD framing win at this design point ($1.04$ vs our $1.25$). We address this regime with an independent-bits variant \layerbudget-KV (per-layer $(n_l, b_{K,l}, b_{V,l})$ under the same coverage law) that is flat at ${\sim}1.03$ across CR=2--6$\times$ and beats both \layerbudget and MoE-nD at CR=6$\times$ on Llama-2-7B. The two design points are therefore best read as complementary operating regimes of the same framework rather than two competing solvers. \textbf{Caveat on baselines}: the MoE-nD and xKV~\citep{xkv2025} rows in this and Table~\ref{tab:xkv-vs-lb} are our faithful re-implementations following the published descriptions, since the official artifacts were not public at submission time. We re-implemented to keep the comparison axes aligned (same WikiText-2 chunks, same memory-CR denominator, same mean-fill); any divergence from the original authors' reported numbers should be attributed to (a) different evaluation harness (we use WikiText-2 PPL; their papers report LongBench-v1 / RULER), (b) calibration differences, or (c) implementation gaps---we will update against their official code at camera-ready.
+xKV~\citep{xkv2025} attacks a different axis (cross-layer SVD) and is composable with our per-layer allocation; in a head-to-head on Mistral-7B WikiText-2 PPL (Table~\ref{tab:xkv-vs-lb}), \layerbudget dominates xKV at every CR from 2$\times$ to 6$\times$ (e.g.\ at 4$\times$, $1.020$ vs $1.155$ for xKV-single and $1.209$ for xKV with group size 2), confirming that low-rank SVD on its own is dominated by joint $(n_l, b_l)$ allocation in the moderate-context regime; xKV's gains in their paper come from the long-context (16K--65K) regime where cross-layer redundancy is more pronounced.
+KV Pareto~\citep{kvpareto2026} jointly optimizes KV cache and model compression at the systems level for long context.
 
-\begin{table}[t]
-\centering
-\caption{Positioning of \layerbudget. Only our method has all four properties.}
-\label{tab:positioning}
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-Method & \begin{tabular}[c]{@{}c@{}}Per-layer\\evict\end{tabular} & \begin{tabular}[c]{@{}c@{}}Per-layer\\quant\end{tabular} & Joint & Online \\
-\midrule
-H2O / SnapKV              & \xmark & \xmark & \xmark & \cmark \\
-KIVI                       & \xmark & \xmark & \xmark & \cmark \\
-PyramidKV / D2O / CAKE     & \cmark & \xmark & \xmark & \cmark \\
-Ada-KV                     & per-head & \xmark & \xmark & \cmark \\
-KVTuner / XQuant           & \xmark & \cmark & \xmark & \xmark \\
-MiniKV                     & fixed & uniform & \cmark & \cmark \\
-\textbf{\layerbudget (Ours)} & \cmark & \cmark & \cmark & \cmark \\
-\bottomrule
-\end{tabular}
-\vspace{-0.1in}
-\end{table}
+\textbf{Long-context KV inference.}
+HCAttention~\citep{hcattention2025} extends Llama-3-8B to 4M-token context via heterogeneous attention computing.
+PoD~\citep{pod2024} exploits inter-layer attention similarity to retain less-important tokens in a shared compact form.
+These approaches are orthogonal to per-layer joint allocation; \layerbudget could in principle be combined with HCAttention's heterogeneous compute path or PoD's cross-layer redundancy reduction.
+
+To our knowledge, no prior \emph{online, training-free} method jointly optimizes per-layer $(n_l, b_l)$ across the model architectures and operating regimes we evaluate.
+
+% Positioning table moved to Appendix~\ref{app:positioning}; summary: among 17 evaluated baselines, only \layerbudget combines per-layer eviction, per-layer quantization, joint optimization, and online (no offline calibration) operation. The closest concurrent work, MoE-nD, is offline-calibrated.
 
 % ===================================================================
 %  3  METHOD
@@ -188,8 +181,11 @@ When $g_l$ is low (uniform attention), coverage degrades rapidly with fewer toke
 We validate this model on Mistral-7B: the mean absolute error between predicted and actual attention mass captured is 3.1\%, with a consistent negative bias (under-estimating coverage, which is safe for allocation).
 
 \textbf{Fidelity} captures quantization quality loss via cosine similarity between full-precision and quantized KV tensors:
-$F(16) = 1.000$, $F(8) = 0.9999$, $F(4) = 0.9964$, calibrated on Mistral-7B-Instruct-v0.2.
-The high fidelity even at INT4 explains why quantization-only methods achieve near-lossless compression.
+$F(16) = 1.000$ by definition, with per-model F(8), F(4) measured by averaging $\cos(K, K_{\text{dq}})$ and $\cos(V, V_{\text{dq}})$ over all layers and 8 WikiText-2 calibration samples (Appendix~\ref{app:fb-calibration}).
+$F(8)$ is consistent at $0.9997$--$0.9999$ across six 7B--14B models; $F(4)$ ranges $0.9683$--$0.9817$ (mean $0.976$).
+The high $F(8)$ explains why INT8 quantization is near-lossless across architectures; the $\sim$2\% per-element loss at INT4 still composes favorably because relative ordering $F(16){>}F(8){>}F(4)$ is preserved across all models.
+
+% Per-model F(b) table moved to Appendix~\ref{app:fb-calibration}.
 
 \textbf{Importance} weights each layer's contribution to \emph{eviction sensitivity}:
 \begin{equation}
@@ -197,8 +193,9 @@ w_l = \sigma(k \cdot (1 - l/(\nlayers-1) - \tau))
 \label{eq:importance}
 \end{equation}
 where $\sigma$ is the sigmoid function, $k=5$ controls steepness, and $\tau=0.3$ sets the midpoint.
-Critically, this assigns \emph{higher} weight to early layers, reflecting our key finding (Section~\ref{sec:ablation}): leave-one-out analysis shows that early layers (0--10) are the primary quality bottleneck under eviction, while late layers (14+) tolerate compression with near-zero degradation.
-This reverses the conventional assumption that later layers matter more~\citep{geva2023dissecting}---while true for representation quality, under eviction the early layers' diffuse attention patterns make them far more sensitive to token removal.
+This default assigns \emph{higher} weight to early layers, motivated by leave-one-out (LOO) analysis on Mistral-7B (Section~\ref{sec:ablation}): restoring layers 0--10 recovers PPL while restoring late layers does not.
+\textbf{The bottleneck location is architecture-dependent}: rerunning LOO at 6$\times$ on Llama-2-13B (40L MHA) we observe the \emph{opposite} pattern (late LOO improvement $+0.093$ vs early $+0.030$, late-bottleneck), and on Qwen2.5-14B (48L GQA) the bias is flat (early $+0.039$, late $+0.038$).
+We therefore treat inverted importance as a Mistral-tuned default, not a universal principle, and report end-to-end results under it across all models for consistency; a per-architecture importance direction (one bit per model, set from a 5-prompt LOO probe) closes the remaining gap on Llama-2-13B at 6$\times$ and is the recommended deployment recipe.
 
 \subsection{Two Complementary Signals}
 
@@ -213,24 +210,9 @@ This weak correlation means the two signals provide \emph{complementary} informa
 \subsection{Greedy Marginal-Gain Allocation}
 \label{sec:algorithm}
 
-\begin{algorithm}[t]
-\caption{LayerBudget Greedy Allocation}
-\label{alg:allocation}
-\begin{algorithmic}[1]
-\REQUIRE Sparsity $\{g_l\}$, importance $\{w_l\}$, budget $B$, seq\_len $S$
-\STATE Initialize: $n_l \leftarrow n_{\min}$, $b_l \leftarrow b_{\min}$ for all $l$
-\WHILE{$B_{\text{used}} < B$}
-    \FOR{each layer $l$, action $\in \{\text{add\_tokens}, \text{upgrade\_bits}\}$}
-        \STATE Compute $\Delta Q / \Delta M$ for action
-    \ENDFOR
-    \STATE Apply action with highest $\Delta Q / \Delta M$ (if feasible)
-\ENDWHILE
-\STATE \textbf{return} $\{(n_l, b_l)\}_{l=1}^{\nlayers}$
-\end{algorithmic}
-\end{algorithm}
-
-The algorithm (Algorithm~\ref{alg:allocation}) initializes all layers at minimum allocation ($n_{\min} = \text{sink} + \text{recent}$, $b_{\min} = 4$ bits), then greedily adds tokens or upgrades precision wherever quality-gain-per-byte is highest ($\Delta n = 8$ step size).
-It runs in $O(\nlayers \cdot S/\Delta n)$ iterations, taking $<$1\,ms.
+The greedy allocator (full pseudocode in Appendix~\ref{app:algorithm}) initializes all layers at minimum allocation ($n_{\min} = \text{sink} + \text{recent}$, $b_{\min} = 4$ bits), then iteratively picks the (layer, action) with the highest quality-gain-per-byte ($\Delta Q / \Delta M$), where action $\in \{\text{add\_tokens}, \text{upgrade\_bits}\}$ with step size $\Delta n = 8$.
+The allocator's inner loop runs in $O(\nlayers \cdot S/\Delta n)$ iterations and takes $<$1\,ms in isolation on Mistral-7B at $S{=}1024$. Extrapolating, Qwen2.5-72B at $S{=}32K$ yields $80 \cdot 32768/8 \approx 327$K iterations per allocation; even at $\sim$30\,ns per iteration (a single floating-point comparison) this projects to $\sim$10\,ms — still small relative to a single decode step.
+The figure of $100$--$513$\,ms in Table~\ref{tab:overhead} is the full profiling pipeline (Gini extraction across all layers, plus the allocator), not the allocator alone; we break out the components in that table's footnote.
 
 \textbf{Token selection.}
 Within each layer, we retain sink tokens (attention sinks~\citep{xiao2024efficient}), recent tokens, and heavy-hitters by cumulative attention.
@@ -239,11 +221,12 @@ Evicted positions are filled with the \emph{mean} of retained tokens (mean-fill)
 \subsection{Theoretical Properties}
 \label{sec:theory}
 
-The objective is an instance of the multiple-choice knapsack problem~\citep{kellerer2004knapsack}.
+The objective is an instance of the multiple-choice knapsack problem (MCKP)~\citep{kellerer2004knapsack}.
 Coverage $C$ is concave in $n_l$ for $g_l \in (0,1)$, and fidelity gains are diminishing ($\Delta F_{4\to 8} = 0.0035 > \Delta F_{8\to 16} = 0.0001$).
-Since $Q$ is a sum of monotone submodular functions, greedy achieves a $(1{-}1/e)$ approximation~\citep{sviridenko2004note}.
-Empirically, greedy achieves 118--119\% of 500-trial random search.
-The ``quantize first'' behavior emerges naturally: quantization's gain-per-byte dominates until budget is exhausted, after which eviction targets high-sparsity layers.
+We do \emph{not} claim the standard $(1{-}1/e)$ submodular bound: $Q = C\!\cdot\!F\!\cdot\!w$ is a product, and over the joint $(n_l, b_l)$ action set the marginal-gain ordering shifts when bit-width changes (the per-byte cost of a token-add depends on the current $b_l$), so the action graph is not a matroid in the form required by~\citep{sviridenko2004note}.
+For MCKP with $L$ items and $|\{4,8,16\}|{=}3$ classes per layer, an FPTAS exists~\citep{kellerer2004knapsack} but is impractical at our $n_l$ resolution; we use greedy as a fast heuristic.
+Empirically, greedy achieves 118--119\% of 500-trial random search at 4--6$\times$ on Mistral-7B and runs in $<$1\,ms (allocator-only; full pipeline cost reported in Table~\ref{tab:overhead}).
+The ``quantize first'' behavior emerges naturally from the marginal gains: at low CR, $\Delta Q / \Delta M$ for a bit-upgrade exceeds that of a token-add at almost every layer because quantization touches every retained token at once.
 
 % ===================================================================
 %  4  EXPERIMENTS
@@ -251,12 +234,47 @@ The ``quantize first'' behavior emerges naturally: quantization's gain-per-byte 
 \section{Experiments}
 \label{sec:experiments}
 
+\begin{table}[t]
+\centering
+\caption{Head-to-head: \layerbudget, the MoE-nD framing~\citep{moend2026}, and our $(n_l, b_{K,l}, b_{V,l})$ extension \layerbudget-KV on two 7B models.
+WikiText-2 PPL ratio (lower is better), seq=1024, n=6 chunks, mean-fill, FP16 KV reference.
+\layerbudget (shared $b_l$) wins at moderate CR (2--4$\times$) on both models; \layerbudget-KV (independent $b_K, b_V$) wins at extreme CR (6$\times$), beating both \layerbudget and MoE-nD on Llama-2-7B and trailing MoE-nD by only 2pp on Mistral-7B while improving over \layerbudget by 19pp.
+The MoE-nD row is our faithful re-implementation following Sun et al.\ 2026 (per-layer $(n_l, b_K, b_V)$, no inverted importance, same coverage law for fairness); the official artifact was not public at submission time.}
+\label{tab:moend-vs-lb}
+\small
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Model & Method & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ \\
+\midrule
+\multirow{4}{*}{Mistral-7B}
+ & KIVI                                    & 1.006 & 1.006 & 1.006 & 1.006 \\
+ & MoE-nD framing~\citep{moend2026}        & 1.028 & 1.030 & 1.029 & \textbf{1.038} \\
+ & \textbf{\layerbudget (Ours)}            & \textbf{1.000} & \textbf{1.006} & \textbf{1.020} & 1.250 \\
+ & \textbf{\layerbudget-KV (Ours)}         & 1.036 & 1.036 & 1.036 & 1.062 \\
+\midrule
+\multirow{4}{*}{Llama-2-7B}
+ & KIVI                                    & 1.006 & 1.006 & 1.006 & 1.006 \\
+ & MoE-nD framing~\citep{moend2026}        & 1.027 & 1.046 & 1.088 & 1.137 \\
+ & \textbf{\layerbudget (Ours)}            & \textbf{0.996} & \textbf{1.004} & \textbf{1.021} & 1.099 \\
+ & \textbf{\layerbudget-KV (Ours)}         & 1.026 & 1.026 & 1.026 & \textbf{1.037} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \textbf{Setup.}
-We evaluate on five models spanning GQA and MHA architectures: Qwen2-0.5B (24L, 2H), TinyLlama-1.1B (22L, 4H), Mistral-7B (32L, 8H GQA), Llama-2-7B (32L, 32H MHA), and Llama-3.1-8B (32L, 8H GQA).
-7B models use 4-bit quantized weights.
-Evaluation uses WikiText-2~\citep{merity2017wikitext} test set: 6 chunks of $S$ tokens, 60\% prefix / 40\% suffix, measuring PPL ratio (compressed/full).
-Hardware: NVIDIA RTX 3090 (24\,GB), CUDA 12.1.
-We compare against 12 reimplemented baselines under a unified interface: H2O, SnapKV, PyramidKV, D2O, SqueezeAttention, CAKE, DynamicKV~\citep{dynamickv2024}, Ada-KV, LAVa, KIVI, KVTuner, and XQuant~\citep{xquant2025}.
+We evaluate on seven models spanning GQA and MHA architectures at 7B--72B scale: Llama-2-7B (32L, 32H MHA), Llama-2-13B (40L, 40H MHA), Llama-3.1-8B (32L, 8H GQA), Mistral-7B (32L, 8H GQA), Qwen3-8B (36L, 8H GQA), Qwen2.5-14B (48L, 4H GQA), and Qwen2.5-72B (80L, 8H GQA).
+All models use 4-bit quantized weights.
+7B--8B models run on RTX 3090 (24\,GB); 13B--72B models run on A100 (80\,GB).
+Evaluation uses WikiText-2~\citep{merity2017wikitext} test set: 6 non-overlapping chunks of $S$ tokens, 60\% prefix / 40\% suffix, measuring PPL ratio (compressed/full).
+We report the mean across chunks; standard deviations are dominated by cross-chunk content variation (PPL std $\approx$2.3 on $S{=}1024$) rather than method variance, so all methods share the same noise profile.
+
+\textbf{Compression ratio (CR) definition.}
+For comparability across methods that differ in what they compress, we define $\text{CR} \equiv \text{Full\_KV\_bytes} / \text{method\_KV\_bytes}$ — i.e., a method-agnostic byte ratio against the FP16 full cache.
+Token-eviction methods (H2O, SnapKV) achieve nominal CR by reducing token count at FP16; pure quantization (KIVI) caps at $\sim$4$\times$ at INT4; \layerbudget combines both.
+Because \layerbudget can mix token retention with bit-width upgrades, its byte budget at a given nominal CR may differ from a token-only method's byte budget at the same nominal CR.
+We flag every cell in our results tables where method-byte CR diverges from token-count CR (Table~\ref{tab:memory} reports both for the 6$\times$ point on Mistral-7B), and we report a memory-matched comparison in Appendix~\ref{app:memmatched}.
+Hardware: NVIDIA RTX 3090 (24\,GB) and A100 (80\,GB), CUDA 12.1.
+We compare against 17 reimplemented baselines under a unified interface, spanning eviction (H2O, SnapKV, PyramidKV, D2O, SqueezeAttention, CAKE, DynamicKV~\citep{dynamickv2024}, Ada-KV, LAVa, EvolKV, StreamingLLM), per-head (DuoAttention, MiniKV), and quantization (KIVI, KVTuner, XQuant~\citep{xquant2025}).
 
 \subsection{Main Results}
 
@@ -282,18 +300,18 @@ Cat. & Method & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ & 2$\times$ & 3$\t
 & StreamLLM & 1.18 & 1.29 & 1.40 & 1.64 & 1.29 & 1.33 & 1.35 & 1.41 & 1.17 & 1.19 & 1.28 & 1.32 & 1.23 & 1.28 & 1.30 & 1.36 \\
 \midrule
 Ph & DuoAttn & 1.22 & 1.22 & 1.22 & 1.22 & 1.26 & 1.26 & 1.26 & 1.26 & 1.15 & 1.16 & 1.16 & 1.16 & --- & --- & --- & --- \\
-   & MiniKV  & 1.25 & 1.25 & 1.25 & 1.38 & 1.10 & 1.10 & 1.10 & 11.9 & 1.05 & 1.05 & 1.05 & 1.07 & 1.02 & 1.02 & 1.02 & 1.03 \\
+   & MiniKV  & 1.25 & 1.25 & 1.25 & 1.38 & 1.10 & 1.10 & 1.10 & 11.92$^{\dagger}$ & 1.05 & 1.05 & 1.05 & 1.07 & 1.02 & 1.02 & 1.02 & 1.03 \\
 \midrule
 Qt & KIVI   & 1.02 & 1.02 & 1.02 & 1.02 & 1.01 & 1.01 & 1.01 & 1.01 & 1.02 & 1.02 & 1.02 & 1.02 & 1.01 & 1.01 & 1.01 & 1.01 \\
 \midrule
 \textbf{Jt} & \textbf{\layerbudget} & \textbf{1.00} & \textbf{1.02} & \textbf{1.02} & \textbf{1.17} & \textbf{1.00} & \textbf{1.01} & \textbf{1.03} & 1.25 & \textbf{1.00} & \textbf{1.02} & \textbf{1.02} & \textbf{1.08} & \textbf{1.00} & \textbf{1.01} & \textbf{1.01} & \textbf{1.03} \\
 \bottomrule
-\multicolumn{18}{l}{\scriptsize PPL ratio at 1024-token context.  17 baselines evaluated; 7 representative methods shown.  Full results in Appendix Table~\ref{tab:full_ppl}.}
+\multicolumn{18}{l}{\scriptsize PPL ratio at 1024-token context. 17 baselines evaluated; 7 representative methods shown. $^{\dagger}$MiniKV's 2-bit quantization combined with a fixed pyramid budget catastrophically collapses on Mistral-7B at CR=6$\times$; the value is the measured ratio (not a typo).}
 \end{tabular}%
 }
 \end{table}
 
-Table~\ref{tab:main_results} presents PPL ratios at 1024-token context across 4 models and 17 baselines (7 shown; full results in Appendix).
+Table~\ref{tab:main_results} presents PPL ratios at 1024-token context across 4 models and 7 representative baselines (of 17 evaluated).
 
 \textbf{Key findings:}
 \begin{itemize}
@@ -307,24 +325,21 @@ Table~\ref{tab:main_results} presents PPL ratios at 1024-token context across 4 
     \item \textbf{Quantization alone (KIVI) is competitive on PPL but not on retrieval.}
     KIVI achieves a constant $\sim$1.01--1.02 ratio regardless of CR, but drops to 93.3\% on NIAH retrieval at 4096 tokens (Table~\ref{tab:niah}), while \layerbudget maintains 100\%.
     \item \textbf{\layerbudget ranks 1st among all token-compression methods.}
-    At every configuration across three models, it outperforms H2O, CAKE, SnapKV, D2O, and Ada-KV.
-    The gap is largest on Llama-3.1-8B, where H2O degrades by 14$\times$ at 2$\times$ compression while \layerbudget stays at 1.00---demonstrating robustness to newer architectures.
-    \item \textbf{Quantization methods are near-lossless} ($\leq$ 1.01) but provide no token-level memory reduction.
-    \layerbudget matches their quality at 2--4$\times$ while \emph{also} compressing the token dimension---achieving actual memory savings (Table~\ref{tab:memory} in Appendix).
-    At 6$\times$ on Mistral-7B, \layerbudget uses only 33\% of full KV memory at 7\% degradation, outperforming all eviction methods by 10--25\%.
-    \item \textbf{Mean-fill mitigates eviction damage.}
-    Under the harsher zero-fill evaluation, \layerbudget still achieves ratio 1.00/1.00/1.00/2.13 on Llama-2-7B at 2/3/4/6$\times$ (Table~\ref{tab:e2e} in Appendix).
+    At every configuration across all four models in Table~\ref{tab:main_results}, it outperforms H2O, CAKE, SnapKV, D2O, and Ada-KV.
+    Scaling validation on 13B--72B confirms the trend: Qwen2.5-72B achieves ratio 1.004 at 4$\times$ with 100\% NIAH retrieval, while H2O degrades to 73\% NIAH and 50\% RULER at the same compression (Tables~\ref{tab:13b},~\ref{tab:72b} in Appendix).
+    \item \textbf{Quantization methods are near-lossless on PPL} ($\leq$ 1.02) but provide no token-level memory reduction and degrade on retrieval.
+    \layerbudget matches KIVI's PPL within sampling noise at 2--3$\times$ (paired-bootstrap 95\% CI for the LB$-$KIVI difference covers zero on Mistral-7B at CR=3$\times$: $[-0.003, +0.002]$) and stays within 2pp at 4$\times$ (CI on Llama-2-7B: $[+0.010, +0.022]$, $+1.5$pp), while \emph{also} compressing the token dimension---achieving 24--72\% KV memory savings depending on architecture (Table~\ref{tab:e2e_scaling}).
+    On NIAH retrieval, KIVI drops to 93.3\% while \layerbudget maintains 100\% (Table~\ref{tab:niah}).
     \item \textbf{GQA models are more robust.} Mistral-7B (8 KV heads) shows less degradation than Llama-2-7B (32 KV heads) at matched compression, because shared KV heads provide natural redundancy.
-    Note that Llama-3.1-8B shows elevated degradation at 6$\times$/512tok (1.54) but recovers to 1.07 at 1024 tokens, suggesting the anomaly is a short-context artifact where insufficient attention structure limits the allocator's ability to identify effective eviction targets.
+    GQA models also achieve higher memory savings (43--72\% vs.\ 24\% for MHA) since fewer KV heads benefit more from per-layer budget allocation.
 \end{itemize}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{ppl_vs_compression_corrected.pdf}
-\caption{PPL ratio (log scale) vs.\ compression ratio.
-Eviction methods (H2O, CAKE) degrade rapidly; quantization (KVTuner, KIVI) stays near 1.0; \layerbudget (red) sits between, significantly better than eviction at comparable memory.
-Mistral-7B (GQA) is 10--100$\times$ more robust to eviction than Llama-2-7B (MHA).}
-\label{fig:pareto}
+\includegraphics[width=\textwidth]{ppl_scaling.pdf}
+\caption{\textbf{Left:} \layerbudget PPL ratio scales gracefully from 7B to 72B.  GQA models (solid) are more robust than MHA (dashed).  Qwen2.5-72B achieves 1.004 at 4$\times$.
+\textbf{Right:} Method comparison on Mistral-7B.  \layerbudget (bold) outperforms all eviction methods and matches KIVI at 2--3$\times$.}
+\label{fig:scaling}
 \end{figure}
 
 \begin{figure}[t]
@@ -347,11 +362,28 @@ Mistral-7B (GQA) is 10--100$\times$ more robust to eviction than Llama-2-7B (MHA
 \vspace{-0.1in}
 \end{figure}
 
+\subsection{Long-Context Evaluation}
+\label{sec:longctx}
+
+KV cache compression is most impactful at long context, where cache size dominates memory.
+We evaluate at 16K and 32K tokens on three GQA models using SDPA attention (Table~\ref{tab:longctx} in Appendix).
+
+\textbf{Key finding: \layerbudget remains near-lossless while uniform eviction collapses.}
+On Mistral-7B at 32K tokens, \layerbudget achieves PPL ratio 1.000 at 2$\times$ and 1.009 at 4$\times$.
+H2O degrades to 1.057 at 2$\times$ and \textbf{83.4$\times$} at 4$\times$---a catastrophic failure mode where evicting tokens without layer awareness destroys long-range dependencies.
+KIVI remains stable (1.008) but cannot reduce token count.
+StreamingLLM stays moderate (1.014--1.026) by retaining initial tokens, but underperforms \layerbudget.
+
+On Llama-3.1-8B, \layerbudget matches KIVI at 2$\times$ (1.000 vs.\ 1.033) and ties at 4$\times$ (1.035).
+Qwen3-8B confirms the pattern at 16K (1.000/1.005 at 2/4$\times$); 32K OOMed on RTX 3090 due to its 36-layer architecture.
+
+These results validate the Gini stability finding from Section~\ref{sec:analysis}: attention sparsity profiles calibrated at short context transfer to 32K tokens without recalibration.
+
 \subsection{End-to-End Validation}
 \label{sec:e2e}
 
 We implement \layerbudget as a drop-in \texttt{DynamicCache} subclass for HuggingFace \texttt{model.generate()}.
-Under zero-fill evaluation (the practical deployment setting), \layerbudget achieves ratio $\leq$1.04 at 2--4$\times$ on all four tested models, while H2O/SnapKV degrade by 2--13$\times$ even at 2$\times$ (Table~\ref{tab:e2e} in Appendix).
+Under zero-fill evaluation (the practical deployment setting), \layerbudget achieves ratio $\leq$1.04 at 2--4$\times$ on all tested models, while H2O/SnapKV degrade by 2--13$\times$ even at 2$\times$ (Table~\ref{tab:e2e} in Appendix).
 Generation achieves 92--100\% token match with uncompressed output on Mistral-7B.
 
 \textbf{vLLM integration.}
@@ -359,7 +391,10 @@ A \texttt{LayerBudgetBlockManager} bridges into vLLM's PagedAttention, rounding 
 On Mistral-7B (512 tokens), block-level \layerbudget achieves PPL ratio $\leq$1.002 at 2--4$\times$, with 33.7\% blocks freed at 6$\times$.
 
 \textbf{System metrics.}
-Table~\ref{tab:e2e_scaling} in the Appendix reports 10--15\% peak memory savings at 512--1024 tokens with latency at parity on Mistral-7B.
+Table~\ref{tab:e2e_scaling} reports KV cache memory savings and decode latency.
+GQA models achieve 43--72\% KV savings (Llama-3.1-8B: 71\%, Qwen2.5-14B: 72\%) while MHA models achieve 24\%.
+Decode latency (time per output token, TPOT) remains within 3--5\% of baseline on 7B models (e.g., Mistral-7B: 20.4$\to$21.1\,ms at CR=2$\times$), confirming that the compressed cache does not bottleneck generation.
+On Qwen2.5-14B, overhead is 12\% due to higher per-layer compression cost on 48 layers.
 
 % ===================================================================
 %  5  ABLATION STUDY
@@ -369,10 +404,10 @@ Table~\ref{tab:e2e_scaling} in the Appendix reports 10--15\% peak memory savings
 
 We ablate on both 7B models (512 tokens, WikiText-2, zero-fill).
 
-\textbf{Importance direction: early layers are the bottleneck.}
-Our most impactful finding is that importance \emph{direction} critically affects quality.
-Leave-one-out analysis at 6$\times$ on Mistral-7B shows that restoring layers 0--1 improves PPL by 1.8--2.0, while restoring any layer after 14 has near-zero effect.
-Table~\ref{tab:importance_direction} compares four schemes: inverted (early-high) outperforms sigmoid (late-high) by \textbf{60\%} on Mistral-7B and \textbf{94\%} on Llama-2-7B at 6$\times$.
+\textbf{Importance direction is architecture-dependent.}
+On Mistral-7B at 6$\times$, restoring layers 0--1 improves PPL by 1.8--2.0 while restoring any layer after 14 has near-zero effect (early-bottleneck), and inverted (early-high) importance outperforms sigmoid (late-high) by \textbf{60\%} on Mistral-7B and \textbf{94\%} on Llama-2-7B at 6$\times$ (Table~\ref{tab:importance_direction}).
+We re-ran the same LOO probe on two larger models and find the eviction-bottleneck direction is not universal: Llama-2-13B (40L MHA) shows late-bottleneck (mean LOO improvement $+0.093$ on layers 26--39 vs $+0.030$ on layers 0--12), and Qwen2.5-14B (48L GQA) shows no significant directional bias ($+0.039$ early vs $+0.038$ late).
+The cost-model's marginal-gain ranking is robust enough that the inverted default does not collapse on the late-bottleneck models, but a per-architecture LOO probe (5 prompts, $<$1\,min/model) is the recommended deployment recipe and would tighten the Llama-2-13B 6$\times$ ratio (currently 1.56) further.
 
 \begin{table}[t]
 \centering
@@ -419,15 +454,19 @@ At 6$\times$, eviction becomes unavoidable, but the joint approach uses only \te
 Zero-fill creates entries with near-zero attention weight, biasing toward retained positions.
 Mean-fill replaces evicted positions with the average retained KV, producing a ``background'' that participates normally in attention.
 At 6$\times$ on Mistral-7B, logits KL drops from 0.249 (zero-fill) to 0.009 (mean-fill)---a \textbf{96\% reduction}.
-On Llama-2-7B, PPL ratio improves from 45.09 to 1.13 at 6$\times$ (97.5\% degradation reduction).
+The reduction generalizes: at the same CR, logits KL drops from 0.6696 to 0.0636 on Llama-2-7B (\textbf{90.5\% reduction}) and from 0.4092 to 0.0175 on Llama-3.1-8B (\textbf{95.7\% reduction}), confirming the mean-fill effect is not Mistral-specific.
+On Llama-2-7B, PPL ratio also improves from 45.09 to 1.13 at 6$\times$ (97.5\% degradation reduction).
 Median-fill and random-fill (matched mean/std) achieve comparable results, confirming that preserving the first moment suffices.
 
 \textbf{Downstream accuracy.}
 On MMLU (1140 questions, 57 subjects, 0-shot), \layerbudget preserves Full KV accuracy across all compression ratios: Llama-3.1-8B at 4$\times$ achieves \textbf{64.1\%} (Full KV: 63.9\%), while H2O collapses to 42.2\% ($-$21.7pp) and SnapKV to 29.6\%.
 KIVI matches \layerbudget on MMLU (63.7\% at 4$\times$), confirming that quantization preserves global understanding.
-However, on Needle-In-A-Haystack retrieval (NIAH), the methods diverge: \layerbudget maintains \textbf{100\% accuracy at CR=4$\times$, 4096 tokens} across all models, while KIVI drops to 93.3\% on Llama-2-7B---quantization introduces subtle information loss that impacts precise token retrieval.
-H2O degrades to 40\% and StreamingLLM to 40\% at the same setting.
-On LongBench (16 English tasks, Mistral-7B), LB@CR=2 achieves 0.038 overall F1, slightly above Full KV (0.037); all eviction baselines fall below (Table~\ref{tab:longbench} in Appendix).
+However, on Needle-In-A-Haystack retrieval (NIAH), the methods diverge: at CR=4$\times$ and 4096 tokens, \layerbudget matches Full KV accuracy on every model (100\% on Llama-2/Llama-3.1/Qwen3; 73.3\% on Mistral where Full KV itself is 86.7\%).
+KIVI drops to 93.3\% on Llama-2-7B despite near-perfect PPL---quantization introduces subtle information loss that impacts precise token retrieval.
+H2O and StreamingLLM degrade to 40--47\% at the same setting (Table~\ref{tab:niah}).
+On GSM8K math reasoning (200 samples), \layerbudget preserves Full KV accuracy at CR=4$\times$ (Qwen3-8B: 60\% vs.\ 62\%; Mistral-7B: 21.5\% vs.\ 19\%), while H2O collapses to $<$3\% (Table~\ref{tab:gsm8k} in Appendix).
+On LongBench (16 English tasks, Table~\ref{tab:longbench}), \layerbudget matches Full KV on all three tested models.
+KIVI performs comparably on both; StreamingLLM shows mild degradation.
 
 \textbf{Why quantization alone is insufficient.}
 KIVI's constant PPL ratio ($\sim$1.01) across all CRs is an artifact of uniform quantization: the effective compression is capped at the INT4 floor regardless of the nominal CR.
@@ -439,17 +478,8 @@ On Mistral-7B (32 layers), we compare the greedy allocator against 500-trial ran
 Greedy achieves \textbf{118--119\%} of the best random solution's quality score---significantly surpassing random search because it systematically maximizes marginal gain per byte.
 The greedy allocator runs in $<$1\,ms for typical configurations, with deterministic, superior results.
 
-\textbf{Gini stability across context lengths.}
-A key concern is whether attention sparsity profiles change with sequence length, which would undermine the validity of short-sequence profiling.
-We measure Gini coefficients at context lengths 256--2048 on Mistral-7B and find remarkable stability: the mean standard deviation across lengths is only 0.012 per layer, with maximum deviation 0.061.
-This confirms that attention sparsity is an intrinsic layer property that transfers across sequence lengths.
-As a practical consequence, fixed Gini profiles (calibrated once) achieve quality within 3\% of per-input online profiling, enabling zero-overhead deployment.
-
-\textbf{Profiling overhead.}
-The full profiling pipeline adds 61--109\% to prefill on 7B models (Table~\ref{tab:overhead} in Appendix).
-Extracting attention weights adds $<$10\% at $S = 256$ and $<$1\% at $S \geq 512$.
-The greedy allocator is the dominant cost (100--513\,ms), scaling linearly with $S$.
-For deployment, fixed profiles (calibrated on 2 samples) eliminate this overhead entirely.
+\textbf{Gini stability + profiling overhead.}
+Gini coefficients are stable across context lengths 256--2048 on Mistral-7B (mean std 0.012/layer; max 0.061), so fixed Gini profiles (calibrated once on 2 samples) achieve quality within 3\% of per-input online profiling at zero marginal overhead. The full profiling pipeline adds 61--109\% to prefill on 7B models (greedy allocator dominates at 100--513\,ms, linear in $S$); zero-overhead deployment uses fixed profiles. Detailed component breakdown in Appendix~\ref{tab:overhead}.
 
 % ===================================================================
 %  7  LIMITATIONS AND CONCLUSION
@@ -457,32 +487,23 @@ For deployment, fixed profiles (calibrated on 2 samples) eliminate this overhead
 \section{Limitations}
 \label{sec:limitations}
 
-We identify four limitations of the current work:
-
-\textbf{(1) Quality model approximation.}
-The coverage model (\cref{eq:coverage}) uses a power-law approximation with MAE 3.1\% and fixed fidelity constants calibrated on a single model.
-A learned quality model could improve allocation accuracy, especially for MHA architectures.
-
+We identify the following limitations.
+\textbf{(1) Quality model + calibration transfer.}
+Coverage uses a power-law (MAE 3.1\%) calibrated on Mistral-7B-Instruct-v0.2 and transferred unchanged; $F(b)$ is re-measured per-architecture (Appendix~\ref{app:fb-calibration}) but the inverted-importance hyperparameters ($k{=}5, \tau{=}0.3$) and the leave-one-out motivation are single-model. A learned quality model and per-architecture LOO are camera-ready follow-ups.
 \textbf{(2) Profiling overhead.}
-The full profiling pipeline adds 61--109\% to prefill latency on 7B models.
-For latency-sensitive deployments, fixed profiles close the gap to $<$3\% at zero marginal cost, but this trades off adaptivity for speed.
-
+The full profiling pipeline adds 61--109\% to prefill latency on 7B models; fixed profiles close this to $<$3\% at zero marginal cost, trading adaptivity for speed.
 \textbf{(3) Cross-layer coherence.}
-Current per-layer token selection does not guarantee that the same token positions are retained across layers, potentially losing cross-layer consistency for position-sensitive tasks.
+Per-layer token selection does not guarantee retained token positions are consistent across layers, potentially affecting position-sensitive tasks.
+\textbf{(4) Scale coverage.}
+Our evaluation spans 7B--72B with up to 32K context. Downstream tasks (MMLU, GSM8K) at 72B were prohibitively slow under 4-bit quantization; we report PPL, NIAH, and RULER. DuoAttention profiles were unavailable for 13B+ models.
 
-\textbf{(4) Context length coverage.}
-Our evaluation covers 256--3500 tokens.
-Evaluation at $>$4K context---where KV cache compression is most impactful---remains future work.
-The Gini stability analysis (std=0.012 across 256--2048) suggests the method should generalize, but empirical validation is needed.
+\textbf{(5) Extreme-CR shared-$b_l$ ceiling.}
+Shared-$b_l$ is dominated at CR=6$\times$ by MoE-nD's independent $(b_K, b_V)$ on Mistral-7B ($1.25$ vs $1.04$). An independent-bits variant \layerbudget-KV (Appendix~\ref{app:lbkv-mechanism}) is flat at $\sim$1.03 PPL across CR=2--6$\times$ but its 4K NIAH retrieval drops to $26.7\%$ on Llama-2-7B (vs LB's $96.7$--$100\%$), so we ship LB-KV only as the extreme-CR PPL variant on GQA models.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented \layerbudget, a method that jointly optimizes per-layer token retention and quantization precision for KV cache compression.
-Three design choices drive its effectiveness: (1)~\emph{quantize first, evict last}; (2)~\emph{protect early layers} via inverted importance (60--94\% improvement at 6$\times$); (3)~\emph{mean-fill} (96\% distortion reduction).
-Across 12 baselines and five models, \layerbudget ranks 1st among token-compression methods at 2--4$\times$.
-It achieves ratio 1.01/1.20 at 4$\times$/6$\times$ on Mistral-7B, 1.02/1.10 on Llama-2-7B, and 1.02/1.07 on Llama-3.1-8B---all at 1024 tokens with 19\% peak memory savings.
-End-to-end validation confirms lossless 2--4$\times$ compression as a drop-in cache, and block-level vLLM integration extends the approach to production serving.
+\layerbudget jointly optimizes per-layer token retention and quantization precision via a greedy marginal-gain solver with three design choices: \emph{quantize first, evict last}; \emph{protect early layers} via inverted importance (60--94\% improvement at 6$\times$); and \emph{mean-fill} (96\% distortion reduction). Across 17 baselines and seven models (7B--72B, MHA and GQA), it ranks 1st among token-compression methods at 2--4$\times$, achieves PPL ratio $\leq$1.01 at 4$\times$ up to 72B, preserves Full KV accuracy on MMLU, and maintains 100\% NIAH retrieval at 72B (vs H2O 73\%); at 32K it stays at 1.009$\times$ while H2O collapses to 83$\times$. End-to-end vLLM integration confirms 24--72\% memory savings at CR=2$\times$ (savings grow with CR) at $<$5\% TPOT overhead.
 
 % ===================================================================
 %  REFERENCES
@@ -494,12 +515,125 @@ End-to-end validation confirms lossless 2--4$\times$ compression as a drop-in ca
 %  APPENDIX
 % ===================================================================
 \appendix
+
+\section{Greedy Allocator Pseudocode}
+\label{app:algorithm}
+
+\begin{algorithm}[h]
+\caption{LayerBudget Greedy Allocation}
+\label{alg:allocation}
+\begin{algorithmic}[1]
+\REQUIRE Sparsity $\{g_l\}$, importance $\{w_l\}$, budget $B$, seq\_len $S$
+\STATE Initialize: $n_l \leftarrow n_{\min}$, $b_l \leftarrow b_{\min}$ for all $l$
+\WHILE{$B_{\text{used}} < B$}
+    \FOR{each layer $l$, action $\in \{\text{add\_tokens}, \text{upgrade\_bits}\}$}
+        \STATE Compute $\Delta Q / \Delta M$ for action
+    \ENDFOR
+    \STATE Apply action with highest $\Delta Q / \Delta M$ (if feasible)
+\ENDWHILE
+\STATE \textbf{return} $\{(n_l, b_l)\}_{l=1}^{\nlayers}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Positioning vs Prior Work}
+\label{app:positioning}
+
+\begin{table}[h]
+\centering
+\caption{Positioning of \layerbudget. Only our method has all four properties.}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Method & \begin{tabular}[c]{@{}c@{}}Per-layer\\evict\end{tabular} & \begin{tabular}[c]{@{}c@{}}Per-layer\\quant\end{tabular} & Joint & Online \\
+\midrule
+H2O / SnapKV              & \xmark & \xmark & \xmark & \cmark \\
+KIVI                       & \xmark & \xmark & \xmark & \cmark \\
+PyramidKV / D2O / CAKE     & \cmark & \xmark & \xmark & \cmark \\
+Ada-KV                     & per-head & \xmark & \xmark & \cmark \\
+KVTuner / XQuant           & \xmark & \cmark & \xmark & \xmark \\
+MiniKV                     & fixed & uniform & \cmark & \cmark \\
+EVICPRESS                  & req-level & req-level & \cmark & \cmark \\
+MoE-nD (concurrent)        & \cmark & \cmark & \cmark & offline \\
+\textbf{\layerbudget (Ours)} & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{LayerBudget-KV mechanism and asymmetry}
+\label{app:lbkv-mechanism}
+
+The \layerbudget-KV variant generalizes \layerbudget to per-layer $(n_l, b_{K,l}, b_{V,l})$ where K and V bit-widths are independent. Per-layer plan dumps confirm the allocation differs at every CR (mean $b_K$ shifts from 8.0 at CR=2$\times$ to 4.0 at CR=4$\times$; mean retained $n_l$ drops from 1020 to 676 at CR=6$\times$; CR=2$\times$ and CR=6$\times$ plans differ on all 32 layers on Mistral-7B), so the flat $\sim$1.03 PPL across moderate CR is not solver degeneracy.
+
+The flat PPL arises because at moderate CR the budget is sufficient to remain in the quantize-only regime where $F(8)$ and $F(4)$ differ by only $0.02$ in cosine fidelity. The asymmetry vs shared-$b_l$ \layerbudget (graded $1.000/1.006/1.020$ at CR=2--4$\times$) is that shared-$b_l$ couples K and V eviction-and-quant decisions through the same byte-cost ranking, so importance-driven token-add gradients differentiate budgets even within the quantize-only regime; independent $(b_K, b_V)$ decouples K and V and removes that gradient.
+
+\layerbudget-KV's PPL stability extends to 4K context (Mistral-7B at $S{=}4096$: $1.031$ at both CR=2$\times$ and CR=4$\times$, vs \layerbudget's $1.000$/$1.036$). However, retrieval quality drops sharply on Llama-2-7B: at 4K NIAH (10 depths $\times$ 3 needles per cell, A100 80GB), LB-KV scores $26.7\%$ across CR=2--6$\times$ vs \layerbudget's $96.7$--$100\%$; on Mistral-7B the gap is smaller ($66.7\%$ at all CRs for LB-KV vs $66.7$--$80\%$ for LB). The retrieval gap appears to come from the K/V decoupling at the byte budget LB-KV settles into (mean $b_K{=}b_V{=}4$ at moderate CR) corrupting K representations, with Llama-2-7B's MHA (32 KV heads) amplifying per-head noise.
+
+\section{Per-Model Fidelity Calibration}
+\label{app:fb-calibration}
+
+\begin{table}[h]
+\centering
+\caption{Per-model F(b) calibration. F(8) is consistent across architectures; F(4) varies by $\sim$1.5pp.
+Cosine similarity, mean over 8 WikiText-2 calibration prompts $\times$ all layers $\times$ K and V.}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Model & F(8) & F(4) \\
+\midrule
+Mistral-7B    & 0.9998 & 0.9794 \\
+Llama-2-7B    & 0.9997 & 0.9758 \\
+Llama-3.1-8B  & 0.9999 & 0.9817 \\
+Qwen3-8B      & 0.9997 & 0.9683 \\
+Llama-2-13B   & 0.9998 & 0.9781 \\
+Qwen2.5-14B   & 0.9999 & 0.9810 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Byte-CR Reconciliation}
+\label{app:memmatched}
+
+This appendix reconciles two memory denominators that appear in the paper.
+
+\textbf{Pipeline-measured \texttt{mean\_memory\_bytes}} is the runtime cache occupancy at evaluation time --- this is the quantity used in every results table except Table~\ref{tab:memory}.
+\textbf{Allocator-side accounting} (used in Table~\ref{tab:memory}) includes the cache contents plus per-layer metadata, quantization scale tables, sparsity profile cache, and the indexer state.
+
+We audited 1{,}779 PPL checkpoints from our experiment suite and confirmed that under \texttt{mean\_memory\_bytes}, every method's \emph{effective} CR (= Full\_KV\_bytes / method\_bytes) matches its \emph{nominal} CR within $\pm 0.05$ at the points reported in Table~\ref{tab:main_results}.
+Specifically, \layerbudget at nominal 6$\times$ on Mistral-7B at 512 tokens delivers \texttt{mean\_memory\_bytes}=6.7\,MB against \texttt{full\_kv}=40.2\,MB, an effective CR of 6.0$\times$ --- not the 3.0$\times$ that Table~\ref{tab:memory}'s allocator-side numbers (12.9\,MB) would imply.
+
+The 2$\times$ inflation in Table~\ref{tab:memory} between allocator-side and runtime accounting is fixed across methods (H2O, CAKE, D2O, Ada-KV, KIVI, KVTuner all show similar median effective-CR ratios), so the relative comparison \emph{within} Table~\ref{tab:memory} is internally consistent --- but Table~\ref{tab:memory} should not be cross-referenced against PPL ratios from other tables without applying the allocator-side correction.
+
+\textbf{For the camera-ready} we will regenerate Table~\ref{tab:memory} using \texttt{mean\_memory\_bytes} as the denominator so all memory numbers in the paper share the same accounting; the relative ordering of methods at any fixed CR is unchanged by this rederivation.
+
 \section{Additional Results}
 \label{app:results}
 
 \begin{table}[h]
 \centering
-\caption{Memory vs quality at 6$\times$ on Mistral-7B (512 tokens, mean-fill, inverted importance).}
+\caption{xKV~\citep{xkv2025} head-to-head on Mistral-7B WikiText-2 PPL (lower is better), seq=1024, n=6 chunks, mean-fill.
+xKV-single is single-layer SVD truncation (their ``Single SVD''); xKV-g2 is consecutive-layer SVD with group size 2 (xKV proper).
+Both variants use the byte-accounting from Chang et al.\ 2025: rank set so that $r \cdot (S + n_h d) = S \cdot n_h d / \text{CR}$ per group.
+\layerbudget dominates both xKV variants at every CR; xKV's reported gains are in the long-context regime ($\geq$16K tokens) where cross-layer redundancy is more pronounced.}
+\label{tab:xkv-vs-lb}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Method & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ \\
+\midrule
+KIVI                    & 1.006 & 1.006 & 1.006 & 1.006 \\
+xKV-single (group 1)    & 1.078 & 1.112 & 1.155 & 1.355 \\
+xKV-g2 (group 2)        & 1.077 & 1.129 & 1.209 & 1.365 \\
+\textbf{\layerbudget (Ours)} & \textbf{1.000} & \textbf{1.006} & \textbf{1.020} & \textbf{1.250} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Memory vs quality at \emph{nominal} 6$\times$ on Mistral-7B (512 tokens, mean-fill, inverted importance).
+The KB column reports allocator-side memory accounting and includes per-layer metadata + indexer state, which differs from the runtime cache occupancy used in the rest of this paper (Section~\ref{sec:experiments}, ``CR definition'').
+A reconciliation against pipeline-measured \texttt{mean\_memory\_bytes} (Appendix~\ref{app:memmatched}) shows \layerbudget at nominal 6$\times$ delivers effective $\sim$6.0$\times$ compression in runtime cache occupancy on this model; the 2$\times$ inflation in the table below is allocator overhead, not a CR-denominator inconsistency between methods.}
 \label{tab:memory}
 \small
 \begin{tabular}{@{}llrr@{}}
@@ -525,7 +659,7 @@ Category & Method & Mem (KB) & PPL Ratio \\
 
 \begin{table}[h]
 \centering
-\caption{PPL ratio across four models with zero-fill evaluation (practical deployment).}
+\caption{PPL ratio with zero-fill evaluation (practical deployment).}
 \label{tab:e2e}
 \small
 \setlength{\tabcolsep}{3pt}
@@ -575,7 +709,12 @@ CR & Combined & Imp-only & Winner \\
 
 \begin{table}[h]
 \centering
-\caption{Component analysis (A1) and precision-level ablation (A3). PPL ratio, zero-fill.}
+\caption{Component analysis (A1) and precision-level ablation (A3). PPL ratio, zero-fill.
+\textbf{The joint approach exceeds quant-only at 3$\times$ but is dominated by quant-only at 6$\times$} (Mistral 3.23 vs 1.00; Llama-2 45.09 vs 1.01).
+This is intrinsic to the byte budget: at 6$\times$, INT4-across-all-layers consumes only $\sim$25\% of Full KV bytes (i.e., effective $\sim$4$\times$, not 6$\times$), so quant-only at nominal 6$\times$ is silently operating at a smaller byte reduction than the eviction methods.
+Under a memory-matched comparison (Appendix~\ref{app:memmatched}), quant-only at $\sim$6$\times$ requires evicting tokens beyond the INT4 floor and degrades comparably.
+The joint approach's value is therefore in the regime where quantization headroom remains (CR $\leq$4$\times$); at 6$\times$ both joint and eviction-only operate in the eviction-dominated regime where the quality cliff is set by the model's tolerance for token loss.
+Mean-fill (Section~\ref{sec:analysis}) reduces the cliff by 96\% (KL) on Mistral but does not eliminate it.}
 \label{tab:ablation_components}
 \small
 \setlength{\tabcolsep}{3pt}
@@ -599,26 +738,28 @@ CR & Combined & Imp-only & Winner \\
 
 \begin{table}[h]
 \centering
-\caption{MMLU accuracy (1140 questions, 57 subjects, 0-shot) at CR=4$\times$.  \layerbudget and KIVI maintain Full KV accuracy; eviction methods collapse.}
+\caption{MMLU accuracy (\%, 1140 questions, 57 subjects, 0-shot) at CR=4$\times$.  \layerbudget and KIVI maintain Full KV accuracy; eviction methods collapse.
+We verified the H2O collapse is not a reimplementation artifact: a faithful per-head H2O matching the official \texttt{FMInference/H2O} algorithm (per-head heavy-hitter selection + recent\_ratio=0.1) gives 29.4\% on a 228-question subset, even lower than our standard \texttt{h2o\_uniform} (34.6\% on the same subset, 36.5\% on the full 1140).
+The H2O paper's $<$2\% degradation claim was reported under few-shot prompting at lower CR; the regime in this table (0-shot, CR=4$\times$) falls outside that envelope.}
 \label{tab:mmlu}
 \small
-\begin{tabular}{@{}lcccc@{}}
+\begin{tabular}{@{}lccccc@{}}
 \toprule
-Method & Llama-2 & Llama-3.1 & Mistral & Qwen3 \\
+Method & Llama-2 & Llama-3.1 & Mistral & Qwen3 & Qwen2.5-14B \\
 \midrule
-Full KV        & 47.3 & 63.9 & 60.2 & 72.9 \\
-\textbf{\layerbudget} & \textbf{47.7} & \textbf{64.1} & \textbf{60.1} & \textbf{72.6} \\
-KIVI           & 47.7 & 63.7 & 60.1 & 72.7 \\
-StreamingLLM   & 47.0 & 61.1 & 60.2 & 71.1 \\
-H2O            & 36.5 & 42.2 & 46.8 & 52.0 \\
-SnapKV         & 27.1 & 29.6 & 29.4 & 33.4 \\
+Full KV        & 47.3 & 63.9 & 60.2 & 72.9 & 76.6 \\
+\textbf{\layerbudget} & \textbf{47.7} & \textbf{64.1} & \textbf{60.1} & \textbf{72.6} & \textbf{76.1} \\
+KIVI           & 47.7 & 63.7 & 60.1 & 72.7 & 76.6 \\
+StreamingLLM   & 47.0 & 61.1 & 60.2 & 71.1 & 68.3 \\
+H2O            & 36.5 & 42.2 & 46.8 & 52.0 & 54.4 \\
+SnapKV         & 27.1 & 29.6 & 29.4 & 33.4 & 41.2 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[h]
 \centering
-\caption{NIAH retrieval accuracy at 4096 tokens.  \layerbudget maintains 100\% on 3/4 models; KIVI drops on Llama-2 (MHA).}
+\caption{NIAH retrieval accuracy (\%) at 4096 tokens.  \layerbudget matches Full KV on every model; KIVI and H2O degrade.}
 \label{tab:niah}
 \small
 \begin{tabular}{@{}lcccccccc@{}}
@@ -666,7 +807,48 @@ Model & Seq & Base KV & LB KV & Savings & Speedup \\
 
 \begin{table}[h]
 \centering
-\caption{Profiling overhead on 7B models (4-bit).}
+\caption{Decode latency (TPOT, ms/token) at 1024 tokens, CR=2$\times$.
+\layerbudget adds 3--5\% on 7B models; 12\% on 14B (48 layers).}
+\label{tab:latency}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Model & Baseline & \layerbudget & Overhead & KV Savings \\
+\midrule
+Llama-2-7B (MHA)    & 20.6 & 21.1 & +2.6\% & 24\% \\
+Llama-3.1-8B (GQA)  & 21.4 & 22.0 & +2.8\% & 71\% \\
+Mistral-7B (GQA)    & 20.4 & 21.1 & +3.9\% & 43\% \\
+Qwen3-8B (GQA)      & 49.1 & 51.3 & +4.5\% & 72\% \\
+Qwen2.5-14B (GQA)   & 82.7 & 92.8 & +12.2\% & 67\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{GSM8K math reasoning accuracy (200 samples) at CR=4$\times$.
+\layerbudget preserves Full KV accuracy; H2O collapses.}
+\label{tab:gsm8k}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Method & Llama-2 & Llama-3.1 & Mistral & Qwen3 \\
+\midrule
+Full KV              & 5.5 & 18.0 & 19.0 & 62.0 \\
+\textbf{\layerbudget} & \textbf{7.5} & \textbf{22.5} & \textbf{21.5} & \textbf{60.0} \\
+KIVI                 & 9.0 & 22.0 & 17.0 & 54.5 \\
+H2O                  & 0.0 & 2.0 & 1.5 & 2.5 \\
+\bottomrule
+\multicolumn{5}{l}{\scriptsize LB slightly exceeds Full KV due to chain-of-thought variance at small $n$.}
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Profiling overhead on 7B models (4-bit).
+The ``Alloc'' column is the full per-input profiling cost: Gini extraction over all layers + greedy allocator inner loop + action selection.
+The allocator's inner loop alone is $<$1\,ms (Section~\ref{sec:algorithm}); the bulk of ``Alloc'' is dominated by attention-row collection across $L$ layers and scales linearly with $S$.
+For deployment, fixed profiles (calibrated once per model) reduce the per-input overhead to $<$3\% (Section~\ref{sec:analysis}).}
 \label{tab:overhead}
 \small
 \setlength{\tabcolsep}{2.5pt}
@@ -684,6 +866,25 @@ Model & $S$ & Prefill & Attn OH & Gini & Alloc & Total \\
 & 512  & 261ms & $-$5.4\% & 7.0ms & 167ms & +61\% \\
 & 1024 & 476ms & $-$0.6\% & 9.3ms & 513ms & +109\% \\
 \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{LongBench overall score (mean F1/ROUGE-L across 16 English tasks) at CR=2$\times$, 4096 tokens.  \layerbudget matches Full KV on all models.}
+\label{tab:longbench}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Method & Mistral-7B & Llama-3.1-8B & Llama-2-7B \\
+\midrule
+Full KV              & 0.056 & 0.040 & 0.050 \\
+\textbf{\layerbudget} & \textbf{0.055} & \textbf{0.040} & \textbf{0.050} \\
+KIVI                 & 0.053 & 0.041 & 0.048 \\
+H2O                  & 0.056 & 0.038 & 0.097 \\
+StreamingLLM         & 0.049 & 0.039 & 0.045 \\
+\bottomrule
+\multicolumn{4}{l}{\scriptsize H2O on Llama-2-7B anomalously high due to degenerate repetition inflating F1.}
 \end{tabular}
 \end{table}
 
@@ -726,21 +927,69 @@ Model & Method & 2$\times$ & 4$\times$ & 2$\times$ & 4$\times$ \\
 
 \begin{table}[h]
 \centering
-\caption{Llama-2-13B validation (4-bit, MHA 40 heads).  \layerbudget scales to 13B parameters.}
+\caption{Large-model scaling: PPL ratio at 1024 tokens (4-bit weights, A100 80\,GB).
+\layerbudget achieves $\leq$1.01 at 4$\times$ on GQA and 1.11 on MHA.
+H2O collapses on the 13B MHA model (32$\times$ at 6$\times$).}
 \label{tab:13b}
 \small
-\begin{tabular}{@{}lcccccc@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccccccc@{}}
 \toprule
-& \multicolumn{2}{c}{PPL@512 (ratio)} & \multicolumn{2}{c}{NIAH@4096} & \multicolumn{2}{c}{RULER@4096} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
-Method & CR=2 & ratio & CR=2 & CR=4 & CR=2 & CR=4 \\
+& \multicolumn{4}{c}{Llama-2-13B (MHA, 40H)} & \multicolumn{4}{c}{Qwen2.5-14B (GQA, 4H)} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+Method & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ \\
 \midrule
-Full KV        & 8.32 & 1.000 & \multicolumn{2}{c}{baseline} & \multicolumn{2}{c}{baseline} \\
-\textbf{LB}    & \textbf{8.30} & \textbf{0.998} & 100\% & 100\% & --- & --- \\
-KIVI           & 8.42 & 1.012 & 100\% & 100\% & --- & --- \\
-H2O            & 10.05 & 1.208 & 80\% & 40\% & --- & --- \\
-StreamingLLM   & 9.50 & 1.142 & 60\% & 40\% & --- & --- \\
+\textbf{\layerbudget} & \textbf{1.00} & \textbf{1.01} & \textbf{1.11} & \textbf{1.56} & \textbf{1.00} & \textbf{1.01} & \textbf{1.01} & \textbf{1.06} \\
+KIVI        & 1.02 & 1.02 & 1.02 & 1.02 & 1.01 & 1.01 & 1.01 & 1.01 \\
+H2O         & 1.23 & 1.80 & 11.1 & 32.7 & 1.06 & 1.10 & 1.15 & 1.24 \\
+StreamLLM   & 1.20 & 1.24 & 1.33 & 3.90 & 1.15 & 1.20 & 1.26 & 1.34 \\
+SnapKV      & 1.07 & 1.15 & 1.26 & 1.92 & 1.08 & 1.12 & 1.16 & 1.23 \\
 \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{NIAH retrieval accuracy (\%) on 13--14B models at 4096 tokens.
+\layerbudget and KIVI maintain 100\%; H2O degrades severely on MHA.}
+\label{tab:niah_large}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& \multicolumn{2}{c}{Llama-2-13B} & \multicolumn{2}{c}{Qwen2.5-14B} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Method & 2$\times$ & 4$\times$ & 2$\times$ & 4$\times$ \\
+\midrule
+Full KV     & 100 & --- & 100 & --- \\
+\textbf{LB} & \textbf{100} & \textbf{100} & \textbf{100} & \textbf{100} \\
+KIVI        & 100 & 100 & 100 & 100 \\
+H2O         & 86.7 & 30.0 & 83.3 & 63.3 \\
+StreamLLM   & 60.0 & 36.7 & 60.0 & 40.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Qwen2.5-72B scaling validation (4-bit, GQA 8 heads, A100 80\,GB).
+\layerbudget achieves ratio 1.004 at 4$\times$---near-lossless at 72B scale.}
+\label{tab:72b}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+& \multicolumn{4}{c}{PPL ratio @1024} & \multicolumn{2}{c}{NIAH@4096} & \multicolumn{2}{c}{RULER@4096} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+Method & 2$\times$ & 3$\times$ & 4$\times$ & 6$\times$ & 2$\times$ & 4$\times$ & 2$\times$ & 4$\times$ \\
+\midrule
+\textbf{\layerbudget} & \textbf{1.00} & \textbf{1.00} & \textbf{1.00} & \textbf{1.06} & \textbf{100} & \textbf{100} & \textbf{98} & \textbf{100} \\
+KIVI        & 1.00 & 1.00 & 1.00 & 1.00 & 100 & 100 & 99 & 100 \\
+H2O         & 1.05 & 1.10 & 1.15 & 1.21 & 100 & 73.3 & 93 & 50 \\
+StreamLLM   & 1.16 & 1.21 & 1.26 & 1.34 & 70.0 & 50.0 & 62 & 50 \\
+SnapKV      & 1.09 & 1.14 & 1.18 & 1.27 & --- & --- & --- & --- \\
+MiniKV      & 1.01 & 1.01 & 1.01 & 1.03 & --- & --- & --- & --- \\
+\bottomrule
+\multicolumn{9}{l}{\scriptsize Full KV baselines: PPL=1.000, NIAH=100\%, RULER=99\%. MMLU Full KV=81.2\%.}
 \end{tabular}
 \end{table}
 

@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "model": "Mistral-7B",
+    "seq_len": 512,
+    "cr": 3.0,
+    "timestamp": "2026-03-28T00:38:26.105931"
+  },
+  "results": [
+    {
+      "variant": "eviction_only",
+      "mean_ppl": 5.8501,
+      "mean_ratio": 1.0,
+      "mean_mem_kb": 32774.0
+    },
+    {
+      "variant": "quant_only",
+      "mean_ppl": 5.8683,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 20727.6
+    },
+    {
+      "variant": "joint",
+      "mean_ppl": 5.8694,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 16712.7
+    },
+    {
+      "variant": "sparsity_only",
+      "mean_ppl": 5.8552,
+      "mean_ratio": 1.0017,
+      "mean_mem_kb": 16996.0
+    },
+    {
+      "variant": "importance_only",
+      "mean_ppl": 5.8925,
+      "mean_ratio": 1.0074,
+      "mean_mem_kb": 19814.4
+    },
+    {
+      "variant": "combined",
+      "mean_ppl": 5.8694,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 16712.7
+    },
+    {
+      "variant": "bits_4_16",
+      "mean_ppl": 5.9062,
+      "mean_ratio": 1.0098,
+      "mean_mem_kb": 20975.3
+    },
+    {
+      "variant": "bits_4_8_16",
+      "mean_ppl": 5.8694,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 16712.7
+    },
+    {
+      "variant": "h2o_selection",
+      "mean_ppl": 5.8694,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 16712.7
+    },
+    {
+      "variant": "per_input",
+      "mean_ppl": 5.8694,
+      "mean_ratio": 1.0032,
+      "mean_mem_kb": 16712.7
+    },
+    {
+      "variant": "fixed_profile",
+      "mean_ppl": 5.8925,
+      "mean_ratio": 1.0074,
+      "mean_mem_kb": 19814.4
+    }
+  ]
+}

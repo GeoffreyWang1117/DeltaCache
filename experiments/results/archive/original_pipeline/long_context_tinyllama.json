@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "device": "cuda:0",
+    "context_lengths": [
+      500,
+      1000,
+      1500,
+      1800
+    ],
+    "n_queries": 15,
+    "timestamp": "2026-01-03T18:20:27.674015"
+  },
+  "experiments": [
+    {
+      "target_tokens": 500,
+      "actual_tokens": 501,
+      "n_queries": 15,
+      "baseline_mean_ms": 35.221287069725804,
+      "baseline_std_ms": 26.10235676064575,
+      "deltacache_mean_ms": 18.624838003112625,
+      "deltacache_std_ms": 7.246694157361154,
+      "deltacache_first_ms": 32.97353700327221,
+      "deltacache_cached_ms": 17.599930931672652,
+      "speedup_overall": 1.8910922642032937,
+      "speedup_cached": 2.0012173460488953,
+      "token_reuse_rate": 0.9194552529182879
+    },
+    {
+      "target_tokens": 1000,
+      "actual_tokens": 1001,
+      "n_queries": 15,
+      "baseline_mean_ms": 54.25672120084831,
+      "baseline_std_ms": 2.8445821226954324,
+      "deltacache_mean_ms": 19.176629665889777,
+      "deltacache_std_ms": 11.004503538248834,
+      "deltacache_first_ms": 58.932236992404796,
+      "deltacache_cached_ms": 16.33694342828156,
+      "speedup_overall": 2.829314751661334,
+      "speedup_cached": 3.3211060220066777,
+      "token_reuse_rate": 0.9262984878369493
+    },
+    {
+      "target_tokens": 1500,
+      "actual_tokens": 1501,
+      "n_queries": 15,
+      "baseline_mean_ms": 69.79234766719553,
+      "baseline_std_ms": 1.6801323646495223,
+      "deltacache_mean_ms": 20.357765932567418,
+      "deltacache_std_ms": 14.208921147233857,
+      "deltacache_first_ms": 71.71316700987518,
+      "deltacache_cached_ms": 16.689522998474008,
+      "speedup_overall": 3.4282910953183197,
+      "speedup_cached": 4.18180601528138,
+      "token_reuse_rate": 0.9286217525319242
+    },
+    {
+      "target_tokens": 1800,
+      "actual_tokens": 1801,
+      "n_queries": 15,
+      "baseline_mean_ms": 89.99302480078768,
+      "baseline_std_ms": 2.1200025877577846,
+      "deltacache_mean_ms": 22.18413006630726,
+      "deltacache_std_ms": 18.483739543167758,
+      "deltacache_first_ms": 88.86755999992602,
+      "deltacache_cached_ms": 17.421027928191638,
+      "speedup_overall": 4.056639793032361,
+      "speedup_cached": 5.165770078076516,
+      "token_reuse_rate": 0.9294009555310547
+    }
+  ],
+  "summary": {
+    "min_tokens": 501,
+    "max_tokens": 1801,
+    "min_speedup": 2.0012173460488953,
+    "max_speedup": 5.165770078076516,
+    "speedup_per_1k_tokens": 2.434271332328939
+  }
+}

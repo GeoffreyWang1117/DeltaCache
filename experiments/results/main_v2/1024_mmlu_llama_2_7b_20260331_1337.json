@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "model": "meta-llama/Llama-2-7b-chat-hf",
+    "model_short": "Llama-2-7B",
+    "importance": "inverted (default)",
+    "timestamp": "2026-03-31T13:36:41.001131"
+  },
+  "main_1024": [
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ratio": 0.9944,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ratio": 1.3044,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ratio": 1.0039,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ratio": 1.459,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ratio": 1.0199,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ratio": 1.5881,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ratio": 1.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ratio": 1.0045,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ratio": 1.0976,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ratio": 1.6855,
+      "n": 4
+    }
+  ],
+  "mmlu": [
+    {
+      "method": "full_kv",
+      "correct": 13,
+      "total": 17,
+      "accuracy": 0.7647
+    },
+    {
+      "method": "layer_budget",
+      "correct": 13,
+      "total": 17,
+      "accuracy": 0.7647
+    },
+    {
+      "method": "h2o_uniform",
+      "correct": 1,
+      "total": 17,
+      "accuracy": 0.0588
+    },
+    {
+      "method": "kivi_uniform",
+      "correct": 13,
+      "total": 17,
+      "accuracy": 0.7647
+    }
+  ]
+}

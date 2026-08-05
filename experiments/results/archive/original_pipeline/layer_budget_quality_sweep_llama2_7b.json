@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "experiment": "layer_budget_quality_sweep",
+    "model": "meta-llama/Llama-2-7b-chat-hf",
+    "load_in_4bit": true,
+    "compression_ratios": [
+      2.0,
+      3.0,
+      4.0,
+      6.0
+    ]
+  },
+  "sweep": {
+    "2.0x": {
+      "full": 8.13,
+      "layer_budget": 8.14,
+      "h2o": 59.88,
+      "cake": 15.21,
+      "kvtuner": 8.2,
+      "ratio_lb": 1.0137,
+      "ratio_h2o": 10.5829,
+      "ratio_cake": 2.312
+    },
+    "3.0x": {
+      "full": 8.13,
+      "layer_budget": 12.21,
+      "h2o": 151.07,
+      "cake": 27.77,
+      "kvtuner": 8.15,
+      "ratio_lb": 1.6694,
+      "ratio_h2o": 38.9914,
+      "ratio_cake": 5.8953
+    },
+    "4.0x": {
+      "full": 8.13,
+      "layer_budget": 12.22,
+      "h2o": 265.85,
+      "cake": 63.29,
+      "kvtuner": 8.14,
+      "ratio_lb": 2.0388,
+      "ratio_h2o": 64.8859,
+      "ratio_cake": 14.1411
+    },
+    "6.0x": {
+      "full": 8.13,
+      "layer_budget": 47.67,
+      "h2o": 473.73,
+      "cake": 143.56,
+      "kvtuner": 8.14,
+      "ratio_lb": 4.5278,
+      "ratio_h2o": 114.5873,
+      "ratio_cake": 30.6244
+    }
+  }
+}

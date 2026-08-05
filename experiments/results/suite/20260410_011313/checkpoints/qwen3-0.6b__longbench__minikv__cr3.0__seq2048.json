@@ -1,0 +1,37 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-0.6B",
+  "method": "minikv",
+  "compression_ratio": 3.0,
+  "seq_len": 2048,
+  "overall_mean": 0.0643,
+  "n_tasks": 4,
+  "per_task": {
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0335,
+      "std": 0.0348,
+      "n": 10
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0891,
+      "std": 0.0736,
+      "n": 10
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1347,
+      "std": 0.0357,
+      "n": 10
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 10
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__longbench__minikv__cr3.0__seq2048",
+  "_timestamp": "2026-04-10T03:18:22.742174"
+}

@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "model": "TinyLlama-1.1B",
+    "n_random": 500,
+    "timestamp": "2026-03-28T22:03:09.643450"
+  },
+  "note": "Greedy achieves near-optimal quality score. See stdout for details."
+}

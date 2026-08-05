@@ -1,0 +1,37 @@
+{
+  "task": "longbench",
+  "model": "Qwen3-0.6B",
+  "method": "duo_attention",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "overall_mean": 0.0558,
+  "n_tasks": 4,
+  "per_task": {
+    "qasper": {
+      "metric": "f1",
+      "mean": 0.0313,
+      "std": 0.0361,
+      "n": 10
+    },
+    "multifieldqa_en": {
+      "metric": "f1",
+      "mean": 0.0781,
+      "std": 0.0618,
+      "n": 10
+    },
+    "gov_report": {
+      "metric": "rouge_l",
+      "mean": 0.1139,
+      "std": 0.0194,
+      "n": 10
+    },
+    "trec": {
+      "metric": "accuracy",
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 10
+    }
+  },
+  "_checkpoint_key": "qwen3-0.6b__longbench__duo_attention__cr6.0__seq2048",
+  "_timestamp": "2026-04-10T05:14:18.717255"
+}

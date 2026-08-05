@@ -1,0 +1,358 @@
+{
+  "date": "2026-05-02T17:28:20.154323",
+  "results": [
+    {
+      "model": "llama2_13b",
+      "hf_name": "meta-llama/Llama-2-13b-chat-hf",
+      "n_layers": 40,
+      "arch": "MHA",
+      "elapsed_s": 61.5,
+      "verdict": "late-bottleneck",
+      "bins": {
+        "early_layers": [
+          0,
+          12
+        ],
+        "mid_layers": [
+          13,
+          25
+        ],
+        "late_layers": [
+          26,
+          39
+        ],
+        "early_loo_mean": 0.0304,
+        "mid_loo_mean": 0.0837,
+        "late_loo_mean": 0.093,
+        "early_loo_max": 0.1158,
+        "late_loo_max": 0.209
+      },
+      "layers": [
+        {
+          "layer": 0,
+          "gini": 0.3267,
+          "importance": 0.9707,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0053
+        },
+        {
+          "layer": 1,
+          "gini": 0.8806,
+          "importance": 0.9668,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0211
+        },
+        {
+          "layer": 2,
+          "gini": 0.9399,
+          "importance": 0.9624,
+          "retention": 0.7801,
+          "bits": 4,
+          "loo_improvement": 0.0747
+        },
+        {
+          "layer": 3,
+          "gini": 0.9277,
+          "importance": 0.9575,
+          "retention": 0.8583,
+          "bits": 4,
+          "loo_improvement": 0.1158
+        },
+        {
+          "layer": 4,
+          "gini": 0.9468,
+          "importance": 0.952,
+          "retention": 0.728,
+          "bits": 4,
+          "loo_improvement": -0.0163
+        },
+        {
+          "layer": 5,
+          "gini": 0.9331,
+          "importance": 0.9458,
+          "retention": 0.8713,
+          "bits": 4,
+          "loo_improvement": 0.0088
+        },
+        {
+          "layer": 6,
+          "gini": 0.9163,
+          "importance": 0.9388,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0052
+        },
+        {
+          "layer": 7,
+          "gini": 0.9336,
+          "importance": 0.931,
+          "retention": 0.8713,
+          "bits": 4,
+          "loo_improvement": 0.0811
+        },
+        {
+          "layer": 8,
+          "gini": 0.9009,
+          "importance": 0.9223,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0036
+        },
+        {
+          "layer": 9,
+          "gini": 0.9155,
+          "importance": 0.9126,
+          "retention": 0.9625,
+          "bits": 4,
+          "loo_improvement": 0.0817
+        },
+        {
+          "layer": 10,
+          "gini": 0.8528,
+          "importance": 0.9018,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0002
+        },
+        {
+          "layer": 11,
+          "gini": 0.8962,
+          "importance": 0.8899,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": -0.0146
+        },
+        {
+          "layer": 12,
+          "gini": 0.8762,
+          "importance": 0.8767,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0286
+        },
+        {
+          "layer": 13,
+          "gini": 0.8562,
+          "importance": 0.8622,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0101
+        },
+        {
+          "layer": 14,
+          "gini": 0.8618,
+          "importance": 0.8462,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0017
+        },
+        {
+          "layer": 15,
+          "gini": 0.8755,
+          "importance": 0.8288,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": -0.0203
+        },
+        {
+          "layer": 16,
+          "gini": 0.9158,
+          "importance": 0.8098,
+          "retention": 1.0,
+          "bits": 4,
+          "loo_improvement": 0.0257
+        },
+        {
+          "layer": 17,
+          "gini": 0.8984,
+          "importance": 0.7893,
+          "retention": 0.9756,
+          "bits": 4,
+          "loo_improvement": 0.0021
+        },
+        {
+          "layer": 18,
+          "gini": 0.937,
+          "importance": 0.7672,
+          "retention": 0.7036,
+          "bits": 4,
+          "loo_improvement": 0.0734
+        },
+        {
+          "layer": 19,
+          "gini": 0.9202,
+          "importance": 0.7435,
+          "retention": 0.8453,
+          "bits": 4,
+          "loo_improvement": 0.1232
+        },
+        {
+          "layer": 20,
+          "gini": 0.9158,
+          "importance": 0.7183,
+          "retention": 0.8192,
+          "bits": 4,
+          "loo_improvement": 0.1281
+        },
+        {
+          "layer": 21,
+          "gini": 0.8975,
+          "importance": 0.6916,
+          "retention": 0.7932,
+          "bits": 4,
+          "loo_improvement": 0.176
+        },
+        {
+          "layer": 22,
+          "gini": 0.9517,
+          "importance": 0.6636,
+          "retention": 0.443,
+          "bits": 4,
+          "loo_improvement": 0.0855
+        },
+        {
+          "layer": 23,
+          "gini": 0.9429,
+          "importance": 0.6344,
+          "retention": 0.43,
+          "bits": 4,
+          "loo_improvement": 0.1661
+        },
+        {
+          "layer": 24,
+          "gini": 0.9387,
+          "importance": 0.6042,
+          "retention": 0.43,
+          "bits": 4,
+          "loo_improvement": 0.179
+        },
+        {
+          "layer": 25,
+          "gini": 0.9414,
+          "importance": 0.5732,
+          "retention": 0.3909,
+          "bits": 4,
+          "loo_improvement": 0.1374
+        },
+        {
+          "layer": 26,
+          "gini": 0.9563,
+          "importance": 0.5416,
+          "retention": 0.3257,
+          "bits": 4,
+          "loo_improvement": 0.0829
+        },
+        {
+          "layer": 27,
+          "gini": 0.9492,
+          "importance": 0.5096,
+          "retention": 0.3388,
+          "bits": 4,
+          "loo_improvement": 0.0982
+        },
+        {
+          "layer": 28,
+          "gini": 0.9524,
+          "importance": 0.4776,
+          "retention": 0.2736,
+          "bits": 4,
+          "loo_improvement": 0.06
+        },
+        {
+          "layer": 29,
+          "gini": 0.9568,
+          "importance": 0.4457,
+          "retention": 0.2606,
+          "bits": 4,
+          "loo_improvement": 0.089
+        },
+        {
+          "layer": 30,
+          "gini": 0.9495,
+          "importance": 0.4143,
+          "retention": 0.2736,
+          "bits": 4,
+          "loo_improvement": 0.0366
+        },
+        {
+          "layer": 31,
+          "gini": 0.9443,
+          "importance": 0.3836,
+          "retention": 0.2866,
+          "bits": 4,
+          "loo_improvement": -0.0279
+        },
+        {
+          "layer": 32,
+          "gini": 0.9395,
+          "importance": 0.3538,
+          "retention": 0.2736,
+          "bits": 4,
+          "loo_improvement": 0.1127
+        },
+        {
+          "layer": 33,
+          "gini": 0.9451,
+          "importance": 0.325,
+          "retention": 0.2606,
+          "bits": 4,
+          "loo_improvement": 0.0751
+        },
+        {
+          "layer": 34,
+          "gini": 0.9121,
+          "importance": 0.2976,
+          "retention": 0.2997,
+          "bits": 4,
+          "loo_improvement": 0.0685
+        },
+        {
+          "layer": 35,
+          "gini": 0.9268,
+          "importance": 0.2715,
+          "retention": 0.2606,
+          "bits": 4,
+          "loo_improvement": 0.1548
+        },
+        {
+          "layer": 36,
+          "gini": 0.8918,
+          "importance": 0.2469,
+          "retention": 0.3257,
+          "bits": 4,
+          "loo_improvement": 0.1344
+        },
+        {
+          "layer": 37,
+          "gini": 0.8569,
+          "importance": 0.2238,
+          "retention": 0.3648,
+          "bits": 4,
+          "loo_improvement": 0.2033
+        },
+        {
+          "layer": 38,
+          "gini": 0.8657,
+          "importance": 0.2023,
+          "retention": 0.2736,
+          "bits": 4,
+          "loo_improvement": 0.209
+        },
+        {
+          "layer": 39,
+          "gini": 0.822,
+          "importance": 0.1824,
+          "retention": 0.3909,
+          "bits": 4,
+          "loo_improvement": 0.006
+        }
+      ]
+    },
+    {
+      "model": "qwen2.5_14b",
+      "error": "CUDA out of memory. Tried to allocate 136.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 65.12 MiB is free. Process 1270231 has 10.39 GiB memory in use. Including non-PyTorch memory, this process has 13.08 GiB memory in use. Of the allocated memory 12.61 GiB is allocated by PyTorch, and 164.16 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)"
+    }
+  ]
+}

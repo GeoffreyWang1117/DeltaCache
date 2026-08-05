@@ -1,0 +1,246 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "load_in_4bit": true,
+    "num_layers": 32,
+    "num_kv_heads": 8,
+    "head_dim": 128,
+    "full_kv_1024_mb": 128.0,
+    "budgets": {
+      "dropin": 32.0,
+      "generation": [
+        12.8,
+        32.0,
+        64.0,
+        256.0
+      ],
+      "scaling": 32.0
+    },
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_memory_gb": 23.6,
+    "timestamp": "2026-03-31T16:00:20.899212"
+  },
+  "test1_generate_dropin": {
+    "baseline": [
+      {
+        "prompt_len": 8,
+        "gen_tokens": 64,
+        "latency_ms": 4946.3,
+        "mem_delta_mb": 9.0
+      },
+      {
+        "prompt_len": 17,
+        "gen_tokens": 64,
+        "latency_ms": 2684.4,
+        "mem_delta_mb": 0.0
+      },
+      {
+        "prompt_len": 23,
+        "gen_tokens": 64,
+        "latency_ms": 2314.0,
+        "mem_delta_mb": 0.0
+      }
+    ],
+    "layerbudget": [
+      {
+        "prompt_len": 8,
+        "gen_tokens": 64,
+        "latency_ms": 4080.1,
+        "mem_delta_mb": 8.9,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 17,
+        "gen_tokens": 64,
+        "latency_ms": 4019.7,
+        "mem_delta_mb": 1.1,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 23,
+        "gen_tokens": 64,
+        "latency_ms": 2588.3,
+        "mem_delta_mb": 0.8,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      }
+    ]
+  },
+  "test3_generation_quality": [
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    }
+  ],
+  "test4_scaling": [
+    {
+      "seq_len": 129,
+      "base_ms": 1284.7,
+      "lb_ms": 1387.5,
+      "speedup": 0.926,
+      "base_mem_mb": 143.7,
+      "lb_mem_mb": 143.7,
+      "mem_savings": 0.0,
+      "compressed": "False"
+    },
+    {
+      "seq_len": 257,
+      "base_ms": 1412.3,
+      "lb_ms": 1493.0,
+      "speedup": 0.946,
+      "base_mem_mb": 170.6,
+      "lb_mem_mb": 150.6,
+      "mem_savings": 0.1173,
+      "compressed": "True"
+    },
+    {
+      "seq_len": 513,
+      "base_ms": 1435.6,
+      "lb_ms": 1444.0,
+      "speedup": 0.994,
+      "base_mem_mb": 243.8,
+      "lb_mem_mb": 206.8,
+      "mem_savings": 0.1518,
+      "compressed": "True"
+    },
+    {
+      "seq_len": 1025,
+      "base_ms": 1583.0,
+      "lb_ms": 1639.6,
+      "speedup": 0.965,
+      "base_mem_mb": 435.3,
+      "lb_mem_mb": 360.7,
+      "mem_savings": 0.1714,
+      "compressed": "True"
+    }
+  ]
+}

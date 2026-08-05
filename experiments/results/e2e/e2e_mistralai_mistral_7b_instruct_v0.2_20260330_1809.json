@@ -1,0 +1,488 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "load_in_4bit": true,
+    "num_layers": 32,
+    "num_kv_heads": 8,
+    "head_dim": 128,
+    "full_kv_1024_mb": 128.0,
+    "budgets": {
+      "dropin": 32.0,
+      "generation": [
+        12.8,
+        32.0,
+        64.0,
+        256.0
+      ],
+      "scaling": 32.0
+    },
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_memory_gb": 23.6,
+    "timestamp": "2026-03-30T18:06:35.997350"
+  },
+  "test1_generate_dropin": {
+    "baseline": [
+      {
+        "prompt_len": 8,
+        "gen_tokens": 64,
+        "latency_ms": 3596.4,
+        "mem_delta_mb": 8.1
+      },
+      {
+        "prompt_len": 17,
+        "gen_tokens": 64,
+        "latency_ms": 2855.0,
+        "mem_delta_mb": 0.0
+      },
+      {
+        "prompt_len": 23,
+        "gen_tokens": 64,
+        "latency_ms": 2760.0,
+        "mem_delta_mb": 0.0
+      }
+    ],
+    "layerbudget": [
+      {
+        "prompt_len": 8,
+        "gen_tokens": 64,
+        "latency_ms": 2987.1,
+        "mem_delta_mb": 8.9,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 17,
+        "gen_tokens": 64,
+        "latency_ms": 2881.9,
+        "mem_delta_mb": 1.1,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      },
+      {
+        "prompt_len": 23,
+        "gen_tokens": 64,
+        "latency_ms": 2847.8,
+        "mem_delta_mb": 0.8,
+        "compressed": false,
+        "budget_mb": 32.0,
+        "token_match_rate": 1.0
+      }
+    ]
+  },
+  "test2_ppl_pipeline": [
+    {
+      "method": "full_kv",
+      "cr": 2.0,
+      "mean_ppl": 5.8558,
+      "std_ppl": 0.993,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.46,
+      "mean_mem_kb": 39296.0,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 2.0,
+      "mean_ppl": 5.8558,
+      "std_ppl": 0.993,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 177.21,
+      "mean_mem_kb": 19814.4,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 2.0,
+      "mean_ppl": 5.8761,
+      "std_ppl": 0.9771,
+      "mean_ratio": 1.0039,
+      "mean_compress_ms": 19.28,
+      "mean_mem_kb": 9990.4,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 2.0,
+      "mean_ppl": 17.2406,
+      "std_ppl": 4.5193,
+      "mean_ratio": 2.9935,
+      "mean_compress_ms": 24.9,
+      "mean_mem_kb": 19584.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 2.0,
+      "mean_ppl": 17.8877,
+      "std_ppl": 5.3064,
+      "mean_ratio": 3.1332,
+      "mean_compress_ms": 24.33,
+      "mean_mem_kb": 19584.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 2.0,
+      "mean_ppl": 77.1274,
+      "std_ppl": 27.5814,
+      "mean_ratio": 13.2619,
+      "mean_compress_ms": 63.57,
+      "mean_mem_kb": 5144.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 3.0,
+      "mean_ppl": 5.8558,
+      "std_ppl": 0.993,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.41,
+      "mean_mem_kb": 39296.0,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 3.0,
+      "mean_ppl": 5.8808,
+      "std_ppl": 1.0118,
+      "mean_ratio": 1.0039,
+      "mean_compress_ms": 171.74,
+      "mean_mem_kb": 19814.4,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 3.0,
+      "mean_ppl": 5.8761,
+      "std_ppl": 0.9771,
+      "mean_ratio": 1.0039,
+      "mean_compress_ms": 15.31,
+      "mean_mem_kb": 9990.4,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 3.0,
+      "mean_ppl": 30.754,
+      "std_ppl": 7.0602,
+      "mean_ratio": 5.2859,
+      "mean_compress_ms": 23.24,
+      "mean_mem_kb": 13056.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 3.0,
+      "mean_ppl": 36.6271,
+      "std_ppl": 13.2782,
+      "mean_ratio": 6.3402,
+      "mean_compress_ms": 22.67,
+      "mean_mem_kb": 13056.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 3.0,
+      "mean_ppl": 81.5908,
+      "std_ppl": 27.9405,
+      "mean_ratio": 14.0131,
+      "mean_compress_ms": 53.22,
+      "mean_mem_kb": 4544.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 4.0,
+      "mean_ppl": 5.8558,
+      "std_ppl": 0.993,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.32,
+      "mean_mem_kb": 39296.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 4.0,
+      "mean_ppl": 5.8761,
+      "std_ppl": 0.9771,
+      "mean_ratio": 1.0039,
+      "mean_compress_ms": 16.0,
+      "mean_mem_kb": 9990.4,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 4.0,
+      "mean_ppl": 6.1032,
+      "std_ppl": 1.1781,
+      "mean_ratio": 1.0394,
+      "mean_compress_ms": 158.01,
+      "mean_mem_kb": 19471.7,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 4.0,
+      "mean_ppl": 41.4844,
+      "std_ppl": 10.0863,
+      "mean_ratio": 7.1266,
+      "mean_compress_ms": 22.77,
+      "mean_mem_kb": 9728.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 4.0,
+      "mean_ppl": 54.1621,
+      "std_ppl": 17.4509,
+      "mean_ratio": 9.3326,
+      "mean_compress_ms": 21.88,
+      "mean_mem_kb": 9728.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 4.0,
+      "mean_ppl": 81.1068,
+      "std_ppl": 25.7398,
+      "mean_ratio": 13.9521,
+      "mean_compress_ms": 52.9,
+      "mean_mem_kb": 4495.0,
+      "n": 4
+    },
+    {
+      "method": "full_kv",
+      "cr": 6.0,
+      "mean_ppl": 5.8558,
+      "std_ppl": 0.993,
+      "mean_ratio": 1.0,
+      "mean_compress_ms": 0.32,
+      "mean_mem_kb": 39296.0,
+      "n": 4
+    },
+    {
+      "method": "kivi_uniform",
+      "cr": 6.0,
+      "mean_ppl": 5.8761,
+      "std_ppl": 0.9771,
+      "mean_ratio": 1.0039,
+      "mean_compress_ms": 14.86,
+      "mean_mem_kb": 9990.4,
+      "n": 4
+    },
+    {
+      "method": "layer_budget",
+      "cr": 6.0,
+      "mean_ppl": 18.8688,
+      "std_ppl": 8.1904,
+      "mean_ratio": 3.2312,
+      "mean_compress_ms": 109.2,
+      "mean_mem_kb": 12938.0,
+      "n": 4
+    },
+    {
+      "method": "h2o_uniform",
+      "cr": 6.0,
+      "mean_ppl": 57.4182,
+      "std_ppl": 17.1865,
+      "mean_ratio": 9.8832,
+      "mean_compress_ms": 22.07,
+      "mean_mem_kb": 6528.0,
+      "n": 4
+    },
+    {
+      "method": "adakv",
+      "cr": 6.0,
+      "mean_ppl": 81.1068,
+      "std_ppl": 25.7398,
+      "mean_ratio": 13.9521,
+      "mean_compress_ms": 51.18,
+      "mean_mem_kb": 4456.0,
+      "n": 4
+    },
+    {
+      "method": "snapkv",
+      "cr": 6.0,
+      "mean_ppl": 86.6879,
+      "std_ppl": 24.6112,
+      "mean_ratio": 14.7973,
+      "mean_compress_ms": 21.34,
+      "mean_mem_kb": 6528.0,
+      "n": 4
+    }
+  ],
+  "test3_generation_quality": [
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The theory of general relativity states that",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "In a recent study published in Nature, researchers",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "The capital of France is Paris, which is known for",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 12.8,
+      "compressed": true,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 32.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 64.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    },
+    {
+      "prompt": "def fibonacci(n):\n    \"\"\"Return the nth Fibonacci ",
+      "budget_mb": 256.0,
+      "compressed": false,
+      "token_match": 1.0,
+      "len_full": 100,
+      "len_lb": 100
+    }
+  ],
+  "test4_scaling": [
+    {
+      "seq_len": 129,
+      "base_ms": 1483.4,
+      "lb_ms": 1440.3,
+      "speedup": 1.03,
+      "base_mem_mb": 253.8,
+      "lb_mem_mb": 253.8,
+      "mem_savings": 0.0,
+      "compressed": "False"
+    },
+    {
+      "seq_len": 257,
+      "base_ms": 1580.9,
+      "lb_ms": 1622.7,
+      "speedup": 0.974,
+      "base_mem_mb": 282.5,
+      "lb_mem_mb": 262.5,
+      "mem_savings": 0.0708,
+      "compressed": "True"
+    },
+    {
+      "seq_len": 513,
+      "base_ms": 1628.5,
+      "lb_ms": 1620.9,
+      "speedup": 1.005,
+      "base_mem_mb": 353.3,
+      "lb_mem_mb": 318.3,
+      "mem_savings": 0.0992,
+      "compressed": "True"
+    },
+    {
+      "seq_len": 1025,
+      "base_ms": 1755.0,
+      "lb_ms": 1791.5,
+      "speedup": 0.98,
+      "base_mem_mb": 507.5,
+      "lb_mem_mb": 433.2,
+      "mem_savings": 0.1464,
+      "compressed": "True"
+    }
+  ]
+}

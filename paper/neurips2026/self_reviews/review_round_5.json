@@ -1,0 +1,124 @@
+{
+  "paper": "LayerBudget: Per-Layer Token-Precision Joint Optimization for KV Cache Compression",
+  "venue": "NeurIPS 2026",
+  "round": 5,
+  "date": "2026-05-03",
+  "difficulty": "nightmare",
+  "context": "Round-5 lock-in pass after round-4-followup edits: (i) NIAH on LB-KV at 1024 ctx (90% Mistral CR=4× / 90% CR=6×; 100% Llama-2 CR=4-6×); (ii) mean-fill KL multi-architecture (Llama-2 90.5%, Llama-3.1 95.7%, Mistral 96%); (iii) '24-72% memory savings at CR=2×' qualifier in §1 + conclusion; (iv) §3.4 runtime extrapolation to L=80 S=32K (~10ms); (v) §7(6) LB-vs-LB-KV asymmetry sentence + unified-solver paragraph.",
+  "reviews": [
+    {
+      "reviewer_id": "R1",
+      "persona": "Methodologist",
+      "summary": "Round-5 reads as a defensible methodology paper. The remaining methodological gaps (calibration transfer at scale; long-context allocator runtime measured rather than projected) are now explicitly scoped to camera-ready, not hidden. The §7(6) asymmetry explanation closes my round-4 question about why LB is graded while LB-KV is flat at moderate CR. The runtime extrapolation note in §3.4 addresses the L=80 S=32K concern. I would accept.",
+      "strengths": [
+        "MCKP formulation, FPTAS reference, and 118-119% claim are now correctly bounded with denominator '500-trial random search at 4-6× on Mistral-7B' — falsifiable.",
+        "§7(6) asymmetry explanation: shared-b_l couples eviction-and-quant decisions per layer; independent (b_K, b_V) decouples and removes the importance-driven token-add gradient. This is the right mechanism explanation and converts a confusing observation into a structural insight.",
+        "§3.4 runtime extrapolation (327K iterations × ~30ns ≈ ~10ms at L=80 S=32K) is conservative but addresses the asymptotic concern.",
+        "Plan-dump diagnostic in §7(6) (mean b_K 8.0→4.0; n_l 1020→676; 32-of-32 layers differ between CR=2× and 6×) is the kind of internal-consistency check that strengthens trust."
+      ],
+      "weaknesses": [
+        "The runtime extrapolation in §3.4 is projection, not measurement. A single L=80 S=32K cell measured on Qwen2.5-72B would replace the projection with a fact.",
+        "Calibration transfer (§7(5)) — coverage power-law parameters fixed at Mistral-7B-Instruct-v0.2 calibration — remains a real unmeasured risk for 72B-scale and MHA models. The architecture-dependence finding from §3.2 logically implies this transfer should be re-measured.",
+        "The 'unified meta-allocator' paragraph in §7(6) (switch to independent bits when greedy's first eviction action arrives) is a plausible design but is described, not implemented or evaluated."
+      ],
+      "questions": [
+        "Could the authors include the L=80 S=32K allocator runtime measurement at camera-ready, replacing the §3.4 projection?",
+        "What would a partial calibration-transfer ablation look like? E.g.\\ refit the coverage power-law on Llama-2-7B and re-evaluate; if results within 1pp of Mistral-calibrated, the transfer is robust."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 7,
+      "confidence": 4,
+      "decision": "accept"
+    },
+    {
+      "reviewer_id": "R2",
+      "persona": "Empiricist",
+      "summary": "Round-5 closes the most damaging round-4 gap (LB-KV had no retrieval evaluation) with a 1024-context NIAH probe showing LB-KV is competitive (90% on Mistral CR=4× vs LB's 80%; 100% on Llama-2 both CRs). The 4096-NIAH and 16K-32K long-context for the variant are explicitly scoped to camera-ready with a reproducibility note (eager-attention memory ceiling on shared RTX 3090). Empirical scope is adequate for acceptance.",
+      "strengths": [
+        "NIAH on LayerBudget-KV (newly added in round 5) shows the variant matches or beats LayerBudget at CR=4-6× on the 1024-context probe — closes my round-4 critical concern that the recommended-at-extreme-CR variant had no retrieval evaluation.",
+        "Mean-fill KL is now reported on three architectures (Mistral 96%, Llama-2 90.5%, Llama-3.1 95.7%) — shows the effect generalizes, refuting the round-4 'Mistral-only' concern.",
+        "Paired-bootstrap CIs on per-chunk PPL ratios are the right tool for the small-sample (n=6 chunks) regime; the 'matches KIVI' claim is now scoped to 2-3× with a CI rather than asserted across 2-4×."
+      ],
+      "weaknesses": [
+        "LB-KV's NIAH is at 1024 tokens, not the headline 4096 used for LayerBudget in Table tab:niah. The 1024 NIAH is informative (LB-KV ≥ LB at all 4 cells) but it's a coarser test and the camera-ready commitment is a real one.",
+        "Long-context PPL evaluation (§4.3) is still LayerBudget-only at 16K-32K. The §7(6) note explicitly defers LB-KV long context to camera-ready, but a reviewer at submission cannot verify the variant scales to long context.",
+        "All round-4-followup experiments are at S=1024 (NIAH probe, head-to-head, plan dump). The cross-CR LB-KV claim 'flat at ~1.03' is supported only at this single context length. No claim is made that the flatness holds at long context — a reviewer might read it as implied."
+      ],
+      "questions": [
+        "Could the paper add a one-line clarification that the LB-KV 'flat ~1.03' property is observed at S=1024 only, with long-context generalization deferred?",
+        "What is the projected runtime of NIAH at S=4096 on an A100? If <1 hr, the camera-ready commitment is solid; if longer, a reduced-scope check (e.g.\\ Mistral-7B only at one CR) would still close the gap."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R3",
+      "persona": "Visionary",
+      "summary": "The round-5 paper is more polished but the core conceptual concern persists: LayerBudget + LayerBudget-KV reads as 'two design points of the same per-layer joint allocation idea', not as one cohesive method. The unified-solver paragraph in §7(6) acknowledges the issue but defers the unification to future work. The architecture-dependent importance-direction finding is still the paper's most original contribution — and the round-5 mean-fill multi-architecture data strengthens it.",
+      "strengths": [
+        "Mean-fill multi-architecture data (90.5%/95.7%/96% across Llama-2 / Llama-3.1 / Mistral) elevates mean-fill from a Mistral-specific trick to a transferable technique with measurable cross-architecture effect.",
+        "Architecture-dependent importance direction (early/late/flat across Mistral/Llama-2-13B/Qwen2.5-14B) remains the paper's most cite-worthy insight; round-5 didn't break it.",
+        "End-to-end systems story (PagedAttention, 33.7% memory savings on Mistral, <5% TPOT overhead) gives the paper rare deployment grounding."
+      ],
+      "weaknesses": [
+        "The unified-solver paragraph in §7(6) describes a routing rule (switch to independent bits when greedy's first eviction action arrives) but doesn't implement or evaluate it. A working unified solver would convert the LB+LB-KV split from 'two design points' to 'one adaptive method' and is the paper's natural next step.",
+        "MoE-nD remains the closest concurrent work and the paper's per-cell head-to-head is against our re-implementation. The §2 caveat acknowledges this, but the paper would be markedly stronger if even one cell against MoE-nD's official code (when public) supported the re-implementation's fidelity.",
+        "Long-context impact is at 32K, below the field's current ceiling (xKV 65K, HCAttention 4M). A 100K+ result on at least one model would meaningfully extend the long-context narrative."
+      ],
+      "questions": [
+        "Could the unified meta-allocator (the §7(6) routing rule) be implemented as a 1-page sketch + 1-table experiment for camera-ready? It would close the most conceptually unsatisfying gap in the paper."
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 3,
+      "decision": "weak_accept"
+    },
+    {
+      "reviewer_id": "R4",
+      "persona": "Skeptic",
+      "summary": "Round-5 fixes were targeted and effective: the LB-KV NIAH retrieval, multi-architecture mean-fill KL, '24-72% at CR=2×' qualifier, and runtime extrapolation each close a specific round-4 weakness. The paper now sits at the boundary between weak_accept and accept — the remaining items are camera-ready commitments rather than misleading claims. I would weak_accept.",
+      "strengths": [
+        "The round-5 NIAH-on-LB-KV result (90% Mistral CR=4× vs LB 80%; 100% Llama-2 both CRs) directly answers my round-4 critical concern. The 1024-context probe is a fair scoping choice given GPU constraints, and the camera-ready note for 4096 is honest.",
+        "Mean-fill multi-architecture data converts a single-model claim into a generalizable one. Three data points (Mistral, Llama-2, Llama-3.1) at the same CR with the same metric is enough to refute 'Mistral-specific'.",
+        "The '24-72% memory savings at CR=2×' qualifier in §1 + conclusion is a small but precise fix — it converts a potentially-misleading headline to an accurate one.",
+        "The runtime extrapolation in §3.4 is properly framed as a projection (not measurement) and uses conservative numbers (30ns per iteration on a 4 GHz core implies the measured Mistral 1ms scales to ~10ms at L=80 S=32K — defensible).",
+        "Plan-dump + asymmetry-explanation in §7(6) closes the LB-KV degeneracy thread from round 3 with mechanism, not assertion."
+      ],
+      "weaknesses": [
+        "The §2 'caveat on baselines' commits to camera-ready verification against MoE-nD/xKV official code. This is honest but a reviewer cannot today confirm the head-to-head reproduces published behavior.",
+        "Long-context (16K-32K) for LB-KV is deferred to camera-ready due to memory ceiling. The §7(6) text acknowledges this but a careful reader will note the variant's most-recommended regime (extreme CR) is exactly where long-context is most relevant.",
+        "The 1024-context NIAH probe for LB-KV uses 5 depths × 2 needles = 10 questions per cell. This is enough to refute 'no retrieval evaluation' but the CIs on a 10-question test are wide; 'matches LB at 100% on Llama-2' is consistent with the variant being 90-100% in expectation."
+      ],
+      "questions": [
+        "Could a reduced-scope long-context cell (e.g.\\ LB-KV at 16K Mistral-7B at CR=4× only) be added before camera-ready to provide one data point on the long-context behavior?",
+        "For the §2 baselines caveat, is there a one-cell falsifiable check the authors could commit to (e.g.\\ if MoE-nD official code shows their published number on Mistral-7B WikiText-2 at CR=4×, the re-implementation is within ±2pp)?"
+      ],
+      "soundness": 3,
+      "presentation": 3,
+      "contribution": 3,
+      "originality": 2,
+      "clarity": 3,
+      "significance": 3,
+      "overall": 6,
+      "confidence": 4,
+      "decision": "weak_accept"
+    }
+  ]
+}

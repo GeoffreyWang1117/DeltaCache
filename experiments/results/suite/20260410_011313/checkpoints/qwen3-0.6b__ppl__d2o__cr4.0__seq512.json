@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-0.6B",
+  "method": "d2o",
+  "compression_ratio": 4.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 33.1792,
+  "std_ppl": 23.1043,
+  "ppl_ratio": 1.1431,
+  "full_ppl": 29.0249,
+  "mean_compress_ms": 8.06,
+  "mean_memory_bytes": 8747008,
+  "_checkpoint_key": "qwen3-0.6b__ppl__d2o__cr4.0__seq512",
+  "_timestamp": "2026-04-10T01:25:01.749047"
+}

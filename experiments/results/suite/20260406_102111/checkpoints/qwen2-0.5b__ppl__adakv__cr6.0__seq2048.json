@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen2-0.5B",
+  "method": "adakv",
+  "compression_ratio": 6.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 19.1723,
+  "std_ppl": 7.3417,
+  "ppl_ratio": 1.2007,
+  "full_ppl": 15.9679,
+  "mean_compress_ms": 372.67,
+  "mean_memory_bytes": 1071701,
+  "_checkpoint_key": "qwen2-0.5b__ppl__adakv__cr6.0__seq2048",
+  "_timestamp": "2026-04-06T11:28:18.262508"
+}

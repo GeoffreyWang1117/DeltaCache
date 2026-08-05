@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "seq_len": 512,
+    "block_size": 16,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "timestamp": "2026-03-30T18:36:58.939365"
+  },
+  "block_layerbudget_summary": [
+    {
+      "cr": 2.0,
+      "mean_ppl": 8.7599,
+      "mean_ratio": 1.0002,
+      "mean_compress_ms": 132.57,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 3.0,
+      "mean_ppl": 8.8151,
+      "mean_ratio": 1.0074,
+      "mean_compress_ms": 120.28,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 4.0,
+      "mean_ppl": 8.805,
+      "mean_ratio": 1.0081,
+      "mean_compress_ms": 122.01,
+      "mean_freed_pct": 0.0,
+      "n": 4
+    },
+    {
+      "cr": 6.0,
+      "mean_ppl": 61.1897,
+      "mean_ratio": 7.1729,
+      "mean_compress_ms": 87.91,
+      "mean_freed_pct": 0.3438,
+      "n": 4
+    }
+  ]
+}

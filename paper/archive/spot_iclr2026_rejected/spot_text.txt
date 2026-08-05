@@ -1,0 +1,703 @@
+Under review as a conference paper at ICLR 2026
+
+000
+001
+
+D ELTAC ACHE : L AYER -AWARE KV C ACHE M ANAGE -
+
+002
+003
+004
+005
+006
+007
+
+MENT
+FOR S CALING P OST-T RAINING LLM I NFERENCE
+
+008
+009
+010
+011
+012
+013
+
+Anonymous authors
+Paper under double-blind review
+
+A BSTRACT
+Post-training LLM workflows—RLHF rollouts, evaluation suites, RAGaugmented serving—involve repeated inference over shared prefixes, making KV
+cache management a significant performance bottleneck. We present D ELTA C ACHE, a layer-aware KV cache management system that exploits reuse heterogeneity across transformer layers: late layers encode task-specific semantics
+and are more valuable to retain than early layers that capture generic syntactic
+patterns. D ELTAC ACHE assigns sigmoid-based importance weights to each layer
+and refines eviction decisions with attention scores. On Mistral-7B at fp16 precision, D ELTAC ACHE achieves 5.06× average end-to-end speedup (up to 10.90× on
+long-prefix workloads) while preserving numerical equivalence with full recomputation. Under memory pressure, layer-aware eviction achieves 66% higher
+cache hit rates than LRU. We characterize the conditions under which layeraware caching is effective and where it provides limited benefit.
+
+014
+015
+016
+017
+018
+019
+020
+021
+022
+023
+024
+025
+026
+027
+028
+029
+030
+031
+032
+033
+034
+035
+036
+037
+038
+039
+040
+041
+042
+043
+044
+045
+046
+047
+048
+049
+050
+051
+052
+053
+
+1
+
+I NTRODUCTION
+
+Post-training—including RLHF, DPO, and iterative refinement—has become a compute-intensive
+phase of LLM development (OpenAI, 2023; Touvron et al., 2023). The inference workloads it
+produces share a distinctive structure: many requests reuse the same prefix. In RLHF, multiple
+rollouts are conditioned on the same prompt; in evaluation pipelines, every checkpoint is tested
+against the same benchmark suite with shared few-shot demonstrations; in RAG-augmented serving,
+the same retrieved documents are queried repeatedly. These shared prefixes make the KV cache—
+which stores O(2Lndk ) entries for L layers, n tokens, and key dimension dk —a natural target for
+reuse.
+Modern serving systems like vLLM (Kwon et al., 2023) and SGLang (Zheng et al., 2023) already
+support prefix caching, but their eviction policies treat all cached entries uniformly. When memory
+pressure forces eviction, LRU and LFU discard entries without considering which transformer layer
+produced them. This is a missed opportunity. Transformer layers specialize functionally: early
+layers capture local syntactic patterns, while late layers encode task-specific semantics that directly
+influence predictions (Rogers et al., 2020; Elhage et al., 2021; Geva et al., 2023). Evicting a latelayer entry is more costly than evicting an early-layer one, because the semantic representation it
+encodes is harder to reconstruct and more immediately relevant to output quality.
+We present D ELTAC ACHE, a KV cache management system that exploits this layer-wise reuse heterogeneity. The core idea is to assign each layer an importance weight via a sigmoid function that
+reflects the syntactic-to-semantic transition:
+1
+wl =
+(1)
+1 + e−k(l/L−τ )
+where l is the layer index, L is the total number of layers, k=5 controls the steepness of the transition,
+and τ =0.3 sets the midpoint. Under this weighting, late layers receive roughly 4.9× higher retention
+priority than early layers, so that when eviction is necessary, generic early-layer entries are discarded
+first.
+Built around this eviction policy, D ELTAC ACHE integrates prefix-tree lookup, incremental KV computation, and hierarchical GPU/CPU memory management into a complete caching system. On
+1
+
+Under review as a conference paper at ICLR 2026
+
+054
+055
+056
+057
+058
+059
+060
+061
+062
+063
+064
+065
+066
+067
+068
+069
+070
+071
+072
+073
+074
+075
+076
+077
+078
+
+Algorithm 1 Layer-Aware Cache Eviction
+Require: Cache entries E, capacity C, params (k, τ )
+1: while |E| > C do
+2:
+for each e ∈ E do
+
+3:
+wl ← σ k · (le /L − τ )
+4:
+I(e) ← wl · (wa ᾱe + wf log(1+fe ) + wr /(1+ log(1+te )))
+5:
+end for
+6:
+Remove arg mine I(e) from E
+7: end while
+
+▷ Layer weight
+
+Mistral-7B at fp16 precision, it achieves 5.06× average speedup with numerical equivalence to full
+recomputation. Under memory pressure, layer-aware eviction achieves 66% higher hit rates than
+LRU. We also characterize the deployment boundary: the system is most effective with long shared
+prefixes (>500 tokens) and high query volume, and provides limited benefit for short or rapidlygrowing contexts.
+
+2
+
+M ETHOD
+
+2.1
+
+L AYER -AWARE C ACHE P RIORITIZATION
+
+The sigmoid weight (Eq. 1) produces a smooth transition: early layers (l/L < 0.3) receive weight
+≈0.18 and late layers (l/L > 0.7) receive ≈0.88. Within the same layer, we further differentiate
+entries using attention scores. The composite importance of a cache entry e at layer l is:
+
+I(e) = wl · wa · ᾱe + wf · log(1+fe ) + wr /(1+ log(1+te ))
+(2)
+
+079
+080
+081
+082
+083
+084
+
+where ᾱe is the exponential moving average of attention scores received by entry e, fe is its access
+frequency, te is the time since last access, and (wa , wf , wr ) = (0.5, 0.3, 0.2). Because wl enters
+multiplicatively, the layer-level signal dominates: a high-attention entry in an early layer will still
+be evicted before a moderate-attention entry in a late layer. This enforces a clear hierarchy where
+layer position determines the primary eviction order, and within-layer attention provides a secondary
+tiebreaker.
+
+085
+086
+087
+088
+089
+090
+
+The parameters k and τ do not require careful tuning. Over a grid of k ∈ {1, 3, 5, 7, 10} and
+τ ∈ {0.1, . . . , 0.5} (25 configurations), we observe <1% variation in hit rate, suggesting that performance depends on the general principle of layer-aware prioritization rather than on the specific
+shape of the weighting function.
+
+091
+092
+093
+094
+095
+096
+097
+098
+099
+100
+101
+102
+103
+104
+105
+106
+107
+
+2.2
+
+S YSTEM A RCHITECTURE
+
+The eviction policy sits within a broader caching system. Cached KV states are organized in a prefix
+tree (trie), where each root-to-node path corresponds to a token sequence and common prefixes share
+tree nodes. Lookup takes O(n) time for a sequence of length n.
+When a query matches a cached prefix of length m, D ELTAC ACHE performs incremental computation: it reuses the cached KV states for positions 1 through m and computes only the remaining
+tokens m+1 through n. This is exact for causal language models, since KV states at position i
+depend only on tokens [1, . . . , i]. To ensure correctness with Rotary Position Embeddings (Su et al.,
+2024), we explicitly pass absolute position IDs when computing the delta.
+A two-tier GPU/CPU memory hierarchy manages capacity. Entries are proactively offloaded to
+CPU memory when GPU utilization exceeds 80%, and predictively prefetched back based on access
+patterns.
+
+3
+
+E XPERIMENTS
+
+We evaluate on TinyLlama-1.1B (22 layers) and Mistral-7B (32 layers, fp16) using 2× NVIDIA
+RTX 3090 GPUs. Baselines include full recomputation, LRU, LFU, and attention-only eviction
+(without layer weighting).
+2
+
+Under review as a conference paper at ICLR 2026
+
+108
+109
+
+Table 1: Speedup on Mistral-7B (fp16). Cached excludes the first (cold) query. Results averaged
+over 2 runs × 15 queries.
+
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+
+Prefix
+
+Speedup
+
+Cached
+
+Reuse
+
+Code Completion
+RAG: API Docs
+RAG: ML Tutorial
+Long System Prompt
+Few-shot Sentiment
+
+1448
+646
+647
+484
+282
+
+6.62×
+5.90×
+5.56×
+3.83×
+3.39×
+
+10.90×
+6.39×
+6.46×
+4.74×
+3.93×
+
+92.3%
+92.4%
+92.3%
+92.2%
+89.4%
+
+–
+
+5.06×
+
+6.48×
+
+91.7%
+
+Average
+
+Table 2: Cross-model validation on TinyLlama-1.1B (2 runs × 20 queries). The lower speedup
+reflects the smaller per-token computation cost of a 1.1B-parameter model.
+
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+
+Scenario
+
+Scenario
+
+Prefix
+
+Speedup
+
+Reuse
+
+Code Completion
+RAG: API Docs
+RAG: ML Tutorial
+Long System Prompt
+Few-shot Sentiment
+
+1464
+660
+656
+497
+298
+
+3.64×
+3.94×
+2.96×
+1.80×
+1.22×
+
+93.8%
+94.4%
+94.2%
+94.0%
+90.8%
+
+–
+
+2.60×
+
+93.4%
+
+Average
+
+3.1
+
+C ORRECTNESS VALIDATION
+
+Because cached KV states are reused verbatim (not approximated), the outputs should be numerically equivalent to full recomputation up to floating-point precision. We verify this by computing
+∥kvcached − kvfresh ∥∞ over 100 test samples per model. At fp16 precision, all samples for both
+TinyLlama and Mistral-7B fall within 0.02 (max observed: 0.0156), consistent with the expected
+rounding behavior of half-precision arithmetic. The 8-bit quantized variant of Mistral-7B shows
+larger deviations (max 0.60), but these arise from quantization noise rather than from the caching
+mechanism itself.
+3.2
+
+E ND - TO -E ND S PEEDUP
+
+We measure end-to-end latency on five workloads that exhibit the repeated-prefix structure common
+in post-training: code completion with a large fixed context (∼1450 tokens), RAG over fixed knowledge bases (∼650 tokens), few-shot evaluation (∼280 tokens), and system-prompt-guided generation (∼480 tokens). Each scenario is run with 15 queries (Mistral-7B) or 20 queries (TinyLlama)
+averaged over 2 runs.
+Tables 1 and 2 summarize the results. Mistral-7B averages 5.06× speedup across the five scenarios, with code completion reaching 10.90× on cached queries. TinyLlama shows a consistent but
+smaller gain (2.60× average), which is expected: the per-token computation cost of a 1.1B model is
+lower, so the relative savings from cache reuse are smaller. Across both models, speedup correlates
+strongly with prefix length—the avoided O(m2 ) attention computation over m cached prefix tokens
+dominates the benefit—and token reuse rates exceed 90% in all scenarios.
+3.3
+
+E VICTION P OLICY U NDER M EMORY P RESSURE
+
+The speedup results above assume sufficient memory to hold the working set. When cache capacity
+is limited, the eviction policy becomes the determining factor. To isolate this effect, we run 320
+queries across 40 unique prefixes on TinyLlama-1.1B and restrict cache capacity to 10–50% of the
+working set, forcing frequent eviction.
+Table 3 shows that layer-aware eviction outperforms both baselines at every capacity level. The
+gap is largest at 10% capacity, where layer-aware eviction achieves a 66% higher hit rate than LRU
+(25.9% vs. 15.6%). This is the regime most relevant to post-training: during RLHF, GPU memory is
+3
+
+Under review as a conference paper at ICLR 2026
+
+162
+163
+
+Table 3: Cache hit rates under memory pressure (TinyLlama-1.1B, 40 prefixes, 320 queries).
+
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+
+10% cap.
+
+20% cap.
+
+30% cap.
+
+50% cap.
+
+LRU
+LFU
+Layer-Aware
+
+15.6%
+20.9%
+25.9%
+
+31.6%
+42.2%
+43.1%
+
+42.8%
+51.6%
+55.3%
+
+62.5%
+65.6%
+69.7%
+
+∆ vs. LRU
+
++66%
+
++36%
+
++29%
+
++12%
+
+Table 4: Context length scaling (TinyLlama-1.1B). Cached latency stays nearly constant while baseline cost grows with context length.
+
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+
+Policy
+
+Context
+
+Baseline (ms)
+
+Cached (ms)
+
+Speedup
+
+501
+1001
+1501
+1801
+
+35.2
+54.3
+69.8
+90.0
+
+17.6
+16.3
+16.7
+17.4
+
+2.00×
+3.32×
+4.18×
+5.17×
+
+shared between model weights, optimizer states, gradients, and KV cache, leaving limited headroom
+for caching. As capacity increases and eviction becomes less frequent, the policies converge—at
+50%, even LRU reaches 62.5%. The pattern is intuitive: when the system can only retain a small
+fraction of the working set, choosing which entries to keep matters far more than when most entries
+fit anyway.
+3.4
+
+C ONTEXT L ENGTH S CALING AND M EMORY OVERHEAD
+
+Table 4 illustrates a characteristic property of incremental computation: the cached query latency
+stays nearly constant at ∼17 ms regardless of context length, because only the short suffix is recomputed. Baseline latency, by contrast, grows linearly with context. The practical implication is that
+speedup improves with longer contexts—roughly 2.4× per additional 1K tokens—making D ELTA C ACHE particularly attractive for the long-context settings increasingly common in post-training.
+In terms of memory cost, D ELTAC ACHE adds 17–22% GPU overhead (505 MB for TinyLlama,
+2.4 GB for Mistral-7B), covering KV tensor storage, prefix tree structure, and importance metadata.
+For Mistral-7B, each additional GB of cache memory translates to approximately 2.2× speedup.
+
+4
+
+D ISCUSSION AND L IMITATIONS
+
+The results above paint a consistent picture: D ELTAC ACHE is effective when the workload involves
+a stable, long prefix shared across many queries, and the available cache memory is insufficient to
+hold the entire working set. These conditions arise naturally in post-training. During RLHF or DPO,
+the policy model generates many completions for the same prompt, each sharing an identical prefix;
+during evaluation, every model checkpoint is tested on the same benchmark suite with shared fewshot demonstrations; in RAG serving, the same retrieved passages are queried by multiple users. In
+each case, the prefix is long enough and reused often enough for caching to pay off.
+The system does not help in all settings. When prefixes are short (<200 tokens), cache management overhead exceeds the saved computation, resulting in a net slowdown (we measure 0.68× at
+100 tokens). Multi-turn conversations with growing context also see little benefit (0.90×), because
+each turn appends substantial new content and the prefix reuse fraction drops. Our layer weighting
+function is grounded in the layer specialization pattern documented for decoder-only transformers
+(Rogers et al., 2020); architectures with different depth profiles (e.g., encoder-decoder models) may
+require a different parameterization of τ . Finally, the current implementation targets single-request
+latency and does not address batched inference; integrating layer-aware eviction into production
+serving systems like vLLM (Kwon et al., 2023) or SGLang (Zheng et al., 2023) would require coordinating eviction decisions across concurrent requests.
+4
+
+Under review as a conference paper at ICLR 2026
+
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+
+We note that layer-aware eviction is orthogonal to both the prefix matching mechanism and the
+token-level eviction dimension. It could be combined with token-level strategies such as H2O
+(Zhang et al., 2024) or with KV cache quantization methods like KIVI (Liu et al., 2024), jointly
+optimizing along the layer, token, and precision axes.
+
+5
+
+C ONCLUSION
+
+We have presented D ELTAC ACHE, a KV cache management system that uses layer-aware importance weighting to decide which cache entries to retain under memory pressure. The approach
+is grounded in a well-established property of transformers—that late layers encode task-specific
+semantics while early layers capture more generic patterns—and translates it into a simple, tuningfree eviction policy. On Mistral-7B, D ELTAC ACHE achieves 5.06× average speedup with numerical
+equivalence to full recomputation, and under tight memory constraints it retains 66% more useful
+cache entries than LRU. The system is most effective for the fixed-prefix, high-reuse workloads that
+characterize post-training—RLHF rollouts, evaluation pipelines, and RAG serving—and we have
+identified the conditions under which simpler alternatives suffice.
+
+R EFERENCES
+Nelson Elhage, Neel Nanda, Catherine Olsson, Tom Henighan, Nicholas Joseph, Ben Mann,
+Amanda Askell, Yuntao Bai, Anna Chen, Tom Conerly, et al. A mathematical framework for
+transformer circuits. Transformer Circuits Thread, 2021.
+Mor Geva, Jasmijn Bastings, Katja Filippova, and Amir Globerson. Dissecting recall of factual
+associations in auto-regressive language models. arXiv preprint arXiv:2304.14767, 2023.
+Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng, Cody Hao Yu, Joseph E
+Gonzalez, Hao Zhang, and Ion Stoica. Efficient memory management for large language model
+serving with pagedattention. In Proceedings of the 29th ACM Symposium on Operating Systems
+Principles, pp. 611–626, 2023.
+Zirui Liu, Jiayi Yuan, Hongye Jin, Shaochen Zhong, Zhaozhuo Xu, Vladimir Braverman, Beidi
+Chen, and Xia Hu. Kivi: A tuning-free asymmetric 2bit quantization for kv cache. arXiv preprint
+arXiv:2402.02750, 2024.
+OpenAI. Gpt-4 technical report. arXiv preprint arXiv:2303.08774, 2023.
+Anna Rogers, Olga Kovaleva, and Anna Rumshisky. A primer in bertology: What we know about
+how bert works. Transactions of the Association for Computational Linguistics, 8:842–866, 2020.
+Jianlin Su, Yu Lu, Shengfeng Pan, Ahmed Murtadha, Bo Wen, and Yunfeng Liu. Roformer: Enhanced transformer with rotary position embedding. Neurocomputing, 568:127063, 2024.
+Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, et al. Llama 2: Open foundation and fine-tuned chat models. arXiv preprint arXiv:2307.09288, 2023.
+Zhenyu Zhang, Ying Sheng, Tianyi Zhou, Tianlong Chen, Lianmin Zheng, Ruisi Cai, Zhao Song,
+Yuandong Tian, Christopher Ré, Clark Barrett, Zhiyuan Wang, and Beidi Chen. H2o: Heavyhitter oracle for efficient generative inference of large language models. Advances in Neural
+Information Processing Systems, 36, 2024.
+Lianmin Zheng, Liangsheng Yin, Zhiqiang Xie, Jeff Huang, Chuyue Sun, Cody Hao Yu, Shiyi
+Cao, Christos Kober, Ying Sheng, Joseph E Gonzalez, Ion Stoica, and Hao Zhang. Efficiently
+programming large language models using sglang. arXiv preprint arXiv:2312.07104, 2023.
+
+5
+
+

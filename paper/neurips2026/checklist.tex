@@ -1,0 +1,85 @@
+\section*{NeurIPS Paper Checklist}
+
+\begin{enumerate}
+
+\item {\bf Claims}
+    \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The abstract and Section~\ref{sec:intro} state five specific contributions, each validated in the corresponding section (Sections~\ref{sec:method}--\ref{sec:e2e}). Quantitative claims (PPL ratios, improvement percentages) are directly supported by experimental tables.
+
+\item {\bf Limitations}
+    \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Section~\ref{sec:limitations} discusses four specific limitations: quality model approximation (MAE 3.1\%), profiling overhead (61--109\%), cross-layer coherence, and context length coverage ($\leq$3500 tokens evaluated).
+
+\item {\bf Theory assumptions and proofs}
+    \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Section~\ref{sec:theory} states the knapsack structure, submodularity assumption ($g_l \in (0,1)$, concavity of coverage), and the $(1-1/e)$ approximation guarantee with a citation to~\citet{sviridenko2004note}. The emergent ``quantize first'' property is derived from the calibrated fidelity constants.
+
+    \item {\bf Experimental result reproducibility}
+    \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Section~\ref{sec:experiments} specifies all models (with HuggingFace identifiers), hardware (RTX 3090), evaluation protocol (WikiText-2, 60/40 prefix/suffix split, 6 chunks), compression ratios, and hyperparameters ($k=5$, $\tau=0.3$, $\Delta n=8$, sink/recent tokens). All 12 baselines are named with citations.
+
+\item {\bf Open access to data and code}
+    \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Code will be released under Apache 2.0 license upon acceptance. All evaluation datasets (WikiText-2, LongBench, MMLU) are publicly available. An anonymized code repository is provided as supplementary material.
+
+\item {\bf Experimental setting/details}
+    \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Section~\ref{sec:experiments} describes the evaluation protocol (WikiText-2 test set, 6 contiguous chunks, 60/40 split). All hyperparameters are specified in Section~\ref{sec:method} ($k=5$, $\tau=0.3$, fidelity constants, step size $\Delta n=8$). No training is involved---the method is training-free.
+
+\item {\bf Experiment statistical significance}
+    \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
+    \item[] Answer: \answerNo{}
+    \item[] Justification: PPL ratios are computed as ratios of perplexities over 6 evaluation chunks, providing implicit averaging. We report deterministic allocations (greedy algorithm), so run-to-run variance is zero. Error bars across different text chunks would strengthen the evaluation but are not reported due to space constraints.
+
+\item {\bf Experiments compute resources}
+    \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Section~\ref{sec:experiments} specifies NVIDIA RTX 3090 (24\,GB), CUDA 12.1. Table~\ref{tab:overhead} provides detailed timing breakdowns for the profiling pipeline. Table~\ref{tab:e2e_scaling} reports memory usage and latency.
+
+\item {\bf Code of ethics}
+    \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: This work proposes an inference optimization technique for publicly available models. It does not involve human subjects, private data, or dual-use concerns beyond standard LLM deployment.
+
+\item {\bf Broader impacts}
+    \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: This work reduces the memory footprint of LLM inference, enabling deployment on resource-constrained hardware. The positive impact (democratized access, reduced energy consumption) is straightforward. We do not foresee specific negative societal impacts beyond those inherent to LLM deployment in general.
+
+\item {\bf Safeguards}
+    \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: We release only an inference optimization library, not new models or datasets. The technique operates on existing publicly available models and does not alter their capabilities.
+
+\item {\bf Licenses for existing assets}
+    \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All models and datasets are cited with their original papers. WikiText-2 is CC-BY-SA-3.0. LongBench is MIT-licensed. All models are used under their respective licenses (Llama 2 Community License, Apache 2.0 for Mistral and Qwen).
+
+\item {\bf New assets}
+    \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The LayerBudget library is documented with a README, docstrings, and usage examples. The 12 reimplemented baselines include documentation of their implementation choices relative to the original papers.
+
+\item {\bf Crowdsourcing and research with human subjects}
+    \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: This work does not involve crowdsourcing or human subjects.
+
+\item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
+    \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: This work does not involve human subjects research.
+
+\item {\bf Declaration of LLM usage}
+    \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: LLMs are used as evaluation targets (Mistral-7B, Llama-2-7B, etc.) in their standard inference mode. They are not used as a component of the proposed method. LLM-assisted writing/editing does not impact core methodology.
+
+\end{enumerate}

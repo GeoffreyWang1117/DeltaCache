@@ -1,0 +1,288 @@
+{
+  "model": "mistralai/Mistral-7B-v0.1",
+  "device": "cuda:1",
+  "quantization": "4bit",
+  "timestamp": "2025-12-31 15:08:59",
+  "memory_after_load": {
+    "gpu_0": {
+      "allocated_gb": 0.0,
+      "reserved_gb": 0.0,
+      "total_gb": 23.56,
+      "free_gb": 23.56
+    },
+    "gpu_1": {
+      "allocated_gb": 4.16,
+      "reserved_gb": 6.7,
+      "total_gb": 23.56,
+      "free_gb": 16.86
+    }
+  },
+  "correctness": {
+    "n_runs": 5,
+    "n_prompts": 5,
+    "max_kv_diff": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "mean_kv_diff": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "token_match_rate": {
+      "mean": 1.0,
+      "std": 0.0,
+      "min": 1.0,
+      "max": 1.0
+    }
+  },
+  "baseline_comparison": {
+    "with_cache": {
+      "avg_latency_ms": {
+        "mean": 13.775405888445675,
+        "std": 0.4692285722575666,
+        "min": 13.375107981264591,
+        "max": 14.291777298785746
+      },
+      "throughput_tok_s": {
+        "mean": 5811.895348789027,
+        "std": 195.72056447216235,
+        "min": 5597.624307145966,
+        "max": 5981.260122315375
+      },
+      "mem_used_gb": {
+        "mean": 4.22,
+        "std": 0.0,
+        "min": 4.22,
+        "max": 4.22
+      }
+    },
+    "without_cache": {
+      "avg_latency_ms": {
+        "mean": 201.29196672079465,
+        "std": 1.5860769461376525,
+        "min": 199.88250558730215,
+        "max": 203.00946802366525
+      },
+      "throughput_tok_s": {
+        "mean": 397.4490659614871,
+        "std": 3.1248657109726046,
+        "min": 394.0702903111604,
+        "max": 400.2351269559137
+      }
+    },
+    "speedup": {
+      "mean": 14.624960406355202,
+      "std": 0.5595643696866228,
+      "min": 13.985839648109023,
+      "max": 15.026714313854374
+    }
+  },
+  "latency": {
+    "n_queries": 100,
+    "n_runs": 3,
+    "system_prompt_len": 50,
+    "total_time_ms": {
+      "mean": 664.6090433156738,
+      "std": 40.88212562399646,
+      "min": 617.536085890606,
+      "max": 691.2197219207883,
+      "raw": [
+        617.536085890606,
+        685.0713221356273,
+        691.2197219207883
+      ]
+    },
+    "avg_latency_ms": {
+      "mean": 6.563968182696651,
+      "std": 0.4101000674243746,
+      "min": 6.0918524488806725,
+      "max": 6.831839815713465,
+      "raw": [
+        6.0918524488806725,
+        6.768212283495814,
+        6.831839815713465
+      ]
+    },
+    "p50_latency_ms": {
+      "mean": 0.018113913635412853,
+      "std": 0.00023829500738112335,
+      "min": 0.017840880900621414,
+      "max": 0.018279999494552612,
+      "raw": [
+        0.017840880900621414,
+        0.01822086051106453,
+        0.018279999494552612
+      ]
+    },
+    "p99_latency_ms": {
+      "mean": 141.72379835508764,
+      "std": 3.2072569404105793,
+      "min": 138.61950603313744,
+      "max": 145.02495108172297,
+      "raw": [
+        138.61950603313744,
+        141.5269379504025,
+        145.02495108172297
+      ]
+    },
+    "cache_hit_rate": {
+      "mean": 0.99,
+      "std": 0.0,
+      "min": 0.99,
+      "max": 0.99,
+      "raw": [
+        0.99,
+        0.99,
+        0.99
+      ]
+    },
+    "token_reuse_rate": {
+      "mean": 0.9833333333333333,
+      "std": 0.0,
+      "min": 0.9833333333333333,
+      "max": 0.9833333333333333,
+      "raw": [
+        0.9833333333333333,
+        0.9833333333333333,
+        0.9833333333333333
+      ]
+    },
+    "throughput_tok_s": {
+      "mean": 8779.971639687727,
+      "std": 559.498871692596,
+      "min": 8419.898645002717,
+      "max": 9424.550456199557,
+      "raw": [
+        9424.550456199557,
+        8495.465817860908,
+        8419.898645002717
+      ]
+    },
+    "mem_delta_gb": {
+      "mean": 0.03000000000000025,
+      "std": 0.0,
+      "min": 0.03000000000000025,
+      "max": 0.03000000000000025,
+      "raw": [
+        0.03000000000000025,
+        0.03000000000000025,
+        0.03000000000000025
+      ]
+    }
+  },
+  "eviction_policies": {
+    "lru": {
+      "avg_latency_ms": 128.77480778144673,
+      "std_latency_ms": 8.906036295236662,
+      "p50_latency_ms": 128.2227858901024,
+      "p99_latency_ms": 165.6741069164127,
+      "cache_hit_rate": 0.995,
+      "throughput_tok_s": 387.36898720015637,
+      "total_evictions": 0
+    },
+    "lfu": {
+      "avg_latency_ms": 128.62647908274084,
+      "std_latency_ms": 10.664929903641685,
+      "p50_latency_ms": 127.4959510192275,
+      "p99_latency_ms": 182.17817600816488,
+      "cache_hit_rate": 0.995,
+      "throughput_tok_s": 387.84750734090494,
+      "total_evictions": 0
+    },
+    "composite": {
+      "avg_latency_ms": 126.47981296293437,
+      "std_latency_ms": 4.354479933624563,
+      "p50_latency_ms": 126.46505888551474,
+      "p99_latency_ms": 133.50670807994902,
+      "cache_hit_rate": 0.995,
+      "throughput_tok_s": 394.54977208376533,
+      "total_evictions": 0
+    },
+    "tiered": {
+      "avg_latency_ms": 127.62724585249089,
+      "std_latency_ms": 13.440153781926155,
+      "p50_latency_ms": 126.25024514272809,
+      "p99_latency_ms": 190.99246198311448,
+      "cache_hit_rate": 0.995,
+      "throughput_tok_s": 390.9116094771535,
+      "total_evictions": 0
+    },
+    "adaptive": {
+      "avg_latency_ms": 125.34109443076886,
+      "std_latency_ms": 4.335527146693577,
+      "p50_latency_ms": 125.26581506244838,
+      "p99_latency_ms": 134.36111714690924,
+      "cache_hit_rate": 0.995,
+      "throughput_tok_s": 398.1508138052251,
+      "total_evictions": 0
+    }
+  },
+  "sequence_scaling": {
+    "128": {
+      "actual_tokens": 128,
+      "avg_latency_ms": 179.4443883933127,
+      "std_latency_ms": 38.06194031836459,
+      "tokens_per_sec": 713.3129163083382
+    },
+    "256": {
+      "actual_tokens": 256,
+      "avg_latency_ms": 282.9521294683218,
+      "std_latency_ms": 22.204232757439684,
+      "tokens_per_sec": 904.7466809351605
+    },
+    "512": {
+      "actual_tokens": 512,
+      "avg_latency_ms": 457.6214421540499,
+      "std_latency_ms": 40.163996659886884,
+      "tokens_per_sec": 1118.8286929694273
+    },
+    "1024": {
+      "actual_tokens": 1024,
+      "avg_latency_ms": 848.5979318153113,
+      "std_latency_ms": 210.65667223639878,
+      "tokens_per_sec": 1206.696318254595
+    },
+    "2048": {
+      "actual_tokens": 2048,
+      "avg_latency_ms": 1623.2203503604978,
+      "std_latency_ms": 157.62893644042595,
+      "tokens_per_sec": 1261.6894554982407
+    }
+  },
+  "cache_sensitivity": {
+    "10": {
+      "avg_latency_ms": 126.16944817593321,
+      "cache_hit_rate": 0.99,
+      "evictions": 0,
+      "memory_used_mb": 0.0
+    },
+    "25": {
+      "avg_latency_ms": 128.09404572006315,
+      "cache_hit_rate": 0.99,
+      "evictions": 0,
+      "memory_used_mb": 0.0
+    },
+    "50": {
+      "avg_latency_ms": 125.69001999450848,
+      "cache_hit_rate": 0.99,
+      "evictions": 0,
+      "memory_used_mb": 0.0
+    },
+    "100": {
+      "avg_latency_ms": 125.48155959695578,
+      "cache_hit_rate": 0.99,
+      "evictions": 0,
+      "memory_used_mb": 0.0
+    },
+    "200": {
+      "avg_latency_ms": 125.4717859509401,
+      "cache_hit_rate": 0.99,
+      "evictions": 0,
+      "memory_used_mb": 0.0
+    }
+  }
+}

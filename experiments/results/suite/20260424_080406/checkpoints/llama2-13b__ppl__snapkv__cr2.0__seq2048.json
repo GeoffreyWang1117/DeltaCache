@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Llama-2-13B",
+  "method": "snapkv",
+  "compression_ratio": 2.0,
+  "seq_len": 2048,
+  "prefix_len": 1228,
+  "n_chunks": 6,
+  "mean_ppl": 5.9137,
+  "std_ppl": 1.2761,
+  "ppl_ratio": 1.0522,
+  "full_ppl": 5.6202,
+  "mean_compress_ms": 11.93,
+  "mean_memory_bytes": 502988800,
+  "_checkpoint_key": "llama2-13b__ppl__snapkv__cr2.0__seq2048",
+  "_timestamp": "2026-04-24T08:09:13.826732"
+}

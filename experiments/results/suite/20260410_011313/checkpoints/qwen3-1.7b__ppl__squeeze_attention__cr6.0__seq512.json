@@ -1,0 +1,17 @@
+{
+  "task": "ppl",
+  "model": "Qwen3-1.7B",
+  "method": "squeeze_attention",
+  "compression_ratio": 6.0,
+  "seq_len": 512,
+  "prefix_len": 307,
+  "n_chunks": 6,
+  "mean_ppl": 24.9246,
+  "std_ppl": 15.2638,
+  "ppl_ratio": 1.1669,
+  "full_ppl": 21.3593,
+  "mean_compress_ms": 6.65,
+  "mean_memory_bytes": 6995968,
+  "_checkpoint_key": "qwen3-1.7b__ppl__squeeze_attention__cr6.0__seq512",
+  "_timestamp": "2026-04-10T17:20:08.873351"
+}

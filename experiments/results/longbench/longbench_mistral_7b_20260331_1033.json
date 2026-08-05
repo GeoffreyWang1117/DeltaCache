@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "model": "mistralai/Mistral-7B-Instruct-v0.2",
+    "model_short": "Mistral-7B",
+    "max_samples": 15,
+    "timestamp": "2026-03-31T10:33:21.660797"
+  },
+  "results": [
+    {
+      "task": "qasper",
+      "method": "full_kv",
+      "cr": 1.0,
+      "score": 0.2089,
+      "n": 15
+    },
+    {
+      "task": "qasper",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "score": 0.2061,
+      "n": 15
+    },
+    {
+      "task": "qasper",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "score": 0.2034,
+      "n": 15
+    },
+    {
+      "task": "qasper",
+      "method": "h2o",
+      "cr": 2.0,
+      "score": 0.1864,
+      "n": 15
+    },
+    {
+      "task": "qasper",
+      "method": "h2o",
+      "cr": 4.0,
+      "score": 0.1798,
+      "n": 15
+    },
+    {
+      "task": "qasper",
+      "method": "kivi",
+      "cr": 2.0,
+      "score": 0.2034,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "full_kv",
+      "cr": 1.0,
+      "score": 0.6428,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "score": 0.6388,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "score": 0.6316,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "h2o",
+      "cr": 2.0,
+      "score": 0.642,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "h2o",
+      "cr": 4.0,
+      "score": 0.6233,
+      "n": 15
+    },
+    {
+      "task": "multifieldqa_en",
+      "method": "kivi",
+      "cr": 2.0,
+      "score": 0.6316,
+      "n": 15
+    },
+    {
+      "task": "gov_report",
+      "method": "full_kv",
+      "cr": 1.0,
+      "score": 0.0693,
+      "n": 11
+    },
+    {
+      "task": "gov_report",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "score": 0.0694,
+      "n": 11
+    },
+    {
+      "task": "gov_report",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "score": 0.0801,
+      "n": 11
+    },
+    {
+      "task": "gov_report",
+      "method": "h2o",
+      "cr": 2.0,
+      "score": 0.0708,
+      "n": 11
+    },
+    {
+      "task": "gov_report",
+      "method": "h2o",
+      "cr": 4.0,
+      "score": 0.0707,
+      "n": 11
+    },
+    {
+      "task": "gov_report",
+      "method": "kivi",
+      "cr": 2.0,
+      "score": 0.0798,
+      "n": 11
+    },
+    {
+      "task": "trec",
+      "method": "full_kv",
+      "cr": 1.0,
+      "score": 0.2,
+      "n": 15
+    },
+    {
+      "task": "trec",
+      "method": "layer_budget",
+      "cr": 2.0,
+      "score": 0.2,
+      "n": 15
+    },
+    {
+      "task": "trec",
+      "method": "layer_budget",
+      "cr": 4.0,
+      "score": 0.2,
+      "n": 15
+    },
+    {
+      "task": "trec",
+      "method": "h2o",
+      "cr": 2.0,
+      "score": 0.2667,
+      "n": 15
+    },
+    {
+      "task": "trec",
+      "method": "h2o",
+      "cr": 4.0,
+      "score": 0.2,
+      "n": 15
+    },
+    {
+      "task": "trec",
+      "method": "kivi",
+      "cr": 2.0,
+      "score": 0.2,
+      "n": 15
+    }
+  ]
+}

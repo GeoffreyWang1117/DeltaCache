@@ -1,0 +1,91 @@
+{
+  "run_id": "20260410_011313",
+  "tier": "full",
+  "hardware": "local_3090x2_9gb",
+  "total_units": 1312,
+  "completed": 1312,
+  "errors": 24,
+  "total_time_seconds": 115111.1,
+  "error_details": [
+    [
+      "qwen3-0.6b__niah__h2o_uniform__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__snapkv__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__minikv__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__h2o_uniform__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__snapkv__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__minikv__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__h2o_uniform__cr4.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__snapkv__cr4.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__minikv__cr4.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__h2o_uniform__cr6.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__snapkv__cr6.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-0.6b__niah__minikv__cr6.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__h2o_uniform__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__snapkv__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__minikv__cr2.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__h2o_uniform__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__snapkv__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__minikv__cr3.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__h2o_uniform__cr4.0__seq8192",
+      "CUDA OOM"
+    ],
+    [
+      "qwen3-1.7b__niah__snapkv__cr4.0__seq8192",
+      "CUDA OOM"
+    ]
+  ]
+}
