@@ -2,18 +2,22 @@
 
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Optional, Tuple, Any
+import logging
+from typing import Any, Dict, List, Optional
 
-import torch
 from torch import Tensor
 
 from deltacache.core.cache_block import CacheBlock
-from deltacache.core.prefix_tree import PrefixTree, LookupResult
+from deltacache.core.memory_monitor import GPUMemoryMonitor, MemoryPressure
 from deltacache.core.memory_pool import MemoryPool, MemoryStats
+from deltacache.core.prefix_tree import LookupResult, PrefixTree
 from deltacache.engine.incremental import IncrementalEngine, IncrementalResult, KVComputeFunc
 from deltacache.engine.rope_handler import RoPEHandler
-from deltacache.eviction.policy import EvictionPolicy, create_eviction_policy, EvictionResult
-from deltacache.utils.config import DeltaCacheConfig, CacheStats
+from deltacache.eviction.policy import EvictionPolicy, EvictionResult, create_eviction_policy
+from deltacache.metrics import DeltaCacheMetrics
+from deltacache.utils.config import CacheStats, DeltaCacheConfig
+
+logger = logging.getLogger(__name__)
 
 
 class DeltaCacheManager:
@@ -95,6 +99,20 @@ class DeltaCacheManager:
         # Statistics
         self.stats = CacheStats()
 
+        # Prometheus metrics (no-op if prometheus_client not installed)
+        self.metrics = DeltaCacheMetrics(enabled=self.config.enable_metrics)
+
+        # GPU memory monitor
+        self.memory_monitor: Optional[GPUMemoryMonitor] = None
+        if self.config.enable_memory_monitor and self.config.device.startswith("cuda"):
+            self.memory_monitor = GPUMemoryMonitor(
+                device=self.config.torch_device,
+                high_watermark=self.config.high_watermark,
+                low_watermark=self.config.low_watermark,
+                critical_threshold=self.config.critical_threshold,
+            )
+            self.memory_monitor.set_eviction_callback(self._on_monitor_pressure)
+
         # Set up eviction callback
         self.memory_pool.set_eviction_callback(self._on_memory_pressure)
 
@@ -108,7 +126,8 @@ class DeltaCacheManager:
         Returns:
             LookupResult with matched length and KV cache if available.
         """
-        result = self.prefix_tree.lookup(tokens)
+        with self.metrics.lookup_timer():
+            result = self.prefix_tree.lookup(tokens)
 
         # Update stats
         if self.config.enable_stats:
@@ -117,6 +136,7 @@ class DeltaCacheManager:
                 matched_tokens=result.matched_length,
                 computed_tokens=len(tokens) - result.matched_length,
             )
+        self.metrics.record_lookup(hit=result.has_match, matched_tokens=result.matched_length)
 
         return result
 
@@ -292,12 +312,29 @@ class DeltaCacheManager:
 
     def _ensure_memory(self, required: int) -> None:
         """Ensure sufficient GPU memory is available."""
+        # Check real GPU memory via monitor if available
+        if self.memory_monitor is not None and not self.memory_monitor.can_allocate(required):
+            to_free = self.memory_monitor.bytes_to_free()
+            to_free = max(to_free, required)
+            self.evict_if_needed(to_free)
+            return
+
         if required > self.memory_pool.gpu_free:
             self.evict_if_needed(required)
 
     def _on_memory_pressure(self, block_ids: List[int]) -> None:
         """Callback when memory pool detects pressure."""
         self.evict_if_needed()
+
+    def _on_monitor_pressure(self, bytes_to_free: int, pressure: MemoryPressure) -> None:
+        """Callback from GPU memory monitor when watermarks are exceeded."""
+        logger.info(
+            "GPU memory pressure: %s, need to free %d MB",
+            pressure.value,
+            bytes_to_free / (1024 * 1024),
+        )
+        with self.metrics.eviction_timer():
+            self.evict_if_needed(bytes_to_free)
 
     @property
     def num_cached_sequences(self) -> int:

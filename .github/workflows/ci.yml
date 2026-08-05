@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, paper-experiments]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check deltacache/ tests/
+      - run: ruff format --check deltacache/ tests/
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]" mypy
+      - run: mypy deltacache/ --ignore-missing-imports
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: pytest tests/ -v --tb=short -x --ignore=tests/test_hf_integration.py --ignore=tests/test_vllm_integration.py
+        env:
+          CUDA_VISIBLE_DEVICES: ""
+
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]" pytest-cov
+      - run: pytest tests/ -v --cov=deltacache --cov-report=xml --cov-report=term-missing --ignore=tests/test_hf_integration.py --ignore=tests/test_vllm_integration.py
+        env:
+          CUDA_VISIBLE_DEVICES: ""

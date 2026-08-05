@@ -60,10 +60,18 @@ class TestKVFormatConversion:
         key_cache, value_cache = sample_dc_cache
         hf_cache = deltacache_to_hf(key_cache, value_cache)
 
-        assert len(hf_cache) == 4  # num_layers
-        for k, v in hf_cache:
-            assert k.shape == (1, 8, 16, 64)  # [batch, heads, seq, dim]
-            assert v.shape == (1, 8, 16, 64)
+        # deltacache_to_hf returns DynamicCache if available, else tuple
+        from transformers.cache_utils import DynamicCache
+        if isinstance(hf_cache, DynamicCache):
+            assert len(hf_cache.layers) == 4
+            for layer in hf_cache.layers:
+                assert layer.keys.shape == (1, 8, 16, 64)
+                assert layer.values.shape == (1, 8, 16, 64)
+        else:
+            assert len(hf_cache) == 4
+            for k, v in hf_cache:
+                assert k.shape == (1, 8, 16, 64)
+                assert v.shape == (1, 8, 16, 64)
 
     def test_roundtrip_hf_to_dc_to_hf(self, sample_hf_cache):
         """Test HF -> DC -> HF roundtrip preserves data."""
@@ -73,13 +81,18 @@ class TestKVFormatConversion:
         # Convert back to HF
         hf_cache_back = deltacache_to_hf(key_dc, value_dc)
 
-        # Verify shapes match
-        assert len(hf_cache_back) == len(sample_hf_cache)
-
         # Verify data matches (approximately due to floating point)
-        for (k1, v1), (k2, v2) in zip(sample_hf_cache, hf_cache_back):
-            assert torch.allclose(k1, k2, atol=1e-6)
-            assert torch.allclose(v1, v2, atol=1e-6)
+        from transformers.cache_utils import DynamicCache
+        if isinstance(hf_cache_back, DynamicCache):
+            assert len(hf_cache_back.layers) == len(sample_hf_cache)
+            for i, (k1, v1) in enumerate(sample_hf_cache):
+                assert torch.allclose(k1, hf_cache_back.layers[i].keys, atol=1e-6)
+                assert torch.allclose(v1, hf_cache_back.layers[i].values, atol=1e-6)
+        else:
+            assert len(hf_cache_back) == len(sample_hf_cache)
+            for (k1, v1), (k2, v2) in zip(sample_hf_cache, hf_cache_back):
+                assert torch.allclose(k1, k2, atol=1e-6)
+                assert torch.allclose(v1, v2, atol=1e-6)
 
     def test_roundtrip_dc_to_hf_to_dc(self, sample_dc_cache):
         """Test DC -> HF -> DC roundtrip preserves data."""

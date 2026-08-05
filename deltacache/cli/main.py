@@ -29,10 +29,12 @@ def cli(ctx, verbose):
 from deltacache.cli.commands.benchmark import benchmark
 from deltacache.cli.commands.analyze import analyze
 from deltacache.cli.commands.stats import stats
+from deltacache.cli.commands.bench import bench
 
 cli.add_command(benchmark)
 cli.add_command(analyze)
 cli.add_command(stats)
+cli.add_command(bench)
 
 
 def main():

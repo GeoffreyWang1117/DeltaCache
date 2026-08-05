@@ -44,9 +44,19 @@ class DeltaCacheConfig:
     rope_base: float = 10000.0
     max_position: int = 8192
 
-    # Behavior flags
+    # Memory monitor watermarks
+    high_watermark: float = 0.85  # Trigger eviction above this GPU utilization
+    low_watermark: float = 0.70  # Target utilization after eviction
+    critical_threshold: float = 0.95  # Emergency eviction threshold
+    enable_memory_monitor: bool = True  # Use real GPU memory monitoring
+
+    # Tiered cache
     enable_offloading: bool = True  # Allow GPU -> CPU offloading
+    cpu_cache_quantize: bool = False  # Quantize KV on CPU tier (INT8)
+
+    # Observability
     enable_stats: bool = True  # Track statistics
+    enable_metrics: bool = False  # Prometheus metrics (requires prometheus_client)
 
     @property
     def torch_dtype(self) -> torch.dtype:
@@ -85,6 +95,12 @@ class DeltaCacheConfig:
 
         if self.target_utilization >= self.eviction_threshold:
             raise ValueError("target_utilization must be less than eviction_threshold")
+
+        if self.high_watermark <= self.low_watermark:
+            raise ValueError("high_watermark must be greater than low_watermark")
+
+        if self.critical_threshold <= self.high_watermark:
+            raise ValueError("critical_threshold must be greater than high_watermark")
 
         if self.num_layers <= 0:
             raise ValueError("num_layers must be positive")

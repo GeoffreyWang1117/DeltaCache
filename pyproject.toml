@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "deltacache"
-version = "0.1.0"
+version = "0.2.0"
 description = "Incremental computation-aware KV cache management system for LLM inference"
 readme = "README.md"
 license = {text = "Apache-2.0"}
@@ -24,13 +24,21 @@ cli = [
     "tqdm>=4.60.0",
 ]
 vllm = ["vllm>=0.4.0"]
+sglang = ["requests>=2.28.0"]
+monitoring = [
+    "prometheus-client>=0.17.0",
+    "structlog>=23.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
     "matplotlib>=3.7.0",
+    "ruff>=0.4.0",
+    "mypy>=1.8.0",
 ]
 all = [
-    "deltacache[hf,cli,vllm,dev]",
+    "deltacache[hf,cli,vllm,sglang,monitoring,dev]",
 ]
 
 [project.scripts]
@@ -43,3 +51,12 @@ include = ["deltacache*", "benchmarks*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["deltacache"]
+omit = ["deltacache/cli/*", "deltacache/vllm_integration/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60

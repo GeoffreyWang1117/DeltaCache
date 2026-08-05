@@ -1,0 +1,31 @@
+target-version = "py39"
+line-length = 100
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific rules
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+    "UP006",  # use builtin types for type annotations (need 3.9+ generics)
+    "UP007",  # use X | Y for union types (need 3.10+)
+    "UP035",  # deprecated typing imports (need 3.9+ builtins)
+    "UP037",  # remove quotes from type annotations
+    "UP045",  # use X | None (need 3.10+)
+    "SIM108", # use ternary operator
+]
+
+[lint.isort]
+known-first-party = ["deltacache"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

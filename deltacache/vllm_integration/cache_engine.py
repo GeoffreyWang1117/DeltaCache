@@ -101,6 +101,10 @@ class DeltaCacheEngine:
         self.head_dim = head_dim
         self.dtype = model_config.dtype
 
+        # Optional LayerBudget block manager (activated via enable_layer_budget)
+        self._lb_block_manager: Optional["LayerBudgetBlockManager"] = None
+        self._lb_budget_bytes: int = 0
+
     def _get_gpu_memory(self) -> int:
         """Get total GPU memory."""
         if torch.cuda.is_available():
@@ -264,6 +268,62 @@ class DeltaCacheEngine:
                 block = self.manager.memory_pool.get_block(block_id)
                 if block:
                     block.release_ref()
+
+    def enable_layer_budget(self, budget_bytes: int) -> None:
+        """Activate LayerBudget block-level compression.
+
+        Once enabled, call on_prefill_complete() after each prefill to
+        trigger per-layer block compression.
+
+        Args:
+            budget_bytes: Total memory budget for KV cache across all layers.
+        """
+        from deltacache.vllm_integration.layer_budget_block_manager import (
+            LayerBudgetBlockManager,
+        )
+        self._lb_block_manager = LayerBudgetBlockManager(
+            num_layers=self.num_layers,
+            num_kv_heads=self.num_kv_heads,
+            head_dim=self.head_dim,
+            block_size=self.block_size,
+        )
+        self._lb_budget_bytes = budget_bytes
+
+    def on_prefill_complete(
+        self,
+        seq_id: int,
+        gpu_cache: List[Tensor],
+        attention_weights: Optional[List[Tensor]] = None,
+        seq_len: int = 0,
+    ) -> Optional[Dict]:
+        """Hook called after prefill to apply LayerBudget compression.
+
+        Args:
+            seq_id: Sequence ID.
+            gpu_cache: Per-layer GPU cache tensors (vLLM format).
+            attention_weights: Per-layer attention tensors from prefill.
+            seq_len: Sequence length for this request.
+
+        Returns:
+            Compression stats dict, or None if LayerBudget not enabled.
+        """
+        if self._lb_block_manager is None:
+            return None
+
+        allocation = self._lb_block_manager.profile_and_allocate(
+            attention_weights, seq_len, self._lb_budget_bytes,
+        )
+        self._lb_block_manager.apply_compression(gpu_cache, allocation)
+
+        return {
+            "seq_id": seq_id,
+            "total_memory_bytes": allocation.total_memory_bytes,
+            "budget_bytes": allocation.budget_bytes,
+            "compression_ratio": allocation.compression_ratio,
+            "freed_blocks_per_layer": {
+                l: len(v) for l, v in allocation.freed_block_indices.items()
+            },
+        }
 
     def get_cache_stats(self) -> Dict:
         """Get cache statistics."""
