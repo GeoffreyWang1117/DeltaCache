@@ -38,9 +38,14 @@ Note that B and C point in opposite directions for the detector idea (§5), and 
 
 ---
 
-## 2. Experiment 0 — the noise floor (the gate, and the novel part)
+## 2. Experiment 0 — the noise floor (the gate)
 
-**This runs first and it is the contribution most likely to survive on its own.**
+> ⚠️ **Superseded claim.** This section originally called the noise-floor control "the contribution
+> most likely to survive on its own." That is wrong: DiFR (arXiv 2511.20621, Nov 2025) already
+> formalizes the pooled-honest-configuration null, and Thinking Machines already diagnosed the root
+> cause (batch-size-dependent reduction kernels) and removed it with batch-invariant kernels. The
+> control below is still worth running as a calibration step, but it is not novel.
+> See `PROBLEM_FORMULATION.md` §0 and §1 for what remains open.
 
 Reference config: model M, **fp16 weights** (no bitsandbytes — see §6), sdpa attention, batch=1, fixed seed, GPU 1, uncompressed cache.
 

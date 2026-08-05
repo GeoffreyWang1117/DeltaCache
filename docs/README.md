@@ -6,7 +6,8 @@
 
 | Doc | Answers |
 |---|---|
-| [`EXPERIMENT_PLAN_FAITHFULNESS.md`](EXPERIMENT_PLAN_FAITHFULNESS.md) | What we are trying to measure, how, and when to stop. **Current work.** |
+| [`PROBLEM_FORMULATION.md`](PROBLEM_FORMULATION.md) | **Start here.** The mathematical model, what is being optimized, the quantitative targets, and what falsifies them. Also records that the earlier "noise floor" framing was already published (DiFR, Anthropic/FAR AI). |
+| [`EXPERIMENT_PLAN_FAITHFULNESS.md`](EXPERIMENT_PLAN_FAITHFULNESS.md) | Measurement design and stop rule. ⚠ Its §2 "noise floor" claim of novelty is superseded by PROBLEM_FORMULATION §0. |
 | [`REFRAME_VERIFAI_PROPOSAL.md`](REFRAME_VERIFAI_PROPOSAL.md) | Why the direction changed, and how it connects to ChainProve (VerifAI@ICLR 2026 / ICICS 2026) |
 | [`ENV_REBUILD_DIAGNOSIS.md`](ENV_REBUILD_DIAGNOSIS.md) | How to get a working environment (10–20 min; the env is empty, not broken) |
 | [`ENGINEERING_DESIGN.md`](ENGINEERING_DESIGN.md) | Library internals. Predates the direction change but is still accurate about the code. |
