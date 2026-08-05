@@ -102,6 +102,12 @@ MODEL_ZOO = {
         head_dim=128, arch="GQA", max_context=131072, vram_fp16_gb=28.0,
         load_in=4, device_map="auto",
     ),
+    "qwen2.5-72b": ModelSpec(
+        hf_name="Qwen/Qwen2.5-72B-Instruct",
+        short_name="Qwen2.5-72B", num_layers=80, num_kv_heads=8,
+        head_dim=128, arch="GQA", max_context=131072, vram_fp16_gb=144.0,
+        load_in=4, device_map="auto",
+    ),
 }
 
 
@@ -313,7 +319,8 @@ def build_experiment_matrix(
         ppl_seqs = [512]
         downstream_seqs = [512]
     elif tier == "paper":
-        models = ["llama2-7b", "mistral-7b", "llama3.1-8b", "llama2-13b"]
+        models = ["llama2-7b", "mistral-7b", "llama3.1-8b", "llama2-13b",
+                  "qwen2.5-14b", "qwen2.5-72b"]
         crs = COMPRESSION_RATIOS
         ppl_seqs = [512, 1024, 2048, 4096]
         downstream_seqs = [1024, 2048, 4096]
