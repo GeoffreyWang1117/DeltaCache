@@ -54,3 +54,15 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Nested upstream clone (H2O official, used for sanity checks) — 165MB, not ours
+baselines/h2o_official/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz

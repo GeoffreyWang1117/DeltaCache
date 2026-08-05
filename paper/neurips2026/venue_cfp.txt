@@ -1,0 +1,51 @@
+NeurIPS 2026 Main Track — submission rules (verbatim quotes from
+https://neurips.cc/Conferences/2026/MainTrackHandbook, retrieved 2026-08-04)
+
+PAGE LIMIT
+"The main text of a submitted paper is limited to nine content pages, including
+all figures and tables."
+"Additional pages containing references, optional technical appendices and
+mandatory paper checklist do not count as content pages."
+Camera-ready: authors receive one additional content page upon acceptance.
+Maximum file size: 50MB.
+
+ABSTRACT LENGTH
+The handbook does not specify an abstract character or word limit.
+
+FORMATTING / FONT
+"you must format your submission using the LaTeX style file for that year"
+Submissions "violating the NeurIPS style (e.g., by decreasing margins or font
+sizes) or page limits may be desk rejected."
+
+ANONYMITY (DOUBLE-BLIND)
+"All submissions must be anonymized and may not contain any identifying
+information that violate the double-blind reviewing policy."
+Authors must avoid acknowledgments and identifying self-citations (use
+"Smith et al." rather than "our"), and must ensure external links permit
+anonymous browsing. Violations result in desk rejection.
+
+PAPER CHECKLIST
+"Authors are required to complete the paper checklist included in the paper
+template." The checklist must be included in the submitted PDF.
+
+DUAL SUBMISSION
+"The reviewing process will treat any other archival submission by an
+overlapping set of authors as prior work."
+Prohibited: submitting similar papers to NeurIPS simultaneously, "thin slicing"
+multiple papers to one conference, or submitting to another archival venue while
+under NeurIPS review.
+
+LLM USE
+"The use of spell checkers and grammar suggestions, aid for editing purposes,
+and basic code assistance does not need to be documented."
+"use of agents and/or LLMs in implementing the method should be described" if
+non-standard. Authors remain fully responsible for all content accuracy.
+
+--------------------------------------------------------------------------------
+CALIBRATION NOTE FOR REVIEWERS (added by the orchestrator, not part of the CFP):
+The NeurIPS 2026 deadline (May 2026) has passed and this paper was never
+submitted. It is being reviewed against the NeurIPS bar to decide whether to
+target a top-tier venue (ICLR 2027 / MLSys 2027 / ASPLOS 2027) or a fast
+second-tier venue. Judge it at full NeurIPS-main-track severity. For the
+venue-fit probe (P13), treat the target community as top-tier ML-systems /
+efficient-inference (NeurIPS, ICLR, MLSys).

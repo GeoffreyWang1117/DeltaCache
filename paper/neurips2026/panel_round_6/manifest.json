@@ -1,0 +1,58 @@
+{
+  "round": 6,
+  "venue": "neurips",
+  "difficulty": "nightmare",
+  "engine": "agent",
+  "review_date": "2026-08-04",
+  "cfp_provided": true,
+  "personas": [
+    {
+      "id": "R1",
+      "name": "Methodologist",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R1.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R1.json"
+    },
+    {
+      "id": "R2",
+      "name": "Empiricist",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R2.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R2.json"
+    },
+    {
+      "id": "R3",
+      "name": "Visionary",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R3.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R3.json"
+    },
+    {
+      "id": "R4",
+      "name": "Skeptic",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R4.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R4.json"
+    },
+    {
+      "id": "R5",
+      "name": "Domain Practitioner",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R5.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R5.json"
+    },
+    {
+      "id": "R6",
+      "name": "Cold Reader",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R6.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R6.json"
+    },
+    {
+      "id": "R7",
+      "name": "Skim Reviewer",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R7.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R7.json"
+    },
+    {
+      "id": "R8",
+      "name": "Venue Reviewer",
+      "prompt_file": "paper/neurips2026/panel_round_6/prompt_R8.md",
+      "result_file": "paper/neurips2026/panel_round_6/review_R8.json"
+    }
+  ]
+}
