@@ -151,11 +151,13 @@ def run_niah_cell(model, tokenizer, num_layers, num_kv_heads, head_dim, method, 
                 print(f"  [err] {type(e).__name__}: {e}", flush=True)
                 clear_gpu()
             finally:
-                for vname in ['full_k', 'full_v', 'attns', 'layers', 'cache']:
-                    try:
-                        exec(f'del {vname}')
-                    except:
-                        pass
+                # Drop the references before clear_gpu(), which starts with gc.collect():
+                # the collector can only reclaim what nothing points at any more.
+                # This was exec("del <name>") in a loop, which cannot work. exec gets a
+                # copy of the function's locals, so the del applied to the copy and every
+                # tensor stayed alive until the frame exited. Rebinding does drop them,
+                # and unlike del it is safe when a name was never assigned.
+                full_k = full_v = attns = layers = cache = None
                 clear_gpu()
         if oom_total >= 5:
             break

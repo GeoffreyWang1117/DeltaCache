@@ -102,16 +102,25 @@ non-cryptographic sampling, and the three "hardcoded password" hits are the para
 
 **semgrep: 7 findings, all `exec-detected`**, matching bandit's B102 exactly.
 
-## The `exec` calls, and why two of them stay
+## The `exec` calls: five removed, one kept on purpose
 
-Five are `exec(f'del {vname}')` in experiment cleanup blocks. `vname` iterates a
-hardcoded list, so there is no injection. They are, however, a **verified no-op**:
-`exec` receives a copy of the function's locals in CPython, so the `del` frees
-nothing, and the surrounding code believes it is releasing GPU memory before
-`clear_gpu()`. That is a correctness bug, not a security one, and is left for a
-separate change.
+Five were `exec(f'del {vname}')` in experiment cleanup blocks. `vname` iterated a
+hardcoded list, so there was no injection. They were, however, a **verified no-op**:
+`exec` receives a copy of the function's locals in CPython, so the `del` freed
+nothing, and the surrounding code believed it was releasing five large tensors per
+sample before `clear_gpu()` — which begins with `gc.collect()`, and so could reclaim
+nothing that was still referenced.
 
-Two are the byte audit deliberately executing vendored upstream source. There were
+**Status: FIXED.** All five now rebind the names to `None`, which is a real store
+and, unlike `del`, is safe when an exception left a name unassigned — these blocks
+run in `finally`, so a cleanup that raised would mask the original error. Covered by
+`tests/test_cleanup_semantics.py`, which uses a weak reference to show the payload
+survives the `exec` form and is collected after the rebinding. That is a correctness
+fix rather than a security one; it is recorded here because the audit is what found
+it.
+
+One is the byte audit deliberately executing vendored upstream source (a second
+`exec` lives in the test above, which reproduces the defect on purpose). There were
 three before; `adapters/h2o_official.py` carried a private copy of the loader and
 now uses the shared `upstream.py:load_from_source`, so there is one implementation
 to reason about. The trust boundary is documented in that module: it executes files

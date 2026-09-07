@@ -216,13 +216,13 @@ class LongBenchTask(BaseTask):
                     clear_gpu()
                     continue
                 finally:
-                    # Always cleanup
-                    for name in ['full_k', 'full_v', 'attns', 'layers', 'cache']:
-                        if name in dir():
-                            try:
-                                exec(f'del {name}')
-                            except:
-                                pass
+                    # Drop the references before clear_gpu(), which starts with gc.collect():
+                    # the collector can only reclaim what nothing points at any more.
+                    # This was exec("del <name>") in a loop, which cannot work. exec gets a
+                    # copy of the function's locals, so the del applied to the copy and every
+                    # tensor stayed alive until the frame exited. Rebinding does drop them,
+                    # and unlike del it is safe when a name was never assigned.
+                    full_k = full_v = attns = layers = cache = None
                     clear_gpu()
 
             if scores:
