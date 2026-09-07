@@ -116,9 +116,7 @@ class GPUMemoryMonitor:
     def device(self) -> torch.device:
         return self._device
 
-    def set_eviction_callback(
-        self, callback: Callable[[int, MemoryPressure], None]
-    ) -> None:
+    def set_eviction_callback(self, callback: Callable[[int, MemoryPressure], None]) -> None:
         """Set callback invoked when eviction is needed.
 
         Args:

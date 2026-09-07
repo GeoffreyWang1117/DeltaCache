@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import time
 import threading
+import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Iterator, Callable
+from typing import Callable, Dict, Iterator, List, Optional, Tuple
 
-import torch
 from torch import Tensor
 
 from deltacache.core.cache_block import CacheBlock
@@ -21,6 +20,7 @@ class PrefixTreeNode:
     Each node represents a token position and may hold KV cache data
     for that position.
     """
+
     token: int
     parent: Optional[PrefixTreeNode] = None
     children: Dict[int, PrefixTreeNode] = field(default_factory=dict)
@@ -80,6 +80,7 @@ class PrefixTreeNode:
 @dataclass
 class LookupResult:
     """Result of a prefix lookup operation."""
+
     matched_length: int
     matched_node: Optional[PrefixTreeNode]
     kv_cache: Optional[Tuple[Tensor, Tensor]] = None
@@ -354,14 +355,18 @@ class PrefixTree:
             List of nodes sorted by eviction priority.
         """
         if scorer is None:
-            scorer = lambda n: n.last_access
+
+            def scorer(n):
+                return n.last_access
 
         with self._lock:
             candidates = [n for n in self._cache_nodes.values() if n.ref_count == 0]
             candidates.sort(key=scorer)
             return candidates[:limit]
 
-    def find_shared_prefix(self, tokens_list: List[List[int]]) -> Tuple[List[int], List[PrefixTreeNode]]:
+    def find_shared_prefix(
+        self, tokens_list: List[List[int]]
+    ) -> Tuple[List[int], List[PrefixTreeNode]]:
         """
         Find the common prefix shared by multiple token sequences.
 

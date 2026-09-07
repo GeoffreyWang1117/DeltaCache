@@ -1,14 +1,13 @@
 """Tests for LayerAttentionProfiler."""
 
-import pytest
 import torch
 
 from deltacache.core.layer_profiler import (
     LayerAttentionProfiler,
     LayerProfile,
     ProfileResult,
-    compute_gini,
     compute_entropy,
+    compute_gini,
 )
 
 
@@ -79,28 +78,31 @@ class TestProfileResult:
 
     def test_gini_scores(self):
         profiles = [
-            LayerProfile(0, gini=0.3, entropy=0.7, top10_mass=0.5,
-                        top20_mass=0.7, max_attention=0.1),
-            LayerProfile(1, gini=0.8, entropy=0.3, top10_mass=0.9,
-                        top20_mass=0.95, max_attention=0.4),
+            LayerProfile(
+                0, gini=0.3, entropy=0.7, top10_mass=0.5, top20_mass=0.7, max_attention=0.1
+            ),
+            LayerProfile(
+                1, gini=0.8, entropy=0.3, top10_mass=0.9, top20_mass=0.95, max_attention=0.4
+            ),
         ]
-        result = ProfileResult(profiles, num_layers=2, seq_len=64,
-                              profiling_time_ms=5.0)
+        result = ProfileResult(profiles, num_layers=2, seq_len=64, profiling_time_ms=5.0)
 
         scores = result.gini_scores()
         assert scores == {0: 0.3, 1: 0.8}
 
     def test_sparsity_ranking(self):
         profiles = [
-            LayerProfile(0, gini=0.3, entropy=0.7, top10_mass=0.5,
-                        top20_mass=0.7, max_attention=0.1),
-            LayerProfile(1, gini=0.8, entropy=0.3, top10_mass=0.9,
-                        top20_mass=0.95, max_attention=0.4),
-            LayerProfile(2, gini=0.5, entropy=0.5, top10_mass=0.7,
-                        top20_mass=0.85, max_attention=0.2),
+            LayerProfile(
+                0, gini=0.3, entropy=0.7, top10_mass=0.5, top20_mass=0.7, max_attention=0.1
+            ),
+            LayerProfile(
+                1, gini=0.8, entropy=0.3, top10_mass=0.9, top20_mass=0.95, max_attention=0.4
+            ),
+            LayerProfile(
+                2, gini=0.5, entropy=0.5, top10_mass=0.7, top20_mass=0.85, max_attention=0.2
+            ),
         ]
-        result = ProfileResult(profiles, num_layers=3, seq_len=64,
-                              profiling_time_ms=5.0)
+        result = ProfileResult(profiles, num_layers=3, seq_len=64, profiling_time_ms=5.0)
 
         ranking = result.sparsity_ranking()
         assert ranking == [1, 2, 0]  # Most sparse first
@@ -116,10 +118,10 @@ class TestLayerAttentionProfiler:
         # Create synthetic attention weights for 4 layers
         # Shape: (batch=1, heads=4, seq=32, seq=32)
         attn_weights = []
-        for l in range(4):
+        for layer in range(4):
             # Create attention pattern: later layers more concentrated
             attn = torch.randn(1, 4, 32, 32)
-            if l >= 2:
+            if layer >= 2:
                 # Make later layers more peaked
                 attn = attn * 3
             attn = torch.softmax(attn, dim=-1)

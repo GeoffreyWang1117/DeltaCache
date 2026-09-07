@@ -7,19 +7,23 @@ import pytest
 import torch
 
 from deltacache.vllm_integration.layer_budget_block_manager import (
-    LayerBudgetBlockManager,
     LayerBlockAllocation,
+    LayerBudgetBlockManager,
 )
 
-
 # ── Fixtures ──────────────────────────────────────────────────────────────
+
 
 @pytest.fixture
 def manager():
     """Standard manager: 4 layers, 4 KV heads, 64 head_dim, block_size=16."""
     return LayerBudgetBlockManager(
-        num_layers=4, num_kv_heads=4, head_dim=64,
-        block_size=16, sink_blocks=1, recent_blocks=1,
+        num_layers=4,
+        num_kv_heads=4,
+        head_dim=64,
+        block_size=16,
+        sink_blocks=1,
+        recent_blocks=1,
     )
 
 
@@ -27,22 +31,26 @@ def manager():
 def large_manager():
     """7B-like manager: 32 layers, 8 KV heads, 128 head_dim."""
     return LayerBudgetBlockManager(
-        num_layers=32, num_kv_heads=8, head_dim=128,
-        block_size=16, sink_blocks=1, recent_blocks=2,
+        num_layers=32,
+        num_kv_heads=8,
+        head_dim=128,
+        block_size=16,
+        sink_blocks=1,
+        recent_blocks=2,
     )
 
 
 def make_attention_weights(num_layers, num_heads, seq_len, sparse=False):
     """Create synthetic attention weights."""
     attn = []
-    for l in range(num_layers):
+    for layer_i in range(num_layers):
         w = torch.rand(1, num_heads, seq_len, seq_len)
         if sparse:
             # Make later layers more sparse (concentrate on sink + recent)
             mask = torch.zeros(seq_len)
             mask[:4] = 1.0  # sink
             mask[-8:] = 1.0  # recent
-            if l > num_layers // 2:
+            if layer_i > num_layers // 2:
                 w = w * mask.unsqueeze(0).unsqueeze(0).unsqueeze(0)
         # Normalize
         w = w / (w.sum(dim=-1, keepdim=True) + 1e-8)
@@ -60,6 +68,7 @@ def make_vllm_cache(num_layers, num_blocks, block_size, num_kv_heads, head_dim):
 
 
 # ── Tests ─────────────────────────────────────────────────────────────────
+
 
 class TestBlockManagerInit:
     def test_basic_init(self, manager):
@@ -100,7 +109,7 @@ class TestProfileAndAllocate:
 
         assert alloc.total_memory_bytes <= budget
         for layer_idx in range(4):
-            retained, bits = alloc.allocations[layer_idx]
+            retained, _bits = alloc.allocations[layer_idx]
             assert len(retained) > 0  # at least some blocks retained
 
     def test_full_budget_retains_all(self, manager):
@@ -124,7 +133,7 @@ class TestProfileAndAllocate:
         alloc = manager.profile_and_allocate(None, seq_len, budget)
 
         for layer_idx in range(4):
-            retained, bits = alloc.allocations[layer_idx]
+            retained, _bits = alloc.allocations[layer_idx]
             # Should retain at least sink (block 0) and recent (block 15)
             assert 0 in retained, f"Layer {layer_idx}: sink block 0 not retained"
             assert 15 in retained, f"Layer {layer_idx}: recent block 15 not retained"
@@ -215,7 +224,7 @@ class TestApplyCompression:
         manager.apply_compression(gpu_cache, alloc)
 
         for layer_idx in range(4):
-            retained, bits = alloc.allocations[layer_idx]
+            retained, _bits = alloc.allocations[layer_idx]
             retained_set = set(retained)
             for b in range(num_blocks):
                 if b not in retained_set:
@@ -234,7 +243,7 @@ class TestApplyCompression:
         manager.apply_compression(gpu_cache, alloc)
 
         for layer_idx in range(4):
-            retained, bits = alloc.allocations[layer_idx]
+            retained, _bits = alloc.allocations[layer_idx]
             for b in retained:
                 if b < num_blocks:
                     assert not (gpu_cache[layer_idx][:, b] == 0).all(), (
@@ -249,10 +258,10 @@ class TestApplyCompression:
 
         # Force all retained at INT4
         alloc = LayerBlockAllocation(
-            allocations={l: (list(range(num_blocks)), 4) for l in range(4)},
+            allocations={layer_i: (list(range(num_blocks)), 4) for layer_i in range(4)},
             total_memory_bytes=0,
             budget_bytes=0,
-            freed_block_indices={l: [] for l in range(4)},
+            freed_block_indices={layer_i: [] for layer_i in range(4)},
         )
 
         manager.apply_compression(gpu_cache, alloc)
@@ -269,10 +278,10 @@ class TestApplyCompression:
         originals = [c.clone() for c in gpu_cache]
 
         alloc = LayerBlockAllocation(
-            allocations={l: (list(range(num_blocks)), 16) for l in range(4)},
+            allocations={layer_i: (list(range(num_blocks)), 16) for layer_i in range(4)},
             total_memory_bytes=0,
             budget_bytes=0,
-            freed_block_indices={l: [] for l in range(4)},
+            freed_block_indices={layer_i: [] for layer_i in range(4)},
         )
 
         manager.apply_compression(gpu_cache, alloc)

@@ -11,13 +11,13 @@ layers keep fewer tokens at higher precision.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
 import torch
 from torch import Tensor
 
-from deltacache.core.kv_quantizer import KVQuantizer, QuantPrecision, QuantizedKV
+from deltacache.core.kv_quantizer import KVQuantizer, QuantizedKV, QuantPrecision
 
 
 @dataclass
@@ -141,21 +141,24 @@ class LayerKVStore:
         seq_len = full_keys.shape[1]
 
         for alloc in allocations:
-            l = alloc.layer_idx
+            layer_i = alloc.layer_idx
             n = alloc.token_budget
             bits = alloc.quant_bits
 
-            layer_keys = full_keys[l:l+1]  # (1, seq_len, H, D)
-            layer_values = full_values[l:l+1]
+            layer_keys = full_keys[layer_i : layer_i + 1]  # (1, seq_len, H, D)
+            layer_values = full_values[layer_i : layer_i + 1]
 
             if token_selector is not None:
-                indices = token_selector(l, layer_keys, layer_values, n)
+                indices = token_selector(layer_i, layer_keys, layer_values, n)
             else:
                 indices = self._default_token_selection(
-                    layer_keys, layer_values, n, seq_len,
+                    layer_keys,
+                    layer_values,
+                    n,
+                    seq_len,
                 )
 
-            self.store_layer(l, layer_keys, layer_values, indices, bits)
+            self.store_layer(layer_i, layer_keys, layer_values, indices, bits)
 
     def _default_token_selection(
         self,
@@ -258,9 +261,9 @@ class LayerKVStore:
             List of (keys, values, token_indices) per layer.
         """
         return [
-            self.get_layer(l, device)
-            for l in range(self.num_layers)
-            if l in self._entries
+            self.get_layer(layer_i, device)
+            for layer_i in range(self.num_layers)
+            if layer_i in self._entries
         ]
 
     def memory_usage(self) -> int:
@@ -270,22 +273,26 @@ class LayerKVStore:
     def layer_summary(self) -> List[Dict]:
         """Summary of per-layer storage."""
         summary = []
-        for l in range(self.num_layers):
-            if l in self._entries:
-                e = self._entries[l]
-                summary.append({
-                    "layer": l,
-                    "tokens": e.num_tokens,
-                    "bits": e.quant_bits,
-                    "memory_bytes": e.memory_bytes,
-                })
+        for layer_i in range(self.num_layers):
+            if layer_i in self._entries:
+                e = self._entries[layer_i]
+                summary.append(
+                    {
+                        "layer": layer_i,
+                        "tokens": e.num_tokens,
+                        "bits": e.quant_bits,
+                        "memory_bytes": e.memory_bytes,
+                    }
+                )
             else:
-                summary.append({
-                    "layer": l,
-                    "tokens": 0,
-                    "bits": 0,
-                    "memory_bytes": 0,
-                })
+                summary.append(
+                    {
+                        "layer": layer_i,
+                        "tokens": 0,
+                        "bits": 0,
+                        "memory_bytes": 0,
+                    }
+                )
         return summary
 
     def clear(self) -> None:

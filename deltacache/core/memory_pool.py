@@ -4,17 +4,17 @@ from __future__ import annotations
 
 import threading
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Set, Callable
+from typing import Callable, Dict, List, Optional, Set
 
 import torch
-from torch import Tensor
 
-from deltacache.core.cache_block import CacheBlock, DeviceType
+from deltacache.core.cache_block import CacheBlock
 
 
 @dataclass
 class MemoryStats:
     """Memory usage statistics."""
+
     total_bytes: int
     used_bytes: int
     free_bytes: int
@@ -97,7 +97,7 @@ class MemoryPool:
     def cpu_free(self) -> int:
         """Free CPU memory in bytes."""
         if self.cpu_limit == 0:
-            return float('inf')
+            return float("inf")
         return max(0, self.cpu_limit - self._cpu_used)
 
     @property

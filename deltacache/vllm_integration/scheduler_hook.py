@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 from deltacache.api import DeltaCacheManager
 from deltacache.core.prefix_tree import PrefixTree
@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class SchedulingHint:
     """Hint for scheduler about a sequence's cache status."""
+
     seq_id: int
     prefix_length: int
     has_cache: bool
@@ -95,7 +96,7 @@ class SchedulerHook:
         result = self.prefix_tree.lookup(token_ids)
 
         # Find matching prefix group
-        prefix_key = tuple(token_ids[:result.matched_length]) if result.matched_length > 0 else ()
+        prefix_key = tuple(token_ids[: result.matched_length]) if result.matched_length > 0 else ()
 
         # Register sequence in prefix group
         if prefix_key not in self._prefix_groups:
@@ -235,10 +236,9 @@ class SchedulerHook:
             result = self.prefix_tree.lookup(token_ids)
             if result.matched_node and result.matched_node.cache_block:
                 block = result.matched_node.cache_block
-                if not block.is_on_gpu:
-                    if block.memory_size <= gpu_memory_available:
-                        candidates.append(seq_id)
-                        gpu_memory_available -= block.memory_size
+                if not block.is_on_gpu and block.memory_size <= gpu_memory_available:
+                    candidates.append(seq_id)
+                    gpu_memory_available -= block.memory_size
 
         return candidates
 
@@ -295,10 +295,7 @@ class PrefixAwareScheduler:
         ordered = self.hook.suggest_batch_order(ready_sequences)
 
         # Apply priority boosts
-        with_priority = [
-            (seq_id, self.hook.get_priority_boost(seq_id))
-            for seq_id in ordered
-        ]
+        with_priority = [(seq_id, self.hook.get_priority_boost(seq_id)) for seq_id in ordered]
 
         # Sort by priority (higher first)
         with_priority.sort(key=lambda x: x[1], reverse=True)

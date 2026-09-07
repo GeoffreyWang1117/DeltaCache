@@ -1,36 +1,22 @@
 """Benchmark command for DeltaCache CLI."""
 
-import click
 from pathlib import Path
+
+import click
 
 
 @click.command()
 @click.option(
-    "--model", "-m",
-    default="gpt2",
-    help="Model name (gpt2, gpt2-medium, gpt2-large, gpt2-xl)"
+    "--model", "-m", default="gpt2", help="Model name (gpt2, gpt2-medium, gpt2-large, gpt2-xl)"
 )
 @click.option(
-    "--device", "-d",
-    default="cpu",
-    type=click.Choice(["cpu", "cuda"]),
-    help="Device to run on"
+    "--device", "-d", default="cpu", type=click.Choice(["cpu", "cuda"]), help="Device to run on"
 )
 @click.option(
-    "--scenario", "-s",
-    default="all",
-    help="Scenario to run (or 'all' for all scenarios)"
+    "--scenario", "-s", default="all", help="Scenario to run (or 'all' for all scenarios)"
 )
-@click.option(
-    "--output-json", "-o",
-    type=click.Path(),
-    help="Save results to JSON file"
-)
-@click.option(
-    "--list-scenarios",
-    is_flag=True,
-    help="List available scenarios and exit"
-)
+@click.option("--output-json", "-o", type=click.Path(), help="Save results to JSON file")
+@click.option("--list-scenarios", is_flag=True, help="List available scenarios and exit")
 @click.pass_context
 def benchmark(ctx, model, device, scenario, output_json, list_scenarios):
     """Run performance benchmarks comparing baseline vs DeltaCache.
@@ -48,14 +34,15 @@ def benchmark(ctx, model, device, scenario, output_json, list_scenarios):
       deltacache benchmark --list-scenarios
     """
     try:
-        from benchmarks.scenarios import list_scenarios as get_scenarios, SCENARIOS
         from benchmarks.hf_benchmark import HFBenchmark
+        from benchmarks.scenarios import SCENARIOS
     except ImportError:
         # Try relative import
         import sys
+
         sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
-        from benchmarks.scenarios import list_scenarios as get_scenarios, SCENARIOS
         from benchmarks.hf_benchmark import HFBenchmark
+        from benchmarks.scenarios import SCENARIOS
 
     verbose = ctx.obj.get("verbose", True)
 
@@ -65,7 +52,7 @@ def benchmark(ctx, model, device, scenario, output_json, list_scenarios):
             click.echo(f"  {name}: {scen.description}")
         return
 
-    click.echo(f"DeltaCache Benchmark")
+    click.echo("DeltaCache Benchmark")
     click.echo(f"Model: {model}")
     click.echo(f"Device: {device}")
     click.echo(f"Scenario: {scenario}")
@@ -91,11 +78,13 @@ def benchmark(ctx, model, device, scenario, output_json, list_scenarios):
         click.echo(f"\nResults saved to {output_path}")
 
     # Print summary
-    click.echo("\n" + "="*80)
+    click.echo("\n" + "=" * 80)
     click.echo("BENCHMARK SUMMARY")
-    click.echo("="*80)
-    click.echo(f"{'Scenario':<30} {'Baseline':<12} {'DeltaCache':<12} {'Speedup':<10} {'Reuse':<10}")
-    click.echo("-"*80)
+    click.echo("=" * 80)
+    click.echo(
+        f"{'Scenario':<30} {'Baseline':<12} {'DeltaCache':<12} {'Speedup':<10} {'Reuse':<10}"
+    )
+    click.echo("-" * 80)
     for name, result in results.items():
         click.echo(
             f"{name:<30} "

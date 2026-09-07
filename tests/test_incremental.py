@@ -1,12 +1,12 @@
 """Tests for IncrementalEngine."""
 
+from typing import Optional, Tuple
+
 import pytest
 import torch
 from torch import Tensor
-from typing import Optional, Tuple
 
 from deltacache.core.prefix_tree import PrefixTree
-from deltacache.core.cache_block import CacheBlock
 from deltacache.engine.incremental import IncrementalEngine, IncrementalResult
 from deltacache.engine.rope_handler import RoPEHandler, create_position_ids
 
@@ -38,7 +38,7 @@ class MockKVCompute:
     ) -> Tuple[Tensor, Tensor]:
         """Compute mock KV cache."""
         self.call_count += 1
-        batch_size, seq_len = input_ids.shape
+        _batch_size, seq_len = input_ids.shape
         self.last_input_length = seq_len
 
         # Create deterministic output based on input
@@ -173,7 +173,7 @@ class TestIncrementalEngine:
         results = engine.compute_batch(batch, compute_fn)
 
         assert len(results) == 3
-        for i, result in enumerate(results):
+        for _i, result in enumerate(results):
             assert result.total_length == 3
 
     def test_compute_batch_shared_prefix(self, engine, compute_fn):

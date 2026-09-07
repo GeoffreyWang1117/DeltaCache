@@ -2,16 +2,23 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 import torch
 from torch import Tensor
 
 from deltacache.api import DeltaCacheManager
-from deltacache.core.cache_block import CacheBlock
 from deltacache.utils.config import DeltaCacheConfig
 
 if TYPE_CHECKING:
+    # Imported for annotations only. The runtime import stays inside
+    # enable_layer_budget() so that constructing the engine does not drag in the
+    # block manager, but the forward reference on _lb_block_manager needs a name
+    # a type checker can resolve.
+    from deltacache.vllm_integration.layer_budget_block_manager import (
+        LayerBudgetBlockManager,
+    )
+
     try:
         from vllm.config import CacheConfig, ModelConfig, ParallelConfig
     except ImportError:
@@ -75,7 +82,9 @@ class DeltaCacheEngine:
         # Create DeltaCache config
         delta_config = DeltaCacheConfig(
             gpu_memory_limit=int(cache_config.gpu_memory_utilization * self._get_gpu_memory()),
-            cpu_memory_limit=cache_config.swap_space_bytes if hasattr(cache_config, 'swap_space_bytes') else 0,
+            cpu_memory_limit=cache_config.swap_space_bytes
+            if hasattr(cache_config, "swap_space_bytes")
+            else 0,
             num_layers=num_layers,
             num_heads=num_kv_heads,  # Use KV heads for cache
             head_dim=head_dim,
@@ -129,7 +138,9 @@ class DeltaCacheEngine:
         """Calculate memory per block in bytes."""
         element_size = torch.tensor([], dtype=self.dtype).element_size()
         # key + value per layer per block
-        return 2 * self.num_layers * self.block_size * self.num_kv_heads * self.head_dim * element_size
+        return (
+            2 * self.num_layers * self.block_size * self.num_kv_heads * self.head_dim * element_size
+        )
 
     def allocate_gpu_cache(self) -> List[Tensor]:
         """
@@ -173,7 +184,7 @@ class DeltaCacheEngine:
         Args:
             src_to_dst: Mapping from CPU block IDs to GPU block IDs.
         """
-        for cpu_block_id, gpu_block_id in src_to_dst.items():
+        for cpu_block_id, _gpu_block_id in src_to_dst.items():
             self.manager.memory_pool.move_to_gpu(cpu_block_id)
 
     def swap_out(self, src_to_dst: Dict[int, int]) -> None:
@@ -183,7 +194,7 @@ class DeltaCacheEngine:
         Args:
             src_to_dst: Mapping from GPU block IDs to CPU block IDs.
         """
-        for gpu_block_id, cpu_block_id in src_to_dst.items():
+        for gpu_block_id, _cpu_block_id in src_to_dst.items():
             self.manager.memory_pool.move_to_cpu(gpu_block_id)
 
     def copy(self, src_to_dsts: Dict[int, List[int]]) -> None:
@@ -198,7 +209,7 @@ class DeltaCacheEngine:
             if src_block is None:
                 continue
 
-            for dst_id in dst_ids:
+            for _dst_id in dst_ids:
                 # Clone the block
                 cloned = src_block.clone()
                 self.manager.memory_pool.register(cloned)
@@ -281,6 +292,7 @@ class DeltaCacheEngine:
         from deltacache.vllm_integration.layer_budget_block_manager import (
             LayerBudgetBlockManager,
         )
+
         self._lb_block_manager = LayerBudgetBlockManager(
             num_layers=self.num_layers,
             num_kv_heads=self.num_kv_heads,
@@ -311,7 +323,9 @@ class DeltaCacheEngine:
             return None
 
         allocation = self._lb_block_manager.profile_and_allocate(
-            attention_weights, seq_len, self._lb_budget_bytes,
+            attention_weights,
+            seq_len,
+            self._lb_budget_bytes,
         )
         self._lb_block_manager.apply_compression(gpu_cache, allocation)
 
@@ -321,7 +335,7 @@ class DeltaCacheEngine:
             "budget_bytes": allocation.budget_bytes,
             "compression_ratio": allocation.compression_ratio,
             "freed_blocks_per_layer": {
-                l: len(v) for l, v in allocation.freed_block_indices.items()
+                layer_i: len(v) for layer_i, v in allocation.freed_block_indices.items()
             },
         }
 
@@ -360,6 +374,7 @@ def patch_vllm_cache_engine() -> None:
     """
     try:
         import vllm.worker.cache_engine as cache_module
+
         cache_module.CacheEngine = DeltaCacheEngine
         print("DeltaCache: Patched vLLM CacheEngine successfully")
     except ImportError:

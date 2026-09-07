@@ -12,6 +12,12 @@ select = [
     "SIM",  # flake8-simplify
     "RUF",  # ruff-specific rules
 ]
+# "x" and the multiplication sign both carry meaning here: 4x is a compression
+# ratio, and the docstrings spell cache arithmetic as
+# "2 (K+V) × n_tokens × num_heads". Rewriting the sign would make the formulas
+# worse, so it is allowed rather than flagged as a confusable.
+allowed-confusables = ["×"]
+
 ignore = [
     "E501",   # line too long (handled by formatter)
     "B008",   # do not perform function calls in argument defaults

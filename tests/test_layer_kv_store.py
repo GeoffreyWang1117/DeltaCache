@@ -3,8 +3,7 @@
 import pytest
 import torch
 
-from deltacache.core.layer_kv_store import LayerKVStore, LayerEntry
-from deltacache.core.kv_quantizer import QuantPrecision
+from deltacache.core.layer_kv_store import LayerKVStore
 
 
 class TestLayerKVStore:
@@ -43,7 +42,7 @@ class TestLayerKVStore:
 
         store.store_layer(0, keys, values, indices, quant_bits=8)
 
-        k_out, v_out, idx_out = store.get_layer(0)
+        k_out, _v_out, _idx_out = store.get_layer(0)
         assert k_out.shape == (1, 32, 8, 64)
 
         key_error = (keys.float() - k_out.float()).abs().mean().item()
@@ -56,7 +55,7 @@ class TestLayerKVStore:
 
         store.store_layer(0, keys, values, indices, quant_bits=4)
 
-        k_out, v_out, idx_out = store.get_layer(0)
+        k_out, _v_out, _idx_out = store.get_layer(0)
         assert k_out.shape == (1, 32, 8, 64)
 
         key_error = (keys.float() - k_out.float()).abs().mean().item()
@@ -69,7 +68,7 @@ class TestLayerKVStore:
 
         store.store_layer(0, keys, values, indices, quant_bits=16)
 
-        k_out, v_out, idx_out = store.get_layer(0)
+        k_out, _v_out, idx_out = store.get_layer(0)
         assert k_out.shape == (1, 5, 8, 64)
         assert torch.equal(idx_out, indices)
 
@@ -152,7 +151,7 @@ class TestLayerKVStore:
 
         store.store_layer(0, keys, values, indices, quant_bits=16)
 
-        k_out, v_out, idx_out = store.get_layer(0)
+        k_out, _v_out, _idx_out = store.get_layer(0)
         assert k_out.shape == (1, 32, 8, 64)
 
     def test_default_token_selection(self, store):

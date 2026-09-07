@@ -16,8 +16,8 @@ import click
 import torch
 
 BLOCK_CONFIGS = {
-    "small": (4, 128, 8, 64),    # ~4MB
-    "medium": (16, 256, 16, 128), # ~256MB
+    "small": (4, 128, 8, 64),  # ~4MB
+    "medium": (16, 256, 16, 128),  # ~256MB
     "large": (32, 512, 32, 128),  # ~2GB
 }
 
@@ -30,19 +30,22 @@ def _format_bytes(b: float) -> str:
 
 @click.command("bench")
 @click.option(
-    "--device", "-d",
+    "--device",
+    "-d",
     default="cpu",
     type=click.Choice(["cpu", "cuda"]),
     help="Device to run on",
 )
 @click.option(
-    "--size", "-s",
+    "--size",
+    "-s",
     default="small",
     type=click.Choice(["small", "medium", "large"]),
     help="Block size for benchmarks",
 )
 @click.option(
-    "--output-json", "-o",
+    "--output-json",
+    "-o",
     type=click.Path(),
     help="Save results to JSON file",
 )
@@ -102,29 +105,39 @@ def bench(ctx, device, size, output_json):
     click.echo("=" * 60)
 
     pt = results["prefix_tree"]
-    click.echo(f"  Prefix Tree:   {pt['insert_ops_per_sec']:.0f} insert/s, "
-               f"{pt['lookup_ops_per_sec']:.0f} lookup/s")
+    click.echo(
+        f"  Prefix Tree:   {pt['insert_ops_per_sec']:.0f} insert/s, "
+        f"{pt['lookup_ops_per_sec']:.0f} lookup/s"
+    )
 
     inc = results["incremental"]
-    click.echo(f"  Incremental:   cold={inc['cold_ms']:.1f}ms, "
-               f"warm={inc['warm_avg_ms']:.1f}ms, "
-               f"speedup={inc['speedup']:.1f}x, "
-               f"reuse={inc['token_reuse_rate']:.0%}")
+    click.echo(
+        f"  Incremental:   cold={inc['cold_ms']:.1f}ms, "
+        f"warm={inc['warm_avg_ms']:.1f}ms, "
+        f"speedup={inc['speedup']:.1f}x, "
+        f"reuse={inc['token_reuse_rate']:.0%}"
+    )
 
     q = results["quantization"]
-    click.echo(f"  INT8 Quant:    {q['INT8']['compression']:.1f}x compression, "
-               f"cosine={q['INT8']['key_cosine']:.6f}, "
-               f"{q['INT8']['quant_ms']:.1f}ms")
-    click.echo(f"  INT4 Quant:    {q['INT4']['compression']:.1f}x compression, "
-               f"cosine={q['INT4']['key_cosine']:.6f}, "
-               f"{q['INT4']['quant_ms']:.1f}ms")
+    click.echo(
+        f"  INT8 Quant:    {q['INT8']['compression']:.1f}x compression, "
+        f"cosine={q['INT8']['key_cosine']:.6f}, "
+        f"{q['INT8']['quant_ms']:.1f}ms"
+    )
+    click.echo(
+        f"  INT4 Quant:    {q['INT4']['compression']:.1f}x compression, "
+        f"cosine={q['INT4']['key_cosine']:.6f}, "
+        f"{q['INT4']['quant_ms']:.1f}ms"
+    )
 
     if "tiered_cache" in results:
         tc = results["tiered_cache"]
-        click.echo(f"  Offload:       {tc['offload_ms']:.1f}ms "
-                   f"({tc['offload_bandwidth_gbs']:.2f} GB/s)")
-        click.echo(f"  Prefetch:      {tc['prefetch_ms']:.1f}ms "
-                   f"({tc['prefetch_bandwidth_gbs']:.2f} GB/s)")
+        click.echo(
+            f"  Offload:       {tc['offload_ms']:.1f}ms ({tc['offload_bandwidth_gbs']:.2f} GB/s)"
+        )
+        click.echo(
+            f"  Prefetch:      {tc['prefetch_ms']:.1f}ms ({tc['prefetch_bandwidth_gbs']:.2f} GB/s)"
+        )
 
     if output_json:
         out = Path(output_json)
@@ -138,8 +151,8 @@ def bench_prefix_tree() -> dict:
     """Benchmark prefix tree insert and lookup throughput."""
     click.echo("[1/4] Prefix Tree Throughput")
 
-    from deltacache.core.prefix_tree import PrefixTree
     from deltacache.core.cache_block import CacheBlock
+    from deltacache.core.prefix_tree import PrefixTree
 
     tree = PrefixTree()
     num_seqs = 1000
@@ -173,8 +186,10 @@ def bench_prefix_tree() -> dict:
     insert_ops = num_seqs / insert_time
     lookup_ops = num_seqs / lookup_time
 
-    click.echo(f"  Insert: {insert_ops:.0f} ops/s ({insert_time*1000:.1f}ms for {num_seqs} seqs)")
-    click.echo(f"  Lookup: {lookup_ops:.0f} ops/s ({lookup_time*1000:.1f}ms, {hits}/{num_seqs} hits)")
+    click.echo(f"  Insert: {insert_ops:.0f} ops/s ({insert_time * 1000:.1f}ms for {num_seqs} seqs)")
+    click.echo(
+        f"  Lookup: {lookup_ops:.0f} ops/s ({lookup_time * 1000:.1f}ms, {hits}/{num_seqs} hits)"
+    )
 
     return {
         "num_sequences": num_seqs,
@@ -191,7 +206,7 @@ def bench_incremental(device: torch.device, size: str) -> dict:
     """Benchmark incremental KV computation with synthetic data."""
     click.echo("[2/4] Incremental KV Computation")
 
-    from deltacache import DeltaCacheManager, DeltaCacheConfig
+    from deltacache import DeltaCacheConfig, DeltaCacheManager
 
     config = DeltaCacheConfig(
         num_layers=4,
@@ -206,11 +221,17 @@ def bench_incremental(device: torch.device, size: str) -> dict:
     def compute_kv(input_ids, position_ids, past_key_values=None):
         seq_len = len(input_ids)
         key = torch.randn(
-            config.num_layers, seq_len, config.num_heads, config.head_dim,
+            config.num_layers,
+            seq_len,
+            config.num_heads,
+            config.head_dim,
             device=device,
         )
         value = torch.randn(
-            config.num_layers, seq_len, config.num_heads, config.head_dim,
+            config.num_layers,
+            seq_len,
+            config.num_heads,
+            config.head_dim,
             device=device,
         )
         return key, value
@@ -233,7 +254,7 @@ def bench_incremental(device: torch.device, size: str) -> dict:
         if device.type == "cuda":
             torch.cuda.synchronize()
         t0 = time.perf_counter()
-        result = manager.compute_incremental(prefix + suffix, compute_kv)
+        manager.compute_incremental(prefix + suffix, compute_kv)
         if device.type == "cuda":
             torch.cuda.synchronize()
         warm_times.append((time.perf_counter() - t0) * 1000)
@@ -278,7 +299,7 @@ def bench_quantization(size: str) -> dict:
         quant_ms = (time.perf_counter() - t0) * 1000
 
         t0 = time.perf_counter()
-        key_deq, value_deq = quantizer.dequantize(qkv)
+        key_deq, _value_deq = quantizer.dequantize(qkv)
         deq_ms = (time.perf_counter() - t0) * 1000
 
         key_cos = torch.nn.functional.cosine_similarity(
@@ -287,9 +308,11 @@ def bench_quantization(size: str) -> dict:
         ).item()
         key_mse = ((key.float() - key_deq.float()) ** 2).mean().item()
 
-        click.echo(f"  {precision.name}: {qkv.compression_ratio:.1f}x compression, "
-                   f"cosine={key_cos:.6f}, MSE={key_mse:.6f}, "
-                   f"quant={quant_ms:.1f}ms, deq={deq_ms:.1f}ms")
+        click.echo(
+            f"  {precision.name}: {qkv.compression_ratio:.1f}x compression, "
+            f"cosine={key_cos:.6f}, MSE={key_mse:.6f}, "
+            f"quant={quant_ms:.1f}ms, deq={deq_ms:.1f}ms"
+        )
 
         results[precision.name] = {
             "compression": qkv.compression_ratio,

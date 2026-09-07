@@ -25,11 +25,13 @@ def cli(ctx, verbose):
     ctx.obj["verbose"] = verbose
 
 
-# Import and register commands
-from deltacache.cli.commands.benchmark import benchmark
-from deltacache.cli.commands.analyze import analyze
-from deltacache.cli.commands.stats import stats
-from deltacache.cli.commands.bench import bench
+# Imported here rather than at the top of the file on purpose: each command
+# module imports the `cli` group defined above, so hoisting these would make the
+# import circular. Click's registration pattern requires the group to exist first.
+from deltacache.cli.commands.analyze import analyze  # noqa: E402
+from deltacache.cli.commands.bench import bench  # noqa: E402
+from deltacache.cli.commands.benchmark import benchmark  # noqa: E402
+from deltacache.cli.commands.stats import stats  # noqa: E402
 
 cli.add_command(benchmark)
 cli.add_command(analyze)

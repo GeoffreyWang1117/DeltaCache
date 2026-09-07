@@ -135,9 +135,7 @@ class KVQuantizer:
         )
         return key, value
 
-    def _quantize_per_channel(
-        self, tensor: Tensor
-    ) -> Tuple[Tensor, Tensor, Tensor]:
+    def _quantize_per_channel(self, tensor: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         """Per-channel (head_dim) quantization for keys.
 
         Computes scale and zero-point per channel across all tokens.
@@ -166,9 +164,7 @@ class KVQuantizer:
         # Store scale/zero in float16 to save memory
         return quantized, scale.half(), zero.half()
 
-    def _quantize_per_token(
-        self, tensor: Tensor
-    ) -> Tuple[Tensor, Tensor, Tensor]:
+    def _quantize_per_token(self, tensor: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         """Per-token (seq_len) quantization for values.
 
         Computes scale and zero-point per token across head dimensions.

@@ -5,16 +5,17 @@ with DeltaCache's incremental computation engine.
 """
 
 from abc import ABC, abstractmethod
-from typing import Tuple, Optional, Callable, Any
+from typing import Any, Optional, Tuple
+
 import torch
 from torch import Tensor
 
-from deltacache.utils.config import DeltaCacheConfig
 from deltacache.hf_integration.kv_format import (
-    hf_to_deltacache,
-    deltacache_to_hf,
     KVFormatConverter,
+    deltacache_to_hf,
+    hf_to_deltacache,
 )
+from deltacache.utils.config import DeltaCacheConfig
 
 
 class HFModelAdapter(ABC):

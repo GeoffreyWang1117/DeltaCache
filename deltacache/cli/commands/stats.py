@@ -1,27 +1,28 @@
 """Stats command for DeltaCache CLI."""
 
 import json
-import click
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict
+
+import click
 
 
 @click.command()
 @click.option(
-    "--results-dir", "-r",
+    "--results-dir",
+    "-r",
     type=click.Path(exists=True),
-    help="Directory containing experiment results"
+    help="Directory containing experiment results",
 )
 @click.option(
-    "--results-file", "-f",
-    type=click.Path(exists=True),
-    help="Specific results JSON file"
+    "--results-file", "-f", type=click.Path(exists=True), help="Specific results JSON file"
 )
 @click.option(
-    "--format", "fmt",
+    "--format",
+    "fmt",
     type=click.Choice(["table", "json", "csv"]),
     default="table",
-    help="Output format"
+    help="Output format",
 )
 @click.pass_context
 def stats(ctx, results_dir, results_file, fmt):
@@ -40,7 +41,6 @@ def stats(ctx, results_dir, results_file, fmt):
       deltacache stats --results-file results.json --format json
       deltacache stats -r ./results -f table
     """
-    verbose = ctx.obj.get("verbose", True)
 
     if not results_dir and not results_file:
         raise click.ClickException("Please specify --results-dir or --results-file")
@@ -80,13 +80,13 @@ def stats(ctx, results_dir, results_file, fmt):
 
 def print_table(results: Dict) -> None:
     """Print results as formatted table."""
-    click.echo("\n" + "="*80)
+    click.echo("\n" + "=" * 80)
     click.echo("DELTACACHE STATISTICS")
-    click.echo("="*80)
+    click.echo("=" * 80)
 
     for name, data in results.items():
         click.echo(f"\n{name.upper()}")
-        click.echo("-"*60)
+        click.echo("-" * 60)
 
         if isinstance(data, dict):
             # Check if it's experiment results format
@@ -113,37 +113,43 @@ def print_experiment_results(data: Dict) -> None:
     if "system_prompt" in data:
         click.echo("\nSystem Prompt Experiments:")
         click.echo(f"  {'Config':<20} {'Hit Rate':<12} {'Token Reuse':<12} {'Throughput':<15}")
-        click.echo("  " + "-"*55)
+        click.echo("  " + "-" * 55)
         for exp in data["system_prompt"]:
             name = exp.get("name", "unknown")
             hit_rate = exp.get("cache_hit_rate", 0) * 100
             reuse = exp.get("token_reuse_rate", 0) * 100
             throughput = exp.get("throughput_tokens_per_sec", 0)
-            click.echo(f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s")
+            click.echo(
+                f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s"
+            )
 
     # RAG results
     if "rag" in data:
         click.echo("\nRAG Experiments:")
         click.echo(f"  {'Config':<20} {'Hit Rate':<12} {'Token Reuse':<12} {'Throughput':<15}")
-        click.echo("  " + "-"*55)
+        click.echo("  " + "-" * 55)
         for exp in data["rag"]:
             name = exp.get("name", "unknown")
             hit_rate = exp.get("cache_hit_rate", 0) * 100
             reuse = exp.get("token_reuse_rate", 0) * 100
             throughput = exp.get("throughput_tokens_per_sec", 0)
-            click.echo(f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s")
+            click.echo(
+                f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s"
+            )
 
     # Few-shot results
     if "few_shot" in data:
         click.echo("\nFew-Shot Experiments:")
         click.echo(f"  {'Config':<20} {'Hit Rate':<12} {'Token Reuse':<12} {'Throughput':<15}")
-        click.echo("  " + "-"*55)
+        click.echo("  " + "-" * 55)
         for exp in data["few_shot"]:
             name = exp.get("name", "unknown")
             hit_rate = exp.get("cache_hit_rate", 0) * 100
             reuse = exp.get("token_reuse_rate", 0) * 100
             throughput = exp.get("throughput_tokens_per_sec", 0)
-            click.echo(f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s")
+            click.echo(
+                f"  {name:<20} {hit_rate:>8.1f}%   {reuse:>8.1f}%   {throughput:>10.0f} tok/s"
+            )
 
     # Baseline comparison
     if "baseline_comparison" in data:
@@ -152,7 +158,7 @@ def print_experiment_results(data: Dict) -> None:
         click.echo(f"  Baseline time: {bc.get('baseline_time_ms', 0):.0f}ms")
         click.echo(f"  DeltaCache time: {bc.get('deltacache_time_ms', 0):.0f}ms")
         click.echo(f"  Speedup: {bc.get('speedup', 0):.2f}x")
-        click.echo(f"  Token savings: {bc.get('token_savings', 0)*100:.1f}%")
+        click.echo(f"  Token savings: {bc.get('token_savings', 0) * 100:.1f}%")
 
 
 def print_benchmark_result(name: str, data: Dict) -> None:
@@ -162,18 +168,22 @@ def print_benchmark_result(name: str, data: Dict) -> None:
 
     click.echo(f"\n{name}:")
     click.echo(f"  {'Method':<15} {'Time':<12} {'Tokens':<12} {'Throughput':<15}")
-    click.echo("  " + "-"*50)
+    click.echo("  " + "-" * 50)
 
     b_time = baseline.get("total_time_ms", 0)
     b_tokens = baseline.get("total_tokens", 0)
     b_throughput = baseline.get("throughput_tokens_per_sec", 0)
-    click.echo(f"  {'Baseline':<15} {b_time:>8.0f}ms  {b_tokens:>8}     {b_throughput:>10.0f} tok/s")
+    click.echo(
+        f"  {'Baseline':<15} {b_time:>8.0f}ms  {b_tokens:>8}     {b_throughput:>10.0f} tok/s"
+    )
 
     d_time = deltacache.get("total_time_ms", 0)
     d_tokens = deltacache.get("total_tokens", 0)
     d_throughput = deltacache.get("throughput_tokens_per_sec", 0)
     d_reuse = deltacache.get("token_reuse_rate", 0) * 100
-    click.echo(f"  {'DeltaCache':<15} {d_time:>8.0f}ms  {d_tokens:>8}     {d_throughput:>10.0f} tok/s")
+    click.echo(
+        f"  {'DeltaCache':<15} {d_time:>8.0f}ms  {d_tokens:>8}     {d_throughput:>10.0f} tok/s"
+    )
 
     click.echo(f"\n  Speedup: {data.get('speedup_vs_baseline', 0):.2f}x")
     click.echo(f"  Token reuse: {d_reuse:.1f}%")
@@ -184,7 +194,7 @@ def print_csv(results: Dict) -> None:
     # Header
     click.echo("name,method,total_time_ms,total_tokens,throughput,hit_rate,reuse_rate")
 
-    for exp_name, data in results.items():
+    for _exp_name, data in results.items():
         if isinstance(data, dict):
             for key in ["system_prompt", "rag", "few_shot"]:
                 if key in data:

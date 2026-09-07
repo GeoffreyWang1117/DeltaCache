@@ -2,15 +2,14 @@
 
 import pytest
 import torch
-from torch import Tensor
 
 from deltacache.hf_integration.kv_format import (
-    hf_to_deltacache,
-    deltacache_to_hf,
     KVFormatConverter,
-    slice_hf_cache,
     concat_hf_cache,
+    deltacache_to_hf,
     get_hf_cache_seq_len,
+    hf_to_deltacache,
+    slice_hf_cache,
 )
 from deltacache.utils.config import DeltaCacheConfig
 
@@ -62,6 +61,7 @@ class TestKVFormatConversion:
 
         # deltacache_to_hf returns DynamicCache if available, else tuple
         from transformers.cache_utils import DynamicCache
+
         if isinstance(hf_cache, DynamicCache):
             assert len(hf_cache.layers) == 4
             for layer in hf_cache.layers:
@@ -83,6 +83,7 @@ class TestKVFormatConversion:
 
         # Verify data matches (approximately due to floating point)
         from transformers.cache_utils import DynamicCache
+
         if isinstance(hf_cache_back, DynamicCache):
             assert len(hf_cache_back.layers) == len(sample_hf_cache)
             for i, (k1, v1) in enumerate(sample_hf_cache):
@@ -134,7 +135,7 @@ class TestKVFormatConverter:
         )
 
         # Should not raise
-        key, value = converter.from_hf(valid_cache, validate=True)
+        key, _value = converter.from_hf(valid_cache, validate=True)
         assert key.shape[0] == 4  # num_layers
 
     def test_from_hf_validation_wrong_layers(self, converter):
@@ -232,7 +233,7 @@ class TestHFCacheOperations:
         sliced = slice_hf_cache(hf_cache, start=2, end=7)
 
         assert get_hf_cache_seq_len(sliced) == 5
-        for k, v in sliced:
+        for k, _v in sliced:
             assert k.shape[2] == 5  # seq dimension
 
     def test_slice_hf_cache_to_end(self, hf_cache):
@@ -243,19 +244,13 @@ class TestHFCacheOperations:
 
     def test_concat_hf_cache(self):
         """Test concatenating HF caches."""
-        cache1 = tuple(
-            (torch.randn(1, 4, 5, 8), torch.randn(1, 4, 5, 8))
-            for _ in range(2)
-        )
-        cache2 = tuple(
-            (torch.randn(1, 4, 3, 8), torch.randn(1, 4, 3, 8))
-            for _ in range(2)
-        )
+        cache1 = tuple((torch.randn(1, 4, 5, 8), torch.randn(1, 4, 5, 8)) for _ in range(2))
+        cache2 = tuple((torch.randn(1, 4, 3, 8), torch.randn(1, 4, 3, 8)) for _ in range(2))
 
         combined = concat_hf_cache(cache1, cache2)
 
         assert get_hf_cache_seq_len(combined) == 8  # 5 + 3
-        for k, v in combined:
+        for k, _v in combined:
             assert k.shape[2] == 8
 
     def test_concat_hf_cache_mismatched_layers(self):
@@ -304,7 +299,7 @@ class TestGPT2Config:
 # Optional: Tests that require transformers library
 @pytest.mark.skipif(
     not pytest.importorskip("transformers", reason="transformers not installed"),
-    reason="transformers not installed"
+    reason="transformers not installed",
 )
 class TestGPT2AdapterIntegration:
     """Integration tests with actual GPT-2 model (requires transformers)."""
@@ -313,6 +308,7 @@ class TestGPT2AdapterIntegration:
     def adapter(self):
         """Load GPT-2 adapter (cached for class)."""
         from deltacache.hf_integration import GPT2Adapter
+
         return GPT2Adapter.from_pretrained("gpt2", device="cpu", dtype=torch.float32)
 
     def test_adapter_creation(self, adapter):
@@ -365,5 +361,5 @@ class TestGPT2AdapterIntegration:
         position_ids = adapter.get_position_ids(tokens.shape[1])
 
         # Should work when called directly
-        key, value = adapter(tokens, position_ids)
+        key, _value = adapter(tokens, position_ids)
         assert key.shape[0] == 12

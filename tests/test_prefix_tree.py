@@ -1,10 +1,9 @@
 """Tests for PrefixTree."""
 
-import pytest
 import torch
 
-from deltacache.core.prefix_tree import PrefixTree, PrefixTreeNode, LookupResult
 from deltacache.core.cache_block import CacheBlock
+from deltacache.core.prefix_tree import LookupResult, PrefixTree, PrefixTreeNode
 
 
 class TestPrefixTreeNode:
@@ -314,7 +313,7 @@ class TestPrefixTree:
         tree.insert([1, 2, 4])
 
         tokens_list = [[1, 2, 3], [1, 2, 4], [1, 2, 5]]
-        prefix, nodes = tree.find_shared_prefix(tokens_list)
+        prefix, _nodes = tree.find_shared_prefix(tokens_list)
 
         assert prefix == [1, 2]
 

@@ -1,22 +1,21 @@
 """Tests for eviction policies."""
 
-import pytest
 import time
+
+import pytest
 import torch
 
-from deltacache.core.prefix_tree import PrefixTree
 from deltacache.core.cache_block import CacheBlock
 from deltacache.core.memory_pool import MemoryPool
+from deltacache.core.prefix_tree import PrefixTree
 from deltacache.eviction.policy import (
-    EvictionPolicy,
-    EvictionCandidate,
-    EvictionAction,
-    EvictionResult,
-    LRUEvictionPolicy,
-    LFUEvictionPolicy,
-    CompositeEvictionPolicy,
-    TieredEvictionPolicy,
     AdaptiveEvictionPolicy,
+    CompositeEvictionPolicy,
+    EvictionAction,
+    EvictionCandidate,
+    LFUEvictionPolicy,
+    LRUEvictionPolicy,
+    TieredEvictionPolicy,
     create_eviction_policy,
 )
 
@@ -218,15 +217,21 @@ class TestAdaptiveEvictionPolicy:
 
         initial_weights = policy.weights.copy()
 
-        # Simulate a miss (evicted something that was reaccessed)
+        # Accessing something that was never evicted is not a mistake, so the
+        # policy has nothing to learn from it.
         policy.record_access((1, 2, 3))
+        assert policy.weights == initial_weights
 
-        # Weights should remain similar (wasn't evicted)
-        # Now mark as evicted and then accessed
+        # Accessing something the policy did evict is a miss it caused, and it
+        # should respond by making eviction less aggressive across the board.
         policy._evicted_tokens.add((4, 5, 6))
         policy.record_access((4, 5, 6))
 
-        # This should trigger weight update
+        assert policy.weights != initial_weights
+        for key, before in initial_weights.items():
+            assert policy.weights[key] > before, f"{key} did not increase"
+        # The token is consumed, so the same miss cannot be learned from twice.
+        assert (4, 5, 6) not in policy._evicted_tokens
 
 
 class TestEvictionExecution:

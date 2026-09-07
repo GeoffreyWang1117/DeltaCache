@@ -13,15 +13,15 @@ Usage:
 from __future__ import annotations
 
 import math
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import torch
 from torch import Tensor
 
 try:
     from transformers.cache_utils import DynamicCache
-except ImportError:
-    raise ImportError("transformers>=4.36 required for DynamicCache support")
+except ImportError as exc:
+    raise ImportError("transformers>=4.36 required for DynamicCache support") from exc
 
 
 def _compute_gini(weights: Tensor) -> float:
@@ -102,8 +102,8 @@ class LayerBudgetCache(DynamicCache):
 
     def _estimate_memory(self) -> int:
         total = 0
-        for l in range(_num_layers(self)):
-            k, v = _get_kv(self, l)
+        for layer_i in range(_num_layers(self)):
+            k, v = _get_kv(self, layer_i)
             total += k.numel() * k.element_size() + v.numel() * v.element_size()
         return total
 
@@ -130,10 +130,10 @@ class LayerBudgetCache(DynamicCache):
 
         # Importance weights (inverted: early layers get higher weight)
         importance = {}
-        for l in range(nl):
-            pos = 1.0 - l / max(1, nl - 1)  # inverted: early layers high
+        for layer_i in range(nl):
+            pos = 1.0 - layer_i / max(1, nl - 1)  # inverted: early layers high
             x = 5.0 * (pos - 0.3)
-            importance[l] = 1.0 / (1.0 + math.exp(-x))
+            importance[layer_i] = 1.0 / (1.0 + math.exp(-x))
 
         # Allocate
         fidelity = {16: 1.0, 8: 0.9999, 4: 0.9964}
@@ -148,41 +148,41 @@ class LayerBudgetCache(DynamicCache):
         def mem_cost(n, b):
             return 2 * n * num_heads * head_dim * b // 8
 
-        def quality(l, n, b):
+        def quality(layer_i, n, b):
             f = n / max(1, seq_len)
-            g = self._sparsity.get(l, 0.5)
-            return (f ** max(0.01, 1 - g)) * fidelity.get(b, 0.9) * importance.get(l, 0.5)
+            g = self._sparsity.get(layer_i, 0.5)
+            return (f ** max(0.01, 1 - g)) * fidelity.get(b, 0.9) * importance.get(layer_i, 0.5)
 
         used = sum(mem_cost(n, b) for n, b in alloc)
         for _ in range(nl * seq_len // token_step):
             best_gpb, best_act = 0, None
-            for l in range(nl):
-                n, b = alloc[l]
+            for layer_i in range(nl):
+                n, b = alloc[layer_i]
                 if n + token_step <= seq_len:
                     nn = n + token_step
-                    dq = quality(l, nn, b) - quality(l, n, b)
+                    dq = quality(layer_i, nn, b) - quality(layer_i, n, b)
                     dm = mem_cost(nn, b) - mem_cost(n, b)
                     if dm > 0 and used + dm <= budget and dq / dm > best_gpb:
                         best_gpb = dq / dm
-                        best_act = (l, nn, b, dm)
+                        best_act = (layer_i, nn, b, dm)
                 bi = self.available_bits.index(b)
                 if bi < len(self.available_bits) - 1:
                     nb = self.available_bits[bi + 1]
-                    dq = quality(l, n, nb) - quality(l, n, b)
+                    dq = quality(layer_i, n, nb) - quality(layer_i, n, b)
                     dm = mem_cost(n, nb) - mem_cost(n, b)
                     if dm > 0 and used + dm <= budget and dq / dm > best_gpb:
                         best_gpb = dq / dm
-                        best_act = (l, n, nb, dm)
+                        best_act = (layer_i, n, nb, dm)
             if best_act is None:
                 break
-            l, n_new, b_new, dm = best_act
-            alloc[l] = (n_new, b_new)
+            layer_i, n_new, b_new, dm = best_act
+            alloc[layer_i] = (n_new, b_new)
             used += dm
 
         # Apply in-place: zero-fill evicted positions, QDQ retained positions.
         # Tensor shapes are preserved so generate()'s position tracking stays valid.
-        for l, (n_tokens, bits) in enumerate(alloc):
-            k, v = _get_kv(self, l)
+        for layer_i, (n_tokens, bits) in enumerate(alloc):
+            k, v = _get_kv(self, layer_i)
             if n_tokens < seq_len:
                 # Determine which tokens to keep
                 sink = min(self.sink_tokens, seq_len)
@@ -210,7 +210,7 @@ class LayerBudgetCache(DynamicCache):
                 k = self._qdq(k, bits)
                 v = self._qdq(v, bits)
 
-            _set_kv(self, l, k, v)
+            _set_kv(self, layer_i, k, v)
 
         self._compressed = True
 

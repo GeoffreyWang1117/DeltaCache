@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Tuple, Protocol
+from typing import List, Optional, Protocol, Tuple
 
 import torch
 from torch import Tensor
 
-from deltacache.core.prefix_tree import PrefixTree, LookupResult
 from deltacache.core.cache_block import CacheBlock
+from deltacache.core.prefix_tree import PrefixTree
 from deltacache.engine.rope_handler import RoPEHandler, create_position_ids
 
 
@@ -39,6 +39,7 @@ class KVComputeFunc(Protocol):
 @dataclass
 class IncrementalResult:
     """Result of incremental computation."""
+
     key_cache: Tensor
     value_cache: Tensor
     matched_length: int

@@ -1,7 +1,7 @@
 """Tests for GPU memory monitor."""
 
 import time
-import threading
+
 import pytest
 import torch
 

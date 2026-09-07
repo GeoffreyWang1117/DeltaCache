@@ -11,23 +11,20 @@ Key innovations:
 
 from __future__ import annotations
 
-import time
 import math
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
-from enum import Enum
+import time
+from dataclasses import dataclass
+from typing import Dict, List, Optional
 
-import torch
 from torch import Tensor
 
-from deltacache.core.prefix_tree import PrefixTree, PrefixTreeNode
 from deltacache.core.memory_pool import MemoryPool
+from deltacache.core.prefix_tree import PrefixTree, PrefixTreeNode
 from deltacache.eviction.policy import (
-    EvictionPolicy,
+    EvictionAction,
     EvictionCandidate,
+    EvictionPolicy,
     EvictionResult,
-    EvictionAction
 )
 
 
@@ -52,9 +49,7 @@ class AttentionMetadata:
         self.attention_samples += 1
         # Exponential moving average
         alpha = min(0.3, 1.0 / self.attention_samples)
-        self.avg_attention_score = (
-            (1 - alpha) * self.avg_attention_score + alpha * attention_score
-        )
+        self.avg_attention_score = (1 - alpha) * self.avg_attention_score + alpha * attention_score
 
     def update_layer_importance(self, layer_scores: Dict[int, float]) -> None:
         """Update per-layer importance scores."""
@@ -348,9 +343,8 @@ class LayerAwareCachingPolicy(EvictionPolicy):
         time_since_access = max(1.0, now - node.last_access)
 
         # Base importance from access patterns
-        base_importance = (
-            math.log1p(node.access_count) *
-            (1.0 / (1.0 + math.log1p(time_since_access)))
+        base_importance = math.log1p(node.access_count) * (
+            1.0 / (1.0 + math.log1p(time_since_access))
         )
 
         # Layer-aware multiplier
@@ -504,10 +498,7 @@ class HierarchicalEvictionPolicy(EvictionPolicy):
         layer_component = layer_importance * self.layer_weight
 
         # Access pattern component
-        access_score = (
-            math.log1p(node.access_count) /
-            (1.0 + math.log1p(time_since_access))
-        )
+        access_score = math.log1p(node.access_count) / (1.0 + math.log1p(time_since_access))
         access_component = access_score * self.access_weight
 
         return attention_component + layer_component + access_component
@@ -560,7 +551,7 @@ class HierarchicalEvictionPolicy(EvictionPolicy):
         candidates.sort()
 
         # Batch for efficiency
-        return candidates[:self.batch_size * 2]
+        return candidates[: self.batch_size * 2]
 
     def proactive_offload(
         self,
@@ -597,9 +588,7 @@ class HierarchicalEvictionPolicy(EvictionPolicy):
 
 
 def create_advanced_eviction_policy(
-    name: str = "hierarchical",
-    num_layers: int = 32,
-    **kwargs
+    name: str = "hierarchical", num_layers: int = 32, **kwargs
 ) -> EvictionPolicy:
     """
     Factory function to create advanced eviction policies.
@@ -613,15 +602,9 @@ def create_advanced_eviction_policy(
         Eviction policy instance.
     """
     policies = {
-        "attention_aware": lambda: AttentionAwareEvictionPolicy(
-            num_layers=num_layers, **kwargs
-        ),
-        "layer_aware": lambda: LayerAwareCachingPolicy(
-            num_layers=num_layers, **kwargs
-        ),
-        "hierarchical": lambda: HierarchicalEvictionPolicy(
-            num_layers=num_layers, **kwargs
-        ),
+        "attention_aware": lambda: AttentionAwareEvictionPolicy(num_layers=num_layers, **kwargs),
+        "layer_aware": lambda: LayerAwareCachingPolicy(num_layers=num_layers, **kwargs),
+        "hierarchical": lambda: HierarchicalEvictionPolicy(num_layers=num_layers, **kwargs),
     }
 
     if name not in policies:

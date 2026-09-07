@@ -9,18 +9,17 @@ This module provides enhanced memory management with:
 
 from __future__ import annotations
 
-import time
-import threading
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set, Callable, Tuple
-from collections import OrderedDict
-from queue import Queue, Empty
 import logging
+import threading
+import time
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from queue import Empty, Queue
+from typing import Dict, List, Optional
 
 import torch
-from torch import Tensor
 
-from deltacache.core.cache_block import CacheBlock, DeviceType
+from deltacache.core.cache_block import CacheBlock
 from deltacache.core.memory_pool import MemoryPool, MemoryStats
 
 logger = logging.getLogger(__name__)
@@ -29,6 +28,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class OffloadRequest:
     """Request to offload a cache block."""
+
     block_id: int
     priority: float  # Lower = more urgent
     timestamp: float = field(default_factory=time.time)
@@ -37,6 +37,7 @@ class OffloadRequest:
 @dataclass
 class PrefetchRequest:
     """Request to prefetch a cache block to GPU."""
+
     block_id: int
     priority: float  # Lower = more urgent
     timestamp: float = field(default_factory=time.time)
@@ -45,6 +46,7 @@ class PrefetchRequest:
 @dataclass
 class HierarchicalMemoryStats(MemoryStats):
     """Extended memory statistics for hierarchical memory."""
+
     num_offloads: int = 0
     num_prefetches: int = 0
     offload_bytes: int = 0
@@ -101,9 +103,7 @@ class HierarchicalMemoryManager:
             prefetch_threshold: Access frequency threshold for prefetching.
         """
         self._lock = threading.RLock()
-        self._device = device or torch.device(
-            "cuda" if torch.cuda.is_available() else "cpu"
-        )
+        self._device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # Initialize base memory pool
         self._pool = MemoryPool(gpu_limit, cpu_limit, device)
@@ -142,9 +142,7 @@ class HierarchicalMemoryManager:
     def _start_worker(self) -> None:
         """Start background worker for async operations."""
         self._worker_thread = threading.Thread(
-            target=self._worker_loop,
-            daemon=True,
-            name="HierarchicalMemory-Worker"
+            target=self._worker_loop, daemon=True, name="HierarchicalMemory-Worker"
         )
         self._worker_thread.start()
 
@@ -209,7 +207,7 @@ class HierarchicalMemoryManager:
 
             # Trim to window size
             if len(history) > self._access_window:
-                self._access_history[block_id] = history[-self._access_window:]
+                self._access_history[block_id] = history[-self._access_window :]
 
     def get_access_frequency(self, block_id: int) -> float:
         """Get recent access frequency for a block (accesses per second)."""
@@ -249,10 +247,7 @@ class HierarchicalMemoryManager:
             True if offload initiated.
         """
         if async_op and self._enable_async:
-            self._offload_queue.put(OffloadRequest(
-                block_id=block_id,
-                priority=time.time()
-            ))
+            self._offload_queue.put(OffloadRequest(block_id=block_id, priority=time.time()))
             return True
         else:
             return self._do_offload(block_id)
@@ -286,10 +281,7 @@ class HierarchicalMemoryManager:
             True if prefetch initiated.
         """
         if async_op and self._enable_async:
-            self._prefetch_queue.put(PrefetchRequest(
-                block_id=block_id,
-                priority=time.time()
-            ))
+            self._prefetch_queue.put(PrefetchRequest(block_id=block_id, priority=time.time()))
             return True
         else:
             return self._do_prefetch(block_id)
@@ -366,7 +358,7 @@ class HierarchicalMemoryManager:
         # Sort by frequency (ascending)
         gpu_blocks.sort()
 
-        for freq, block_id, size in gpu_blocks:
+        for _freq, block_id, size in gpu_blocks:
             if freed >= to_free:
                 break
 
@@ -398,7 +390,7 @@ class HierarchicalMemoryManager:
 
         cpu_blocks.sort()
 
-        for freq, block_id, size in cpu_blocks:
+        for _freq, block_id, size in cpu_blocks:
             if freed >= to_free:
                 break
 
@@ -431,7 +423,7 @@ class HierarchicalMemoryManager:
         cpu_blocks.sort(reverse=True)
 
         used = 0
-        for freq, block_id, size in cpu_blocks:
+        for _freq, block_id, size in cpu_blocks:
             if used + size > available_gpu:
                 break
 

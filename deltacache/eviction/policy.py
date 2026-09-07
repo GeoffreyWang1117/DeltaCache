@@ -3,18 +3,18 @@
 from __future__ import annotations
 
 import time
-import heapq
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import List, Optional, Callable
+from typing import List, Optional
 
-from deltacache.core.prefix_tree import PrefixTree, PrefixTreeNode
 from deltacache.core.memory_pool import MemoryPool
+from deltacache.core.prefix_tree import PrefixTree, PrefixTreeNode
 
 
 class EvictionAction(Enum):
     """Type of eviction action."""
+
     OFFLOAD_TO_CPU = "offload"  # Move from GPU to CPU
     DELETE = "delete"  # Remove completely
 
@@ -22,6 +22,7 @@ class EvictionAction(Enum):
 @dataclass
 class EvictionCandidate:
     """A candidate for eviction with computed priority."""
+
     node: PrefixTreeNode
     score: float
     action: EvictionAction = EvictionAction.OFFLOAD_TO_CPU
@@ -35,6 +36,7 @@ class EvictionCandidate:
 @dataclass
 class EvictionResult:
     """Result of an eviction operation."""
+
     num_offloaded: int = 0
     num_deleted: int = 0
     memory_freed_gpu: int = 0
@@ -140,7 +142,9 @@ class LRUEvictionPolicy(EvictionPolicy):
             candidate = EvictionCandidate(
                 node=node,
                 score=node.last_access,  # Lower = older = evict first
-                action=EvictionAction.OFFLOAD_TO_CPU if node.cache_block.is_on_gpu else EvictionAction.DELETE,
+                action=EvictionAction.OFFLOAD_TO_CPU
+                if node.cache_block.is_on_gpu
+                else EvictionAction.DELETE,
                 memory_freed=node.cache_block.memory_size,
             )
             candidates.append(candidate)
@@ -174,7 +178,9 @@ class LFUEvictionPolicy(EvictionPolicy):
             candidate = EvictionCandidate(
                 node=node,
                 score=node.access_count,  # Lower = less used = evict first
-                action=EvictionAction.OFFLOAD_TO_CPU if node.cache_block.is_on_gpu else EvictionAction.DELETE,
+                action=EvictionAction.OFFLOAD_TO_CPU
+                if node.cache_block.is_on_gpu
+                else EvictionAction.DELETE,
                 memory_freed=node.cache_block.memory_size,
             )
             candidates.append(candidate)
@@ -306,7 +312,9 @@ class TieredEvictionPolicy(EvictionPolicy):
     ) -> List[EvictionCandidate]:
         # Get all candidates from base policy
         all_candidates = self.base_policy.select_victims(
-            prefix_tree, memory_pool, required_memory * 2  # Get more candidates
+            prefix_tree,
+            memory_pool,
+            required_memory * 2,  # Get more candidates
         )
 
         # Separate into GPU and CPU blocks
@@ -373,11 +381,11 @@ class AdaptiveEvictionPolicy(EvictionPolicy):
         if was_miss:
             # Make eviction more conservative
             for key in self.weights:
-                self.weights[key] *= (1 + self.learning_rate)
+                self.weights[key] *= 1 + self.learning_rate
         else:
             # Make eviction more aggressive
             for key in self.weights:
-                self.weights[key] *= (1 - self.learning_rate * 0.1)
+                self.weights[key] *= 1 - self.learning_rate * 0.1
 
     def select_victims(
         self,
@@ -399,7 +407,9 @@ class AdaptiveEvictionPolicy(EvictionPolicy):
             candidate = EvictionCandidate(
                 node=node,
                 score=score,
-                action=EvictionAction.OFFLOAD_TO_CPU if node.cache_block.is_on_gpu else EvictionAction.DELETE,
+                action=EvictionAction.OFFLOAD_TO_CPU
+                if node.cache_block.is_on_gpu
+                else EvictionAction.DELETE,
                 memory_freed=node.cache_block.memory_size,
             )
             candidates.append(candidate)
@@ -419,10 +429,14 @@ class AdaptiveEvictionPolicy(EvictionPolicy):
         time_since_access = max(1.0, now - node.last_access)
 
         score = (
-            (node.access_count + 1) * self.weights["frequency"]
-            * node.subtree_size * self.weights["subtree"]
-            * (node.depth + 1) * self.weights["depth"]
-            * self.weights["recency"] / time_since_access
+            (node.access_count + 1)
+            * self.weights["frequency"]
+            * node.subtree_size
+            * self.weights["subtree"]
+            * (node.depth + 1)
+            * self.weights["depth"]
+            * self.weights["recency"]
+            / time_since_access
         )
 
         return score

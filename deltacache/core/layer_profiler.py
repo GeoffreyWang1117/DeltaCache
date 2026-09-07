@@ -14,8 +14,8 @@ These signals drive LayerBudget's per-layer token retention decisions.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Tuple
 
 import torch
 from torch import Tensor
@@ -54,7 +54,7 @@ class ProfileResult:
         """Return layer indices sorted by sparsity (most sparse first)."""
         return sorted(
             range(self.num_layers),
-            key=lambda l: self.layer_profiles[l].gini,
+            key=lambda layer_i: self.layer_profiles[layer_i].gini,
             reverse=True,
         )
 
@@ -130,9 +130,8 @@ class LayerAttentionProfiler:
 
             if isinstance(output, tuple) and len(output) >= 2:
                 candidate = output[1]
-                if candidate is not None and isinstance(candidate, Tensor):
-                    if candidate.dim() == 4:
-                        attn_weights = candidate
+                if candidate is not None and isinstance(candidate, Tensor) and candidate.dim() == 4:
+                    attn_weights = candidate
 
             if attn_weights is not None:
                 # Extract last-token row, average over heads → (seq_len,)
@@ -227,8 +226,7 @@ class LayerAttentionProfiler:
         num_hooks = self.register_hooks(model)
         if num_hooks == 0:
             raise RuntimeError(
-                "No attention modules found. Ensure model has "
-                "self_attn/attn/attention sub-modules."
+                "No attention modules found. Ensure model has self_attn/attn/attention sub-modules."
             )
 
         # Run prefill with attention output enabled
@@ -265,14 +263,16 @@ class LayerAttentionProfiler:
             # Max attention (already head-averaged in hook)
             max_attn = attn_row.max().item()
 
-            layer_profiles.append(LayerProfile(
-                layer_idx=layer_idx,
-                gini=gini,
-                entropy=entropy,
-                top10_mass=top10_mass,
-                top20_mass=top20_mass,
-                max_attention=max_attn,
-            ))
+            layer_profiles.append(
+                LayerProfile(
+                    layer_idx=layer_idx,
+                    gini=gini,
+                    entropy=entropy,
+                    top10_mass=top10_mass,
+                    top20_mass=top20_mass,
+                    max_attention=max_attn,
+                )
+            )
 
         # Cleanup
         self.remove_hooks()
@@ -320,14 +320,16 @@ class LayerAttentionProfiler:
             top10_vals, _ = last_row.topk(min(k10, seq_len))
             top20_vals, _ = last_row.topk(min(k20, seq_len))
 
-            layer_profiles.append(LayerProfile(
-                layer_idx=layer_idx,
-                gini=gini,
-                entropy=entropy,
-                top10_mass=top10_vals.sum().item(),
-                top20_mass=top20_vals.sum().item(),
-                max_attention=last_row.max().item(),
-            ))
+            layer_profiles.append(
+                LayerProfile(
+                    layer_idx=layer_idx,
+                    gini=gini,
+                    entropy=entropy,
+                    top10_mass=top10_vals.sum().item(),
+                    top20_mass=top20_vals.sum().item(),
+                    max_attention=last_row.max().item(),
+                )
+            )
 
         profiling_time_ms = (time.perf_counter() - t0) * 1000
         seq_len = attention_weights[0].shape[-1] if attention_weights else 0

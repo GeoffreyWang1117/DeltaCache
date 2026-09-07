@@ -17,43 +17,79 @@ from deltacache.utils.config import DeltaCacheConfig
 LLAMA_STYLE_CONFIGS = {
     # TinyLlama - great for fast testing
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0": {
-        "num_layers": 22, "num_heads": 32, "num_kv_heads": 4,
-        "head_dim": 64, "hidden_size": 2048, "max_position": 2048,
+        "num_layers": 22,
+        "num_heads": 32,
+        "num_kv_heads": 4,
+        "head_dim": 64,
+        "hidden_size": 2048,
+        "max_position": 2048,
     },
     "TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T": {
-        "num_layers": 22, "num_heads": 32, "num_kv_heads": 4,
-        "head_dim": 64, "hidden_size": 2048, "max_position": 2048,
+        "num_layers": 22,
+        "num_heads": 32,
+        "num_kv_heads": 4,
+        "head_dim": 64,
+        "hidden_size": 2048,
+        "max_position": 2048,
     },
     # Qwen2 - small efficient model
     "Qwen/Qwen2-0.5B": {
-        "num_layers": 24, "num_heads": 14, "num_kv_heads": 2,
-        "head_dim": 64, "hidden_size": 896, "max_position": 32768,
+        "num_layers": 24,
+        "num_heads": 14,
+        "num_kv_heads": 2,
+        "head_dim": 64,
+        "hidden_size": 896,
+        "max_position": 32768,
     },
     "Qwen/Qwen2-1.5B": {
-        "num_layers": 28, "num_heads": 12, "num_kv_heads": 2,
-        "head_dim": 128, "hidden_size": 1536, "max_position": 32768,
+        "num_layers": 28,
+        "num_heads": 12,
+        "num_kv_heads": 2,
+        "head_dim": 128,
+        "hidden_size": 1536,
+        "max_position": 32768,
     },
     # Mistral - efficient 7B
     "mistralai/Mistral-7B-v0.1": {
-        "num_layers": 32, "num_heads": 32, "num_kv_heads": 8,
-        "head_dim": 128, "hidden_size": 4096, "max_position": 32768,
+        "num_layers": 32,
+        "num_heads": 32,
+        "num_kv_heads": 8,
+        "head_dim": 128,
+        "hidden_size": 4096,
+        "max_position": 32768,
     },
     "mistralai/Mistral-7B-Instruct-v0.1": {
-        "num_layers": 32, "num_heads": 32, "num_kv_heads": 8,
-        "head_dim": 128, "hidden_size": 4096, "max_position": 32768,
+        "num_layers": 32,
+        "num_heads": 32,
+        "num_kv_heads": 8,
+        "head_dim": 128,
+        "hidden_size": 4096,
+        "max_position": 32768,
     },
     # Llama-2
     "meta-llama/Llama-2-7b-hf": {
-        "num_layers": 32, "num_heads": 32, "num_kv_heads": 32,
-        "head_dim": 128, "hidden_size": 4096, "max_position": 4096,
+        "num_layers": 32,
+        "num_heads": 32,
+        "num_kv_heads": 32,
+        "head_dim": 128,
+        "hidden_size": 4096,
+        "max_position": 4096,
     },
     "meta-llama/Llama-2-7b-chat-hf": {
-        "num_layers": 32, "num_heads": 32, "num_kv_heads": 32,
-        "head_dim": 128, "hidden_size": 4096, "max_position": 4096,
+        "num_layers": 32,
+        "num_heads": 32,
+        "num_kv_heads": 32,
+        "head_dim": 128,
+        "hidden_size": 4096,
+        "max_position": 4096,
     },
     "meta-llama/Llama-2-13b-hf": {
-        "num_layers": 40, "num_heads": 40, "num_kv_heads": 40,
-        "head_dim": 128, "hidden_size": 5120, "max_position": 4096,
+        "num_layers": 40,
+        "num_heads": 40,
+        "num_kv_heads": 40,
+        "head_dim": 128,
+        "hidden_size": 5120,
+        "max_position": 4096,
     },
 }
 
@@ -154,6 +190,7 @@ class LlamaStyleAdapter(HFModelAdapter):
         if load_in_8bit or load_in_4bit:
             try:
                 from transformers import BitsAndBytesConfig
+
                 quantization_config = BitsAndBytesConfig(
                     load_in_8bit=load_in_8bit,
                     load_in_4bit=load_in_4bit,
@@ -186,7 +223,8 @@ class LlamaStyleAdapter(HFModelAdapter):
             num_kv_heads = getattr(hf_config, "num_attention_heads", 32)
 
         return cls(
-            model, tokenizer,
+            model,
+            tokenizer,
             config=config,
             device=device,
             num_kv_heads=num_kv_heads,

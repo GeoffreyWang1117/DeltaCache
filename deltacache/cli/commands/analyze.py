@@ -1,41 +1,27 @@
 """Analyze command for DeltaCache CLI."""
 
 import json
-import click
-from pathlib import Path
-from typing import List, Dict
 from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List
 
+import click
 import numpy as np
 
 
 @click.command()
 @click.option(
-    "--dataset", "-d",
+    "--dataset",
+    "-d",
     type=click.Path(exists=True),
     required=True,
-    help="Dataset file (JSON with conversations/prompts)"
+    help="Dataset file (JSON with conversations/prompts)",
 )
+@click.option("--tokenizer", "-t", default="gpt2", help="Tokenizer name or path")
+@click.option("--max-samples", type=int, default=1000, help="Maximum samples to analyze")
+@click.option("--output", "-o", type=click.Path(), help="Output JSON file for results")
 @click.option(
-    "--tokenizer", "-t",
-    default="gpt2",
-    help="Tokenizer name or path"
-)
-@click.option(
-    "--max-samples",
-    type=int,
-    default=1000,
-    help="Maximum samples to analyze"
-)
-@click.option(
-    "--output", "-o",
-    type=click.Path(),
-    help="Output JSON file for results"
-)
-@click.option(
-    "--system-prompt",
-    type=str,
-    help="Simulate adding this system prompt to all sequences"
+    "--system-prompt", type=str, help="Simulate adding this system prompt to all sequences"
 )
 @click.pass_context
 def analyze(ctx, dataset, tokenizer, max_samples, output, system_prompt):
@@ -64,8 +50,10 @@ def analyze(ctx, dataset, tokenizer, max_samples, output, system_prompt):
     # Load tokenizer
     try:
         from transformers import AutoTokenizer
-    except ImportError:
-        raise click.ClickException("transformers library required. Install with: pip install transformers")
+    except ImportError as exc:
+        raise click.ClickException(
+            "transformers library required. Install with: pip install transformers"
+        ) from exc
 
     click.echo("Loading tokenizer...")
     tok = AutoTokenizer.from_pretrained(tokenizer)
@@ -158,7 +146,7 @@ def analyze_prefix_patterns(tokenized: List[List[int]], verbose: bool) -> Dict:
     }
 
     if verbose:
-        click.echo(f"\nDataset Statistics:")
+        click.echo("\nDataset Statistics:")
         click.echo(f"  Sequences: {len(tokenized)}")
         click.echo(f"  Avg length: {np.mean(lengths):.0f} tokens")
         click.echo(f"  Min/Max: {min(lengths)}/{max(lengths)} tokens")
@@ -202,13 +190,15 @@ def analyze_prefix_patterns(tokenized: List[List[int]], verbose: bool) -> Dict:
     # Get most common prefixes
     sorted_prefixes = sorted(prefix_counts.items(), key=lambda x: x[1], reverse=True)
     common = []
-    for (length, prefix), count in sorted_prefixes[:10]:
+    for (length, _prefix), count in sorted_prefixes[:10]:
         if count > 1:
-            common.append({
-                "length": length,
-                "count": count,
-                "share": count / len(tokenized),
-            })
+            common.append(
+                {
+                    "length": length,
+                    "count": count,
+                    "share": count / len(tokenized),
+                }
+            )
 
     results["common_prefixes"] = common
 
@@ -251,32 +241,34 @@ def simulate_system_prompt(tokenized: List[List[int]], sys_tokens: List[int]) ->
 
 def print_results(results: Dict) -> None:
     """Print formatted results."""
-    click.echo("\n" + "="*60)
+    click.echo("\n" + "=" * 60)
     click.echo("ANALYSIS RESULTS")
-    click.echo("="*60)
+    click.echo("=" * 60)
 
     if "dataset_stats" in results:
         stats = results["dataset_stats"]
-        click.echo(f"\nDataset Statistics:")
+        click.echo("\nDataset Statistics:")
         click.echo(f"  Total sequences: {stats.get('total_sequences', 0)}")
         click.echo(f"  Average length: {stats.get('avg_length', 0):.0f} tokens")
         click.echo(f"  Range: {stats.get('min_length', 0)} - {stats.get('max_length', 0)} tokens")
 
-    if "prefix_sharing" in results and results["prefix_sharing"]:
+    if results.get("prefix_sharing"):
         ps = results["prefix_sharing"]
-        click.echo(f"\nNatural Prefix Sharing:")
+        click.echo("\nNatural Prefix Sharing:")
         click.echo(f"  Pairs analyzed: {ps.get('pairs_analyzed', 0)}")
-        click.echo(f"  Sharing rate: {ps.get('sharing_rate', 0)*100:.1f}%")
+        click.echo(f"  Sharing rate: {ps.get('sharing_rate', 0) * 100:.1f}%")
         click.echo(f"  Avg shared length: {ps.get('avg_shared_length', 0):.1f} tokens")
 
-    if "common_prefixes" in results and results["common_prefixes"]:
-        click.echo(f"\nCommon Prefixes:")
+    if results.get("common_prefixes"):
+        click.echo("\nCommon Prefixes:")
         for i, p in enumerate(results["common_prefixes"][:5]):
-            click.echo(f"  {i+1}. Length {p['length']}: {p['count']} occurrences ({p['share']*100:.1f}%)")
+            click.echo(
+                f"  {i + 1}. Length {p['length']}: {p['count']} occurrences ({p['share'] * 100:.1f}%)"
+            )
 
     if "system_prompt_simulation" in results:
         sim = results["system_prompt_simulation"]
-        click.echo(f"\nSystem Prompt Simulation:")
+        click.echo("\nSystem Prompt Simulation:")
         click.echo(f"  Prompt length: {sim.get('system_prompt_length', 0)} tokens")
         click.echo(f"  Reusable tokens: {sim.get('reusable_tokens', 0):,}")
-        click.echo(f"  Potential reuse rate: {sim.get('reuse_rate', 0)*100:.1f}%")
+        click.echo(f"  Potential reuse rate: {sim.get('reuse_rate', 0) * 100:.1f}%")

@@ -19,8 +19,7 @@ Usage standalone (no KVPress dependency):
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import torch
 from torch import Tensor
@@ -28,13 +27,16 @@ from torch import Tensor
 # Try to import KVPress base class; fall back to standalone if unavailable
 try:
     from kvpress import BasePress
+
     HAS_KVPRESS = True
 except Exception:
     # kvpress may fail to import due to version incompatibilities
     HAS_KVPRESS = False
+
     # Define a minimal compatible base class
     class BasePress:
         """Minimal KVPress-compatible base when kvpress is not installed."""
+
         def __init__(self, compression_ratio: float = 0.5):
             self.compression_ratio = compression_ratio
 
@@ -126,8 +128,6 @@ class LayerBudgetPress(BasePress):
         seq_len = k0.shape[2]
         num_heads = k0.shape[1]
         head_dim = k0.shape[3]
-        device = k0.device
-        dtype = k0.dtype
 
         # Step 1: Profile sparsity
         sparsity = self._profile_sparsity(past_key_values, attention_weights, num_layers)
@@ -139,20 +139,26 @@ class LayerBudgetPress(BasePress):
         full_mem = 2 * num_layers * seq_len * num_heads * head_dim * 2  # FP16
         budget = int(full_mem * self.compression_ratio)
         allocations = self._allocate(
-            sparsity, importance, budget, seq_len, num_layers, num_heads, head_dim,
+            sparsity,
+            importance,
+            budget,
+            seq_len,
+            num_layers,
+            num_heads,
+            head_dim,
         )
 
         # Step 4: Apply compression per layer
-        for l, (n_tokens, bits) in enumerate(allocations):
+        for layer_i, (n_tokens, bits) in enumerate(allocations):
             if hasattr(past_key_values, "key_cache"):
-                k = past_key_values.key_cache[l]  # (B, H, S, D)
-                v = past_key_values.value_cache[l]
+                k = past_key_values.key_cache[layer_i]  # (B, H, S, D)
+                v = past_key_values.value_cache[layer_i]
             else:
-                k, v = past_key_values[l]
+                k, v = past_key_values[layer_i]
 
             # Token selection
             if n_tokens < seq_len:
-                indices = self._select_tokens(k, v, n_tokens, seq_len, attention_weights, l)
+                indices = self._select_tokens(k, v, n_tokens, seq_len, attention_weights, layer_i)
                 k = k[:, :, indices, :]
                 v = v[:, :, indices, :]
 
@@ -163,37 +169,37 @@ class LayerBudgetPress(BasePress):
 
             # Write back
             if hasattr(past_key_values, "key_cache"):
-                past_key_values.key_cache[l] = k
-                past_key_values.value_cache[l] = v
+                past_key_values.key_cache[layer_i] = k
+                past_key_values.value_cache[layer_i] = v
             else:
-                past_key_values[l] = (k, v)
+                past_key_values[layer_i] = (k, v)
 
         return past_key_values
 
     def _profile_sparsity(self, past_kv, attn_weights, num_layers):
         """Extract per-layer Gini sparsity."""
         sparsity = {}
-        for l in range(num_layers):
-            if attn_weights and l < len(attn_weights):
+        for layer_i in range(num_layers):
+            if attn_weights and layer_i < len(attn_weights):
                 # Use last-token attention row
-                last_row = attn_weights[l][0, :, -1, :].mean(dim=0)  # (S,)
-                sparsity[l] = _compute_gini(last_row)
+                last_row = attn_weights[layer_i][0, :, -1, :].mean(dim=0)  # (S,)
+                sparsity[layer_i] = _compute_gini(last_row)
             else:
                 # Fallback: estimate from value norms
                 if hasattr(past_kv, "value_cache"):
-                    v = past_kv.value_cache[l][0]  # (H, S, D)
+                    v = past_kv.value_cache[layer_i][0]  # (H, S, D)
                 else:
-                    v = past_kv[l][1][0]
+                    v = past_kv[layer_i][1][0]
                 norms = v.float().norm(dim=-1).mean(dim=0)  # (S,)
-                sparsity[l] = _compute_gini(norms)
+                sparsity[layer_i] = _compute_gini(norms)
         return sparsity
 
     def _compute_importance(self, num_layers):
         """Sigmoid importance weights."""
         importance = {}
-        for l in range(num_layers):
-            x = self.importance_k * (l / max(1, num_layers - 1) - self.importance_tau)
-            importance[l] = 1.0 / (1.0 + math.exp(-x))
+        for layer_i in range(num_layers):
+            x = self.importance_k * (layer_i / max(1, num_layers - 1) - self.importance_tau)
+            importance[layer_i] = 1.0 / (1.0 + math.exp(-x))
         return importance
 
     def _allocate(self, sparsity, importance, budget, seq_len, num_layers, num_heads, head_dim):
@@ -207,12 +213,12 @@ class LayerBudgetPress(BasePress):
         def mem_cost(n, b):
             return 2 * n * num_heads * head_dim * b // 8
 
-        def quality(l, n, b):
+        def quality(layer_i, n, b):
             frac = n / max(1, seq_len)
-            g = sparsity.get(l, 0.5)
+            g = sparsity.get(layer_i, 0.5)
             coverage = frac ** max(0.01, 1 - g)
             fidelity = self.fidelity.get(b, 0.9)
-            return coverage * fidelity * importance.get(l, 0.5)
+            return coverage * fidelity * importance.get(layer_i, 0.5)
 
         used = sum(mem_cost(n, b) for n, b in alloc)
 
@@ -220,37 +226,37 @@ class LayerBudgetPress(BasePress):
             best_gain = 0
             best_action = None
 
-            for l in range(num_layers):
-                n, b = alloc[l]
+            for layer_i in range(num_layers):
+                n, b = alloc[layer_i]
 
                 # Try adding tokens
                 if n + self.token_step <= seq_len:
                     nn = n + self.token_step
-                    dq = quality(l, nn, b) - quality(l, n, b)
+                    dq = quality(layer_i, nn, b) - quality(layer_i, n, b)
                     dm = mem_cost(nn, b) - mem_cost(n, b)
                     if dm > 0 and used + dm <= budget:
                         gpb = dq / dm
                         if gpb > best_gain:
                             best_gain = gpb
-                            best_action = (l, nn, b, dm)
+                            best_action = (layer_i, nn, b, dm)
 
                 # Try upgrading bits
                 bi = self.available_bits.index(b)
                 if bi < len(self.available_bits) - 1:
                     nb = self.available_bits[bi + 1]
-                    dq = quality(l, n, nb) - quality(l, n, b)
+                    dq = quality(layer_i, n, nb) - quality(layer_i, n, b)
                     dm = mem_cost(n, nb) - mem_cost(n, b)
                     if dm > 0 and used + dm <= budget:
                         gpb = dq / dm
                         if gpb > best_gain:
                             best_gain = gpb
-                            best_action = (l, n, nb, dm)
+                            best_action = (layer_i, n, nb, dm)
 
             if best_action is None:
                 break
 
-            l, n_new, b_new, dm = best_action
-            alloc[l] = (n_new, b_new)
+            layer_i, n_new, b_new, dm = best_action
+            alloc[layer_i] = (n_new, b_new)
             used += dm
 
         return alloc

@@ -3,10 +3,9 @@
 import pytest
 import torch
 
-from deltacache.api import DeltaCacheManager, create_delta_cache
+from deltacache.api import create_delta_cache
 from deltacache.utils.config import DeltaCacheConfig
-from deltacache.vllm_integration.scheduler_hook import SchedulerHook, SchedulingHint
-from deltacache.core.cache_block import CacheBlock
+from deltacache.vllm_integration.scheduler_hook import SchedulerHook
 
 
 class TestSchedulerHook:
@@ -70,7 +69,7 @@ class TestSchedulerHook:
 
         # Should have one group with seq 1 and 2
         assert len(groups) == 1
-        group = list(groups.values())[0]
+        group = next(iter(groups.values()))
         assert set(group) == {1, 2}
 
     def test_suggest_batch_order(self, hook):
@@ -186,12 +185,16 @@ class TestDeltaCacheManagerIntegration:
             manager.insert(tokens, key, value)
 
         initial_cached = manager.num_cached_sequences
+        assert initial_cached > 0, "nothing was cached, so eviction has nothing to do"
 
         # Trigger eviction
         result = manager.evict_if_needed(required_memory=1000000)
 
-        # Some blocks should be evicted or offloaded
-        # (Exact behavior depends on memory limits)
+        # How much gets freed depends on the configured limits, so the invariant
+        # asserted here is the one that holds regardless: eviction reports a
+        # result and never grows the cache.
+        assert result is not None
+        assert manager.num_cached_sequences <= initial_cached
 
     def test_clear(self, manager):
         """Test clearing cache."""

@@ -12,13 +12,15 @@ DeltaCache format:
     key/value shape: [num_layers, seq_len, num_heads, head_dim]
 """
 
-from typing import Tuple, Optional, List, Any, Union
+from typing import Any, Optional, Tuple, Union
+
 import torch
 from torch import Tensor
 
 # Try to import DynamicCache for newer transformers versions
 try:
     from transformers.cache_utils import DynamicCache
+
     HAS_DYNAMIC_CACHE = True
 except ImportError:
     HAS_DYNAMIC_CACHE = False
@@ -114,9 +116,7 @@ def deltacache_to_hf(
         return cache
 
     # Legacy tuple format
-    past_key_values = tuple(
-        (keys[i], values[i]) for i in range(num_layers)
-    )
+    past_key_values = tuple((keys[i], values[i]) for i in range(num_layers))
 
     return past_key_values
 
@@ -190,9 +190,7 @@ class KVFormatConverter:
     ) -> None:
         """Validate HuggingFace format KV cache."""
         if len(past_key_values) != self.num_layers:
-            raise ValueError(
-                f"Expected {self.num_layers} layers, got {len(past_key_values)}"
-            )
+            raise ValueError(f"Expected {self.num_layers} layers, got {len(past_key_values)}")
 
         for i, (k, v) in enumerate(past_key_values):
             # Expected shape: [batch, heads, seq, dim]
@@ -203,13 +201,9 @@ class KVFormatConverter:
 
             _, heads, _, dim = k.shape
             if heads != self.num_heads:
-                raise ValueError(
-                    f"Layer {i}: expected {self.num_heads} heads, got {heads}"
-                )
+                raise ValueError(f"Layer {i}: expected {self.num_heads} heads, got {heads}")
             if dim != self.head_dim:
-                raise ValueError(
-                    f"Layer {i}: expected head_dim {self.head_dim}, got {dim}"
-                )
+                raise ValueError(f"Layer {i}: expected head_dim {self.head_dim}, got {dim}")
 
     def _validate_deltacache_format(
         self,
@@ -292,10 +286,7 @@ def slice_hf_cache(
     Returns:
         Sliced KV cache
     """
-    return tuple(
-        (k[:, :, start:end, :], v[:, :, start:end, :])
-        for k, v in past_key_values
-    )
+    return tuple((k[:, :, start:end, :], v[:, :, start:end, :]) for k, v in past_key_values)
 
 
 def concat_hf_cache(

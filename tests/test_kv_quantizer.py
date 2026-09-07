@@ -6,7 +6,6 @@ import torch
 from deltacache.core.kv_quantizer import (
     KVQuantizer,
     QuantPrecision,
-    QuantizedKV,
 )
 
 
@@ -120,11 +119,16 @@ class TestKVQuantizer:
         ratio_int8 = KVQuantizer.estimate_memory_saving(shape, QuantPrecision.INT8)
         ratio_int4 = KVQuantizer.estimate_memory_saving(shape, QuantPrecision.INT4)
 
-        # INT8 should give ~2x, INT4 should give more
-        assert ratio_int8 > 1.8
-        assert ratio_int8 < 2.2
-        # INT4 data is same size as INT8 in this implementation (packed later)
-        # But still should show savings over FP16
+        # INT8 should give ~2x against FP16.
+        assert 1.8 < ratio_int8 < 2.2
+
+        # INT4 reports the *same* ratio as INT8, because this implementation
+        # stores four-bit values one per byte and defers packing. The estimate
+        # therefore describes the layout in use, not the nominal bit width. That
+        # is asserted rather than glossed, so the day packing lands this test
+        # fails and says so.
+        assert ratio_int4 == ratio_int8
+        assert ratio_int4 > 1.8
 
     def test_quantize_empty_seq(self):
         """Edge case: quantizing single-token sequence."""

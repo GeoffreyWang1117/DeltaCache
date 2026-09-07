@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Optional, Tuple
 from enum import Enum
+from typing import Optional, Tuple
 
 import torch
 from torch import Tensor
@@ -13,6 +13,7 @@ from torch import Tensor
 
 class DeviceType(Enum):
     """Device type for cache block storage."""
+
     GPU = "cuda"
     CPU = "cpu"
 
@@ -20,6 +21,7 @@ class DeviceType(Enum):
 @dataclass
 class CacheBlockMetadata:
     """Metadata for a cache block."""
+
     created_at: float = field(default_factory=time.time)
     last_access: float = field(default_factory=time.time)
     access_count: int = 0
@@ -133,8 +135,10 @@ class CacheBlock:
     @property
     def memory_size(self) -> int:
         """Total memory size in bytes."""
-        return self.key_cache.numel() * self.key_cache.element_size() + \
-               self.value_cache.numel() * self.value_cache.element_size()
+        return (
+            self.key_cache.numel() * self.key_cache.element_size()
+            + self.value_cache.numel() * self.value_cache.element_size()
+        )
 
     def touch(self) -> None:
         """Update access metadata."""

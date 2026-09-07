@@ -1,7 +1,5 @@
 """Tests for metrics module."""
 
-import pytest
-
 from deltacache.metrics import DeltaCacheMetrics
 
 

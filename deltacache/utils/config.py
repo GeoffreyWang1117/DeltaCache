@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Any, Dict
 
 import torch
 
@@ -165,10 +165,34 @@ class DeltaCacheConfig:
         # Common model configs
         model_configs = {
             # GPT-2 models (no RoPE, learned position embeddings)
-            "gpt2": {"num_layers": 12, "num_heads": 12, "head_dim": 64, "max_position": 1024, "rope_base": 0},
-            "gpt2-medium": {"num_layers": 24, "num_heads": 16, "head_dim": 64, "max_position": 1024, "rope_base": 0},
-            "gpt2-large": {"num_layers": 36, "num_heads": 20, "head_dim": 64, "max_position": 1024, "rope_base": 0},
-            "gpt2-xl": {"num_layers": 48, "num_heads": 25, "head_dim": 64, "max_position": 1024, "rope_base": 0},
+            "gpt2": {
+                "num_layers": 12,
+                "num_heads": 12,
+                "head_dim": 64,
+                "max_position": 1024,
+                "rope_base": 0,
+            },
+            "gpt2-medium": {
+                "num_layers": 24,
+                "num_heads": 16,
+                "head_dim": 64,
+                "max_position": 1024,
+                "rope_base": 0,
+            },
+            "gpt2-large": {
+                "num_layers": 36,
+                "num_heads": 20,
+                "head_dim": 64,
+                "max_position": 1024,
+                "rope_base": 0,
+            },
+            "gpt2-xl": {
+                "num_layers": 48,
+                "num_heads": 25,
+                "head_dim": 64,
+                "max_position": 1024,
+                "rope_base": 0,
+            },
             # Llama models
             "llama-7b": {"num_layers": 32, "num_heads": 32, "head_dim": 128},
             "llama-13b": {"num_layers": 40, "num_heads": 40, "head_dim": 128},

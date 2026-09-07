@@ -12,7 +12,7 @@ blocks at the target precision.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
 import torch
@@ -20,7 +20,6 @@ from torch import Tensor
 
 from deltacache.core.layer_budget_allocator import (
     LayerBudgetAllocator,
-    AllocationResult,
 )
 from deltacache.core.layer_profiler import LayerAttentionProfiler
 
@@ -122,7 +121,7 @@ class LayerBudgetBlockManager:
             profile = self._profiler.profile_from_attention_weights(attention_weights)
             sparsity = profile.gini_scores()
         else:
-            sparsity = {l: 0.5 for l in range(self.num_layers)}
+            sparsity = {layer_i: 0.5 for layer_i in range(self.num_layers)}
 
         importance = self._allocator.compute_importance_weights(self.num_layers)
 
@@ -150,8 +149,11 @@ class LayerBudgetBlockManager:
             else:
                 # Select which blocks to retain using importance
                 retained, evicted = self._select_blocks(
-                    layer_idx, num_blocks, block_budget,
-                    attention_weights, seq_len,
+                    layer_idx,
+                    num_blocks,
+                    block_budget,
+                    attention_weights,
+                    seq_len,
                 )
 
             allocations[layer_idx] = (retained, bits)
@@ -199,8 +201,10 @@ class LayerBudgetBlockManager:
             # Select top-importance middle blocks
             if attention_weights is not None and layer_idx < len(attention_weights):
                 importance = self.compute_block_importance(
-                    layer_idx, attention_weights[layer_idx],
-                    self.block_size, num_blocks,
+                    layer_idx,
+                    attention_weights[layer_idx],
+                    self.block_size,
+                    num_blocks,
                 )
                 mid_scores = [(i, importance[i].item()) for i in mid_candidates]
             else:

@@ -4,8 +4,6 @@ import pytest
 
 from deltacache.core.layer_budget_allocator import (
     LayerBudgetAllocator,
-    LayerAllocation,
-    AllocationResult,
     sigmoid_importance,
 )
 
@@ -15,20 +13,20 @@ class TestSigmoidImportance:
 
     def test_inverted_default_monotonically_decreasing(self):
         """Default (inverted): early layers should have higher importance."""
-        weights = [sigmoid_importance(l, 22) for l in range(22)]
+        weights = [sigmoid_importance(layer_i, 22) for layer_i in range(22)]
         for i in range(len(weights) - 1):
             assert weights[i] >= weights[i + 1]
 
     def test_non_inverted_monotonically_increasing(self):
         """Non-inverted: later layers should have higher importance."""
-        weights = [sigmoid_importance(l, 22, invert=False) for l in range(22)]
+        weights = [sigmoid_importance(layer_i, 22, invert=False) for layer_i in range(22)]
         for i in range(len(weights) - 1):
             assert weights[i] <= weights[i + 1]
 
     def test_range(self):
         """Weights should be in (0, 1)."""
-        for l in range(32):
-            w = sigmoid_importance(l, 32)
+        for layer_i in range(32):
+            w = sigmoid_importance(layer_i, 32)
             assert 0.0 < w < 1.0
 
     def test_early_layers_high_inverted(self):
@@ -47,9 +45,9 @@ class TestSigmoidImportance:
 
     def test_invert_flag(self):
         """Inverted and non-inverted should mirror each other."""
-        for l in range(22):
-            inv = sigmoid_importance(l, 22, invert=True)
-            non = sigmoid_importance(21 - l, 22, invert=False)
+        for layer_i in range(22):
+            inv = sigmoid_importance(layer_i, 22, invert=True)
+            non = sigmoid_importance(21 - layer_i, 22, invert=False)
             assert abs(inv - non) < 1e-10
 
 
@@ -73,8 +71,8 @@ class TestLayerBudgetAllocator:
     def sparsity(self):
         """Synthetic sparsity (Gini) scores — high for early layers."""
         return {
-            l: 0.9 - 0.4 * l / 21  # 0.9 at layer 0, 0.5 at layer 21
-            for l in range(22)
+            layer_i: 0.9 - 0.4 * layer_i / 21  # 0.9 at layer 0, 0.5 at layer 21
+            for layer_i in range(22)
         }
 
     @pytest.fixture
@@ -140,8 +138,8 @@ class TestLayerBudgetAllocator:
         result = allocator.allocate(sparsity, importance, budget, seq_len)
 
         # Average tokens for early (sparse) vs late (dense) layers
-        early_tokens = [result.allocations[l].token_budget for l in range(7)]
-        late_tokens = [result.allocations[l].token_budget for l in range(15, 22)]
+        early_tokens = [result.allocations[layer_i].token_budget for layer_i in range(7)]
+        late_tokens = [result.allocations[layer_i].token_budget for layer_i in range(15, 22)]
 
         avg_early = sum(early_tokens) / len(early_tokens)
         avg_late = sum(late_tokens) / len(late_tokens)

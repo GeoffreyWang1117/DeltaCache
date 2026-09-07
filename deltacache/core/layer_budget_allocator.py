@@ -178,9 +178,9 @@ class LayerBudgetAllocator:
         # aggressive eviction more heavily.
         frac = min(1.0, n_tokens / max(1, seq_len))
         exponent = max(0.01, 1.0 - gini)
-        attention_mass = frac ** exponent
+        attention_mass = frac**exponent
         # Eviction penalty: squared coverage to discourage aggressive eviction
-        coverage = attention_mass ** 2
+        coverage = attention_mass**2
 
         # Fidelity model: calibrated from cosine similarity measurements
         # on Mistral-7B (INT8: 0.9999, INT4: 0.9964).
@@ -208,7 +208,12 @@ class LayerBudgetAllocator:
             (gain_per_byte, additional_bytes)
         """
         current_quality = self._quality_score(
-            layer_idx, current_tokens, current_bits, seq_len, sparsity, importance,
+            layer_idx,
+            current_tokens,
+            current_bits,
+            seq_len,
+            sparsity,
+            importance,
         )
         current_memory = self.memory_cost(current_tokens, current_bits)
 
@@ -217,7 +222,12 @@ class LayerBudgetAllocator:
             if new_tokens == current_tokens:
                 return -1.0, 0
             new_quality = self._quality_score(
-                layer_idx, new_tokens, current_bits, seq_len, sparsity, importance,
+                layer_idx,
+                new_tokens,
+                current_bits,
+                seq_len,
+                sparsity,
+                importance,
             )
             new_memory = self.memory_cost(new_tokens, current_bits)
 
@@ -227,7 +237,12 @@ class LayerBudgetAllocator:
                 return -1.0, 0  # Already at max precision
             new_bits = self.available_bits[bits_idx + 1]
             new_quality = self._quality_score(
-                layer_idx, current_tokens, new_bits, seq_len, sparsity, importance,
+                layer_idx,
+                current_tokens,
+                new_bits,
+                seq_len,
+                sparsity,
+                importance,
             )
             new_memory = self.memory_cost(current_tokens, new_bits)
 
@@ -271,18 +286,18 @@ class LayerBudgetAllocator:
 
         # Check if even minimum allocation exceeds budget
         total_used = sum(
-            self.memory_cost(current_tokens[l], current_bits[l])
-            for l in range(self.num_layers)
+            self.memory_cost(current_tokens[layer_i], current_bits[layer_i])
+            for layer_i in range(self.num_layers)
         )
 
         if total_used > budget_bytes:
             # Budget is extremely tight — reduce tokens proportionally
             scale = budget_bytes / max(1, total_used)
-            for l in range(self.num_layers):
-                current_tokens[l] = max(1, int(min_tokens * scale))
+            for layer_i in range(self.num_layers):
+                current_tokens[layer_i] = max(1, int(min_tokens * scale))
             total_used = sum(
-                self.memory_cost(current_tokens[l], current_bits[l])
-                for l in range(self.num_layers)
+                self.memory_cost(current_tokens[layer_i], current_bits[layer_i])
+                for layer_i in range(self.num_layers)
             )
 
         # Greedy allocation: repeatedly pick best (layer, action)
@@ -300,15 +315,20 @@ class LayerBudgetAllocator:
             best_action = ""
             best_cost = 0
 
-            for l in range(self.num_layers):
+            for layer_i in range(self.num_layers):
                 for action in ("add_tokens", "upgrade_bits"):
                     gain, cost = self._marginal_quality_gain(
-                        l, current_tokens[l], current_bits[l],
-                        action, seq_len, sparsity, importance,
+                        layer_i,
+                        current_tokens[layer_i],
+                        current_bits[layer_i],
+                        action,
+                        seq_len,
+                        sparsity,
+                        importance,
                     )
                     if gain > best_gain and cost <= remaining and cost > 0:
                         best_gain = gain
-                        best_layer = l
+                        best_layer = layer_i
                         best_action = action
                         best_cost = cost
 
@@ -318,7 +338,8 @@ class LayerBudgetAllocator:
             # Apply best action
             if best_action == "add_tokens":
                 current_tokens[best_layer] = min(
-                    seq_len, current_tokens[best_layer] + self.token_step,
+                    seq_len,
+                    current_tokens[best_layer] + self.token_step,
                 )
             elif best_action == "upgrade_bits":
                 bits_idx = self.available_bits.index(current_bits[best_layer])
@@ -329,12 +350,12 @@ class LayerBudgetAllocator:
         # Build result
         allocations = []
         actual_total = 0
-        for l in range(self.num_layers):
-            mem = self.memory_cost(current_tokens[l], current_bits[l])
+        for layer_i in range(self.num_layers):
+            mem = self.memory_cost(current_tokens[layer_i], current_bits[layer_i])
             alloc = LayerAllocation(
-                layer_idx=l,
-                token_budget=current_tokens[l],
-                quant_bits=current_bits[l],
+                layer_idx=layer_i,
+                token_budget=current_tokens[layer_i],
+                quant_bits=current_bits[layer_i],
                 memory_bytes=mem,
             )
             alloc._max_tokens = seq_len
@@ -371,10 +392,10 @@ class LayerBudgetAllocator:
         allocations = []
         total = 0
 
-        for l in range(self.num_layers):
+        for layer_i in range(self.num_layers):
             mem = self.memory_cost(n_tokens, bits)
             alloc = LayerAllocation(
-                layer_idx=l,
+                layer_idx=layer_i,
                 token_budget=n_tokens,
                 quant_bits=bits,
                 memory_bytes=mem,
@@ -412,6 +433,6 @@ class LayerBudgetAllocator:
             invert: If True (default), early layers get higher importance.
         """
         return {
-            l: sigmoid_importance(l, num_layers, k, tau, invert=invert)
-            for l in range(num_layers)
+            layer_i: sigmoid_importance(layer_i, num_layers, k, tau, invert=invert)
+            for layer_i in range(num_layers)
         }

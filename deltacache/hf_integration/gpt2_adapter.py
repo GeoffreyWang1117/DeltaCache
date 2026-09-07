@@ -4,13 +4,13 @@ GPT-2 uses absolute position embeddings (not RoPE), which simplifies
 KV cache handling as positions are baked into the embeddings.
 """
 
-from typing import Optional, Any
+from typing import Any, Optional
+
 import torch
 from torch import Tensor
 
-from deltacache.utils.config import DeltaCacheConfig
 from deltacache.hf_integration.model_adapter import HFModelAdapter
-
+from deltacache.utils.config import DeltaCacheConfig
 
 # GPT-2 model configurations
 GPT2_CONFIGS = {
@@ -82,11 +82,10 @@ class GPT2Adapter(HFModelAdapter):
         """
         try:
             from transformers import GPT2LMHeadModel, GPT2Tokenizer
-        except ImportError:
+        except ImportError as exc:
             raise ImportError(
-                "transformers is required for GPT2Adapter. "
-                "Install with: pip install transformers"
-            )
+                "transformers is required for GPT2Adapter. Install with: pip install transformers"
+            ) from exc
 
         # Determine device
         if device is None:
