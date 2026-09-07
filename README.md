@@ -9,8 +9,9 @@ does the audit cost scale with context length?**
 >
 > **New readers start at [`docs/PROBLEM_FORMULATION.md`](docs/PROBLEM_FORMULATION.md)**, then
 > [`docs/README.md`](docs/README.md). Do not trust numbers in the git history, in `paper/`, or in
-> docs dated before August 2026 without checking
-> [`docs/CLAIM_VERIFY_2026Q3.md`](docs/CLAIM_VERIFY_2026Q3.md) first.
+> docs dated before August 2026 without re-deriving them from
+> `experiments/results/`. The claim-by-claim audit that lists which figures are wrong
+> is kept out of this repository; ask the author if you need it.
 
 ---
 
@@ -85,18 +86,16 @@ Three independent findings retired it:
    staged fashion** — which refutes "quantize first, evict last". Also HqeKV (ACL 2026 Findings,
    code public), MoE-nD, ARKV, PolyKV. The venue bar was reset to 20–40× by STAR-KV (ICML 2026
    Spotlight) and KVTC (ICLR 2026, NVIDIA), against this project's 2–6×.
-   → [`docs/SCOUT_2026Q3_LANDSCAPE.md`](docs/SCOUT_2026Q3_LANDSCAPE.md)
+   (Competitive landscape notes are kept out of this repository.)
 
 2. **It loses to KIVI at matched memory.** KIVI's `mean_memory_bytes` is byte-identical across all
    four requested compression ratios — it ignores the CR knob entirely, so the main comparison
    table was never memory-matched. At CR=4×, the only genuinely byte-matched point, KIVI wins on
    both models tested. The CR=2× "win" costs 1.96× the memory.
-   → [`docs/SELF_REVIEW_ROUND6_VERDICT.md`](docs/SELF_REVIEW_ROUND6_VERDICT.md)
 
 3. **Several headline numbers are wrong**, including the intro's motivating memory figure (off
    ~15×), a fidelity constant that drives the solver's action ordering (off 6.4×), and an
    end-to-end vLLM claim whose own result files all report `mean_freed_pct: 0.0`.
-   → [`docs/CLAIM_VERIFY_2026Q3.md`](docs/CLAIM_VERIFY_2026Q3.md)
 
 **Two findings from that work survive and are worth keeping:** *mean-fill* (largest measured
 isolated effect, orthogonal to any eviction method, unclaimed by any 2026 paper — but currently
@@ -113,10 +112,7 @@ docs/                       ← START HERE (PROBLEM_FORMULATION.md, then README.
   PROBLEM_FORMULATION.md            the model, the targets, the falsification conditions
   EXPERIMENT_PLAN_FAITHFULNESS.md   measurement design + stop rule (§2 partly superseded)
   REFRAME_VERIFAI_PROPOSAL.md       why the direction changed
-  SCOUT_2026Q3_LANDSCAPE.md         competitive landscape as of Aug 2026
-  CLAIM_VERIFY_2026Q3.md            which published numbers are wrong
-  SELF_REVIEW_ROUND6_VERDICT.md     8-persona independent review, 8/8 Reject
-  HARNESS_FEASIBILITY_2026Q3.md     which evaluation harnesses are broken
+  SECURITY_AUDIT_2026Q3.md          supply-chain and code-path audit
   ENV_REBUILD_DIAGNOSIS.md          how to rebuild the conda env (10-20 min)
   ENGINEERING_DESIGN.md             library internals (still current)
 

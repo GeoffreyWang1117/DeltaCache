@@ -79,7 +79,7 @@ torch 2.5.1+cu124 runs fine under a CUDA 13.2 driver (drivers are backward-compa
 
 1. `import torch, transformers; torch.cuda.is_available()`; report `torch.__version__`, `torch.version.cuda`, device count.
 2. `pytest tests/ -x -q` — the repo claims 189 unit tests; a pass here confirms the library half.
-3. **The real smoke test:** run the existing PPL path on one small cell. PPL and the faithfulness measurement share the forward-pass code path, so a green PPL cell is the direct precondition for the sweep. Do **not** smoke-test via LongBench/GSM8K/MMLU — those harnesses are independently broken (`HARNESS_FEASIBILITY_2026Q3.md`) and would give a false negative.
+3. **The real smoke test:** run the existing PPL path on one small cell. PPL and the faithfulness measurement share the forward-pass code path, so a green PPL cell is the direct precondition for the sweep. Do **not** smoke-test via LongBench/GSM8K/MMLU — those harnesses are independently broken (evaluation-harness feasibility study, not published in this repository) and would give a false negative.
 4. Freeze the result: `pip freeze > requirements.lock.txt` and commit it. The absence of this file is what caused the May incident.
 
 **Estimated wall-clock:** 10–20 minutes, dominated by the ~2.5 GB torch wheel download.

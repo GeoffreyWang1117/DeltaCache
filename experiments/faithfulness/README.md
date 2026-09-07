@@ -5,7 +5,7 @@ compressed-KV run's output distribution move away from an uncompressed reference
 movement distinguishable from the variation an honest implementation produces by accident?**
 
 Design and rationale: **`docs/EXPERIMENT_PLAN_FAITHFULNESS.md`**.
-Why the direction changed: `docs/SELF_REVIEW_ROUND6_VERDICT.md`, `docs/SCOUT_2026Q3_LANDSCAPE.md`.
+Why the direction changed: see the banner in the top-level `README.md`.
 
 ## What is here
 

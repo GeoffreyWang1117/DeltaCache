@@ -5,7 +5,7 @@ unified runner. They are superseded for future work but are kept because **they 
 provenance for numbers that appear in `paper/neurips2026/main.tex`**. Do not delete them;
 without them several published figures become untraceable.
 
-**Read `docs/CLAIM_VERIFY_2026Q3.md` before trusting any number these produced.** Several
+**Do not trust any number these produced without re-deriving it.** Several
 were found to be wrong or to rest on n=2 samples.
 
 ## Script → results directory → what it produced
@@ -22,7 +22,7 @@ were found to be wrong or to rest on n=2 samples.
 | `bench_sglang_comparison.py` | `e2e/` | SGLang comparison | `sglang_url: "skipped"` in all outputs |
 | `run_main_results_v2.py`, `run_1024_all_models.py`, `run_1024_and_mmlu.py` | `main_v2/` | early main-results tables | superseded by `suite/` |
 | `run_corrected_matrix.py`, `run_corrected_ablation_mmlu.py` | `paper/` | ICML-era tables | superseded |
-| `run_longbench.py` | `longbench/` | LongBench | harness is broken — see `docs/HARNESS_FEASIBILITY_2026Q3.md` §1 |
+| `run_longbench.py` | `longbench/` | LongBench | harness is broken at the implementation level; scores unusable |
 | `run_ruler.py` | `ruler/` | RULER | superseded by `suite/tasks/ruler.py` |
 | `run_mmlu_expanded.py` | `mmlu/` | MMLU | prompts too short to discriminate compression |
 | `run_allocator_fixes.py` | `allocator_fixes/` | allocator debugging | — |

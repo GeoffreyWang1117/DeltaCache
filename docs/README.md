@@ -17,12 +17,17 @@
 Read these before trusting any number in `paper/`, in the git history, or in any doc dated
 before August 2026.
 
-| Doc | Finding |
-|---|---|
-| [`SELF_REVIEW_ROUND6_VERDICT.md`](SELF_REVIEW_ROUND6_VERDICT.md) | 8-persona independent-context panel: **8/8 Reject, mean 2.88**. KIVI beats LayerBudget at the only genuinely byte-matched compression ratio. Rounds 1–5 had scored 6.25 — those were in-session with author context and 4 personas. |
-| [`SCOUT_2026Q3_LANDSCAPE.md`](SCOUT_2026Q3_LANDSCAPE.md) | The core idea was independently published ~6× during a three-month gap. RDKV subsumes and explicitly refutes the "quantize first, evict last" framing. Field bar moved to 20–40×. |
-| [`CLAIM_VERIFY_2026Q3.md`](CLAIM_VERIFY_2026Q3.md) | **Which specific numbers are wrong**, with the corrected values. Consult this before reusing anything. |
-| [`HARNESS_FEASIBILITY_2026Q3.md`](HARNESS_FEASIBILITY_2026Q3.md) | LongBench / GSM8K / MMLU harnesses are broken at the implementation level; two of the three should be deleted rather than repaired. |
+The assessments behind that conclusion — the adversarial self-review, the
+claim-by-claim number audit, the competitive landscape survey and the evaluation-harness
+feasibility study — are working documents and are kept out of this repository. What a
+reader needs from them is stated here directly:
+
+- Numbers in `paper/` and in docs dated before August 2026 have not all survived
+  re-checking. Re-derive anything you intend to reuse from `experiments/results/`.
+- The LongBench, GSM8K and MMLU harnesses have implementation-level defects and their
+  scores should not be used.
+- The measurement work that *is* published, and that stands on its own, is
+  [`../experiments/byte_audit/`](../experiments/byte_audit/).
 
 ## 3. Reference
 
@@ -33,8 +38,7 @@ before August 2026.
 
 ## Numbers you should not repeat
 
-From `CLAIM_VERIFY_2026Q3.md` and the round-6 panel. Every one of these appears in the
-unsubmitted draft and in the pre-August README:
+Every one of these appears in the unsubmitted draft and in the pre-August README:
 
 | Claim as written | Reality |
 |---|---|

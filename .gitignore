@@ -89,3 +89,13 @@ experiments/suite/results/.longbench_cache/
 # They are local process state; the audit trail is the commit each run records.
 .convergence_ledger.json
 .pipeline_ledger.json
+
+# Internal assessment documents. Kept on disk, deliberately out of the public
+# repository: candid self-review scores, claim-by-claim audits of our own numbers
+# and competitive landscape notes are working material, not published record.
+# Removed from the unpushed history too, since untracking only the tip would
+# still have published them in the commit that introduced them.
+docs/SELF_REVIEW_ROUND6_VERDICT.md
+docs/CLAIM_VERIFY_2026Q3.md
+docs/SCOUT_2026Q3_LANDSCAPE.md
+docs/HARNESS_FEASIBILITY_2026Q3.md
