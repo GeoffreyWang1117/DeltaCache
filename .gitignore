@@ -83,3 +83,9 @@ experiments/suite/results/.longbench_cache/
 .claude/
 .env
 *.pem
+
+# Skill ledgers. These are rewritten on every scan, so tracking them makes the
+# freshness check unsatisfiable: recording a clean run is itself a tree change.
+# They are local process state; the audit trail is the commit each run records.
+.convergence_ledger.json
+.pipeline_ledger.json
