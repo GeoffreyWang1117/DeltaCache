@@ -1,0 +1,5 @@
+bib_key,arxiv_id,paper_family,axis_kind,axis_levels,quant_baseline_present,cross_family_axis,verified_from,note
+rdkv2026,2605.08317,eviction,token_budget,64L;128L;256L;512L;1024L,no,no,arxiv html v1 tables 1-3,"Budget stated as B_total per layer. Baselines SnapKV/AdaKV/ThinK/Snap+Zip are all eviction; Snap+Zip pairs eviction with quantization but is not swept as a quantization baseline."
+pyramidkv2024,2406.02069,eviction,token_budget,64;96;128;2048,no,no,arxiv html v3 tables 1 and 8-10,"Axis is KV cache size in tokens. No quantization baseline appears in any main table."
+kvtuner2025,2502.04420,quantization,bit_width,KV8;K8V4;K8V2;K4V8;KV4;K4V2;K2V8;K2V4;KV2,yes,no,arxiv html v3 tables 2 and 5,"Axis is bit-width pairs, which is the native knob. KIVI appears as KIVI-2/4/8, at its own native widths rather than at ratio columns."
+deltacache_neurips2026_draft,,joint,ratio,2;3;4;6,yes,yes,"experiments/results/archive/pre_correction/unified_tinyllama.json","Our own retired draft. LayerBudget swept over four ratio columns against KIVI, whose measured footprint is byte-identical at all four (583803 bytes). The four-column comparison rests on one KIVI operating point."

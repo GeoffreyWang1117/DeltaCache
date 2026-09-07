@@ -1,0 +1,29 @@
+Published comparison axes
+==============================================================================
+paper                           family       axis           levels  quant baseline
+----------------------------------------------------------------------------------
+rdkv2026                        eviction     token_budget        5              no
+pyramidkv2024                   eviction     token_budget        4              no
+kvtuner2025                     quantization bit_width           9             yes
+deltacache_neurips2026_draft    joint        ratio               4             yes
+
+Tables placing both families on one ratio axis: 1/4
+  deltacache_neurips2026_draft: 4 ratio columns over a fixed-bit-width baseline
+    Our own retired draft. LayerBudget swept over four ratio columns against KIVI, whose measured footprint is byte-identical at all four (583803 bytes). The four-column comparison rests on one KIVI operating point.
+
+Measured operating points, upstream quantization implementations
+  h2o_flexgen_quant                 4 distinct delivered footprint(s)
+  hf_quantized_cache[quanto]        8 distinct delivered footprint(s)
+  kivi_official                     12 distinct delivered footprint(s)
+
+Reading
+------------------------------------------------------------------------------
+Within a family the axis is the native knob: eviction papers index by token
+budget, quantization papers by bit width. The mismatch appears only where a
+table sweeps a ratio across both families, and that is rare, because the two
+families largely do not appear in the same table at all.
+
+So the finding is not that the field miscompares routinely. It is that the
+cross-family comparison is the one nobody grounds, and the measurements above
+say why: a fixed-bit-width method has two or three delivered footprints, so a
+ratio axis with more columns than that cannot be matched at every column.

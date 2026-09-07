@@ -96,3 +96,36 @@ The portfolio note treats the environment as a multi-day blocker. It is not. Cor
 | Verify via PPL smoke cell | ~30 min |
 | Faithfulness sweep (17 methods × 7 models × 4 CRs × N≥50 texts, forward-pass only) | GPU-bound; schedule around the `fisherkd` job |
 | LongBench/GSM8K/MMLU repair | 5–7 weeks — **not on the critical path for the reframe** |
+
+---
+
+## What was actually installed — 2026-09-06
+
+The rebuild above was executed. Two deviations from the plan, both worth knowing before
+the faithfulness sweep is scheduled.
+
+**torch is 2.14.0+cu130, not the pinned 2.5.1+cu124.** `optimum-quanto` requires
+`torch>=2.6.0`, so installing it silently upgraded torch and pulled the cuda-toolkit 13.0.3
+wheels. Nothing is broken — `torch.cuda.is_available()` is True on both 3090s — but the
+2.5.1 pin existed to match the bitsandbytes 0.49.2 pairing proven in `longspec`, and that
+pairing no longer holds. bitsandbytes is **not installed**, so no old 4-bit cell can be
+reproduced in this env as it stands. Decide before reproducing anything: either drop
+optimum-quanto and go back to 2.5.1, or keep 2.14 and re-verify bnb separately.
+
+**transformers 4.57.6 as pinned.** It exposes both quantized-cache APIs
+(`QuantoQuantizedLayer` and `QuantoQuantizedCache`), but `is_optimum_quanto_available`
+lives in `transformers.utils.import_utils`, not in `cache_utils` where 4.46 kept it.
+
+**ninja must be on PATH, not merely installed.** optimum-quanto builds a C++ extension on
+first dequantize, and torch's extension loader looks for the `ninja` executable. Running
+`$E/bin/python` without `$E/bin` on PATH fails with "Ninja is required to load C++
+extensions" even though the package is present. Prefix commands with
+`PATH="$E/bin:$PATH"` or activate the env.
+
+Installed for the byte audit only: torch, transformers==4.57.6, tokenizers, safetensors,
+numpy, accelerate, optimum-quanto, ninja, pytest, ruff, and the package in editable mode.
+Not installed: bitsandbytes, datasets, sentencepiece, protobuf, scipy, matplotlib, mypy.
+`requirements.lock.txt` is frozen at the repository root.
+
+Pre-existing unrelated packages in this env (vastai, aiohttp, borb) have unmet dependencies
+of their own and produce pip resolver warnings. They are not ours and were left alone.

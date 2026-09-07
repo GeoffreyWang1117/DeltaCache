@@ -1,0 +1,33 @@
+scope: local baselines (instrument validation only)
+
+method                      family        delivered    nominal bits             effective    gap  storage   
+------------------------------------------------------------------------------------------------------------
+adakv                       eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+cake                        eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+d2o                         eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+duo_attention               eviction      DISCRETE                -                     -      -  simulated 
+dynamickv                   eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+evolkv                      eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+h2o_uniform                 eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+kivi_uniform                quantization  FLAT                    -                     -      -  simulated 
+kvtuner                     quantization  FLAT                    -                     -      -  simulated 0 errored, 1 no-op
+lava                        eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+minikv                      joint         DISCRETE                -                     -      -  simulated 
+pyramidkv                   eviction      CONTINUOUS              -                     -      -  simulated 
+snapkv                      eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+squeeze_attention           eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+streaming_llm               eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 1 no-op
+xquant                      quantization  FLAT                    -                     -      -  simulated 
+
+==============================================================================
+VERDICT
+==============================================================================
+A. axis claim   quantization median distinct delivered points = 1
+                eviction     median distinct delivered points = 5.0
+                -> HOLDS
+B'. bit width   UNTESTABLE: no verified method states a nominal bit width.
+
+GATE: not decidable at this tier. These baselines dequantize by design, so
+      claim B is true by construction and carries no information about the
+      field. What this run establishes is that the instrument works and
+      that claim A is measurable. Write adapters and rerun for the verdict.

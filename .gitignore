@@ -55,8 +55,14 @@ Thumbs.db
 # Logs
 *.log
 
-# Nested upstream clone (H2O official, used for sanity checks) — 165MB, not ours
+# Nested upstream clones used by the byte audit — ~1.3GB of third-party code with
+# its own licences and its own .git dirs, so kept on disk and out of this repo.
+# experiments/byte_audit/upstream.py:MANIFEST records each URL and pinned commit,
+# and Upstream.require() prints the clone command when one is missing.
 baselines/h2o_official/
+baselines/kivi_official/
+baselines/snapkv_official/
+baselines/pyramidkv_official/
 
 # LaTeX build artifacts
 *.aux

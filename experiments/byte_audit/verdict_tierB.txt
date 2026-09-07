@@ -1,0 +1,23 @@
+scope: upstream implementations (evidence about the field)
+
+method                      family        delivered    nominal bits             effective    gap  storage   
+------------------------------------------------------------------------------------------------------------
+h2o_flexgen_quant           quantization  FLAT            2,3,4,5,8                   8.5    6.5  packed    
+h2o_official                eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 4 no-op
+hf_quantized_cache[quanto]  quantization  DISCRETE              2,4             2.51-4.54   0.55  packed    
+kivi_official               quantization  DISCRETE            2,4,8                 3,5,9    1.0  packed    
+snapkv_official             eviction      CONTINUOUS              -                     -      -  simulated 0 errored, 4 no-op
+transformers_sliding_window eviction      CONTINUOUS              -                     -      -  simulated 
+
+==============================================================================
+VERDICT
+==============================================================================
+A. axis claim   quantization median distinct delivered points = 2
+                eviction     median distinct delivered points = 5
+                -> HOLDS
+B'. bit width   2/3 quantization methods spend at least one bit per value  (67%)
+                h2o_flexgen_quant            nominal [2, 3, 4, 5, 8] -> effective [8.5]
+                hf_quantized_cache[quanto]   nominal [2, 4] -> effective [2.51, 2.53, 2.55, 4.51, 4.52, 4.54]
+                kivi_official                nominal [2, 4, 8] -> effective [3.0, 5.0, 9.0]
+
+GATE: GO. Both claims hold on upstream code. This is a paper.
