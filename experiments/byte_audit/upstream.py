@@ -11,6 +11,16 @@ transformers and their modules import names that have since moved, so importing
 them fails outright. ``load_from_source`` executes only the definitions actually
 needed, without running the surrounding module. What runs is their source,
 unedited: patching upstream would make the measurement about the patch.
+
+Security note. ``load_from_source`` calls ``exec``, and static scanners flag it.
+The trust boundary is worth stating rather than suppressing: it executes source
+from ``baselines/``, which contains repositories the operator cloned themselves
+from the URLs in ``MANIFEST``. Nothing here fetches code, chooses a path from
+user input, or runs anything the operator did not already place on disk. Running
+these files is the point of the audit, and importing them the ordinary way would
+execute strictly more of each module than this does. Anyone pointing an adapter
+at an untrusted repository is running that repository's code either way, so the
+protection that matters is checking what is cloned, not how it is loaded.
 """
 
 from __future__ import annotations

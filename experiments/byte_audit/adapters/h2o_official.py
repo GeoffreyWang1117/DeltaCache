@@ -18,11 +18,9 @@ ratio, and it is continuous in a way a bit width is not.
 
 from __future__ import annotations
 
-import ast
 import time
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import List, Sequence, Tuple
 
 import torch
 
@@ -33,33 +31,10 @@ from experiments.byte_audit.accountant import (
     measure_structural,
 )
 from experiments.byte_audit.gate import Cell, Shape, make_inputs
+from experiments.byte_audit.upstream import MANIFEST, load_from_source
 
-_UPSTREAM = (
-    Path(__file__).resolve().parents[3]
-    / "baselines/h2o_official/h2o_hf/utils_real_drop/modify_llama.py"
-)
+_SOURCE = "h2o_hf/utils_real_drop/modify_llama.py"
 _CLASS_NAME = "H2OKVCache_LayerWise"
-
-
-def load_upstream_class(path: Path = _UPSTREAM, name: str = _CLASS_NAME) -> type:
-    """Execute one class definition out of the upstream file, unmodified."""
-    if not path.exists():
-        raise FileNotFoundError(
-            f"upstream H2O source not found at {path}; the vendored checkout under "
-            "baselines/h2o_official is required for this adapter"
-        )
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    node = next(
-        (n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == name),
-        None,
-    )
-    if node is None:
-        raise AttributeError(f"{name} not found in {path}")
-    module = ast.Module(body=[node], type_ignores=[])
-    namespace: Dict[str, Any] = {"torch": torch}
-    # Executing upstream source is the point: a rewrite would measure the rewrite.
-    exec(compile(module, filename=str(path), mode="exec"), namespace)
-    return namespace[name]
 
 
 def budget_for_cr(seq_len: int, cr: float) -> Tuple[int, int]:
@@ -88,7 +63,9 @@ class H2OOfficialAdapter:
                 "measure a smaller multi-head cache rather than a grouped one. Refusing "
                 "instead of reporting a number for the wrong geometry."
             )
-        cache_cls = load_upstream_class()
+        upstream = MANIFEST["h2o"]
+        upstream.require()
+        cache_cls = load_from_source(upstream.path / _SOURCE, (_CLASS_NAME,))[_CLASS_NAME]
         data = make_inputs(shape, device)
         # H2O works one layer at a time on (batch, heads, seq, head_dim).
         keys = data["keys"][0].permute(1, 0, 2).unsqueeze(0).contiguous()
@@ -130,7 +107,10 @@ class H2OOfficialAdapter:
                 cell.simulated_storage = is_simulated(fp)
                 cell.float_byte_fraction = round(float_byte_fraction(fp), 6)
                 cell.by_dtype = fp.as_dict()["by_dtype"]
-                cell.error = f"budget={heavy}+{recent}={heavy + recent} tokens"
+                cell.error = (
+                    f"budget={heavy}+{recent}={heavy + recent} tokens "
+                    f"commit={upstream.commit()}"
+                )
             except Exception as exc:
                 cell.error = f"{type(exc).__name__}: {exc}"
             cells.append(cell)

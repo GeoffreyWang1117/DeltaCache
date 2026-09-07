@@ -1,0 +1,26 @@
+# gitleaks config for DeltaCache.
+#
+# Extends the default rules; the only thing suppressed is one demonstrated false
+# positive, scoped as narrowly as the tool allows.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+description = "Generic API key (default rule, with an experiment-identifier allowlist)"
+regex = '''(?i)(?:key|api|token|secret|client|passwd|password|auth|access)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\||:|<=|=>|:=|\?=|,)(?:'|\"|\s|=|\x60){0,5}([0-9a-z\-_.=]{10,150})(?:['|\"|\n|\r|\s|\x60|;|\\]|$)'''
+keywords = ["key", "api", "token", "secret", "client", "passwd", "password", "auth", "access"]
+
+  [rules.allowlist]
+  # Experiment checkpoint files carry a "_checkpoint_key" field whose value is a
+  # run identifier: model, task, method, compression ratio and sequence length.
+  # The rule matches on the word "key" in the field name. Verified 2026-09-07:
+  # all 627 history hits were this field, 607 distinct values, every one of the
+  # shape "qwen3-0.6b__ppl__cake__cr4.0__seq1024". No credential among them.
+  # Matched against the captured value, not the surrounding text: the run
+  # identifier shape "<model>__<task>__<method>__cr<ratio>__seq<len>". A real
+  # credential does not have this shape, so the suppression cannot hide one.
+  regexTarget = "secret"
+  regexes = [
+    '''^[a-z0-9.\-]+__[a-z0-9_]+__[a-z0-9_]+__cr[0-9.]+__seq[0-9]+$''',
+  ]

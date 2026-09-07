@@ -4,14 +4,14 @@ Supports Llama, Llama-2, Llama-3, Mistral, TinyLlama, Qwen, and other
 models using RoPE (Rotary Position Embedding).
 """
 
-from typing import Optional, Tuple, Any, List
+from typing import Any, List, Optional, Tuple
+
 import torch
 from torch import Tensor
 
-from deltacache.utils.config import DeltaCacheConfig
+from deltacache.hf_integration.kv_format import deltacache_to_hf, hf_to_deltacache
 from deltacache.hf_integration.model_adapter import HFModelAdapter
-from deltacache.hf_integration.kv_format import hf_to_deltacache, deltacache_to_hf
-
+from deltacache.utils.config import DeltaCacheConfig
 
 # Model configurations for common Llama-style models
 LLAMA_STYLE_CONFIGS = {
@@ -102,7 +102,8 @@ class LlamaStyleAdapter(HFModelAdapter):
         config: Optional[DeltaCacheConfig] = None,
         load_in_8bit: bool = False,
         load_in_4bit: bool = False,
-        trust_remote_code: bool = True,
+        trust_remote_code: bool = False,
+        revision: Optional[str] = None,
     ) -> "LlamaStyleAdapter":
         """Load model and tokenizer from HuggingFace.
 
@@ -113,17 +114,23 @@ class LlamaStyleAdapter(HFModelAdapter):
             config: Optional DeltaCacheConfig override
             load_in_8bit: Use 8-bit quantization
             load_in_4bit: Use 4-bit quantization
-            trust_remote_code: Trust remote code for custom models
+            trust_remote_code: Execute Python shipped inside the model repository.
+                Defaults to False. Turning it on runs arbitrary code from
+                whatever `model_name` resolves to at load time, so it must be
+                an explicit decision by the caller and never a default.
+            revision: Pin the model to an exact commit. Without it the name
+                resolves to whatever the repository's default branch points at
+                today, which is neither reproducible nor a fixed trust anchor.
 
         Returns:
             Initialized adapter
         """
         try:
             from transformers import AutoModelForCausalLM, AutoTokenizer
-        except ImportError:
+        except ImportError as exc:
             raise ImportError(
                 "transformers is required. Install with: pip install transformers"
-            )
+            ) from exc
 
         # Determine device
         if device is None:
@@ -133,6 +140,7 @@ class LlamaStyleAdapter(HFModelAdapter):
         tokenizer = AutoTokenizer.from_pretrained(
             model_name,
             trust_remote_code=trust_remote_code,
+            revision=revision,
         )
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
@@ -140,6 +148,7 @@ class LlamaStyleAdapter(HFModelAdapter):
         # Prepare model loading kwargs
         model_kwargs = {
             "trust_remote_code": trust_remote_code,
+            "revision": revision,
         }
 
         if load_in_8bit or load_in_4bit:
