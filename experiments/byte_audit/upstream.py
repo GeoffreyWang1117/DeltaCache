@@ -75,9 +75,22 @@ class Upstream:
 MANIFEST: Dict[str, Upstream] = {
     u.key: u
     for u in (
-        Upstream("h2o", "https://github.com/FMInference/H2O", "h2o_official", "MIT"),
+        # Licences read off each checkout on 2026-09-07, not assumed. H2O states
+        # MIT in its README badge but ships no licence file, which is worth
+        # knowing before any of its code is redistributed rather than merely run.
+        Upstream(
+            "h2o",
+            "https://github.com/FMInference/H2O",
+            "h2o_official",
+            "MIT per README badge; no LICENSE file in repo",
+        ),
         Upstream("kivi", "https://github.com/jy-yuan/KIVI", "kivi_official", "MIT"),
-        Upstream("snapkv", "https://github.com/FasterDecoding/SnapKV", "snapkv_official", "MIT"),
+        Upstream(
+            "snapkv",
+            "https://github.com/FasterDecoding/SnapKV",
+            "snapkv_official",
+            "Apache-2.0",
+        ),
         Upstream(
             "pyramidkv",
             "https://github.com/Zefan-Cai/KVCache-Factory",

@@ -76,3 +76,10 @@ baselines/pyramidkv_official/
 # Re-downloadable dataset caches
 experiments/suite/results/.longbench_cache/
 **/.longbench_cache/
+
+# Local agent config and secrets. These are covered by the global ignore file on
+# this machine, but that does not travel with a clone or a fork, so the rule is
+# repeated here where it belongs.
+.claude/
+.env
+*.pem
